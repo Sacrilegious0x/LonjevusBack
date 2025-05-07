@@ -8,6 +8,6 @@ package cr.ac.ucr.ie.Lonjevus.domain;
  *
  * @author User
  */
-public class NewClass {
+public class Person {
     
 }

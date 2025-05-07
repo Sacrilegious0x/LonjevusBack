@@ -9,5 +9,6 @@ package cr.ac.ucr.ie.Lonjevus.Connection;
  * @author User
  */
 public class ConnectionDB {
+    private static final String DATABASE = "longevusdb";
     
 }
