@@ -1,13 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
- */
 package cr.ac.ucr.ie.Lonjevus.dao;
 
-/**
- *
- * @author User
- */
-public interface CRUD {
-    
+import java.util.LinkedList;
+
+    public interface CRUD<T> {
+    public LinkedList<T> getAll();
+    public void add(T t);
+    public void update(T t);
+    public void deleteById(Integer x);
+    public T findById(Integer y);
 }
+    
+
