@@ -4,10 +4,12 @@
  */
 package cr.ac.ucr.ie.Lonjevus.dao;
 
+import java.util.LinkedList;
+
 /**
  *
  * @author User
  */
-public interface CRUD {
-    
+public interface CRUD <T> {
+    public LinkedList<T> getAll();
 }
