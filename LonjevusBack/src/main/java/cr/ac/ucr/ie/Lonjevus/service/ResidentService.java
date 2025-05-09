@@ -15,4 +15,8 @@ public class ResidentService {
     public static LinkedList<Resident> getAll(){
         return data.getAll();
     }
+    
+    public static void add(Resident r){
+        data.add(r);
+    }
 }

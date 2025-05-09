@@ -10,7 +10,7 @@ public class Resident {
     private String name;
     private int age;
     private String healthStatus;
-    private int roomNumber;
+    private int numberRoom;
     private String photo;
     private boolean isActive;
 
@@ -22,7 +22,7 @@ public class Resident {
         this.name = name;
         this.age = age;
         this.healthStatus = healthStatus;
-        this.roomNumber = roomNumber;
+        this.numberRoom = roomNumber;
         this.photo = photo;
         this.isActive = isActive;
     }
@@ -68,12 +68,12 @@ public class Resident {
         this.healthStatus = healthStatus;
     }
 
-    public int getRoomNumber() {
-        return roomNumber;
+    public int getNumberRoom() {
+        return numberRoom;
     }
 
-    public void setRoomNumber(int roomNumber) {
-        this.roomNumber = roomNumber;
+    public void setNumberRoom(int numberRoom) {
+        this.numberRoom = numberRoom;
     }
 
     public String getPhoto() {
