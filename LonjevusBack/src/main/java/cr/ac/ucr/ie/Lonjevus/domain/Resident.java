@@ -91,5 +91,4 @@ public class Resident {
     public void setIsActive(boolean isActive) {
         this.isActive = isActive;
     }
-    
 }

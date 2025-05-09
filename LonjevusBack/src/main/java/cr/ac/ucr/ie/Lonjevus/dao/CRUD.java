@@ -14,5 +14,6 @@ public interface CRUD <T> {
     public LinkedList<T> getAll();
     public void add(T t);
     public void deleteById(int id);
-    public void findById(int id);
+    public T findById(int id);
+    public void update(T t);
 }

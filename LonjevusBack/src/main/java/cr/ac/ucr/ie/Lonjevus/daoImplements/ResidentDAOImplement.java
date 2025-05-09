@@ -77,12 +77,72 @@ public class ResidentDAOImplement implements ResidentDAO{
 
     @Override
     public void deleteById(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        StringBuilder sql = new StringBuilder();
+        sql.append("DELETE FROM resident WHERE id = " + id + ";");
+
+        try {
+            Connection cn = ConnectionDB.getConnection();
+            if (cn == null) {
+                System.out.println("Error: la conexión es NULL en ConnectionDB.getConnection()");
+            }
+            PreparedStatement ps = cn.prepareStatement(sql.toString());
+            ps.executeUpdate();
+            System.out.println("eliminado");
+        } catch (SQLException e) {
+            System.out.println(sql.toString() + "\nNo sirvio el query\n" + e.getMessage());
+        }
     }
 
     @Override
-    public void findById(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public Resident findById(int id) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("call getResidentById(?)");
+        Resident resident = new Resident();
+        Connection cn = ConnectionDB.getConnection();
+        try {
+            PreparedStatement ps = cn.prepareStatement(sql.toString());
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                resident.setId(rs.getInt(1));
+                resident.setIdentification(rs.getString(2));
+                resident.setName(rs.getString(3));
+                resident.setAge(rs.getInt(4));
+                resident.setHealthStatus(rs.getString(5));
+                resident.setNumberRoom(rs.getInt(6));
+                resident.setPhoto(rs.getString(7));
+                resident.setIsActive(rs.getBoolean(8));
+            }
+        } catch (SQLException ex) {
+            System.out.println("Fallo la query" + sql.toString());
+        }
+        
+        return resident;
+    }
+
+    @Override
+    public void update(Resident t) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("call updateResident (?,?,?,?,?,?,?,?)");
+        
+        Connection cn = ConnectionDB.getConnection();
+        try {
+            PreparedStatement ps = cn.prepareStatement(sql.toString());
+            ps.setInt(1, t.getId());
+            ps.setString(2, t.getIdentification());
+            ps.setString(3, t.getName());
+            ps.setInt(4, t.getAge());
+            ps.setString(5, t.getHealthStatus());
+            ps.setInt(6, t.getNumberRoom());
+            ps.setString(7, t.getPhoto());
+            ps.setBoolean(8, t.isIsActive());
+            ps.execute();
+            System.out.println("LA QUERY\n"+sql.toString());
+            System.out.println("Residente actualizado");
+        } catch (SQLException ex) {
+            System.out.println("Fallo la query" + sql.toString());
+        }
+        
     }
     
 }

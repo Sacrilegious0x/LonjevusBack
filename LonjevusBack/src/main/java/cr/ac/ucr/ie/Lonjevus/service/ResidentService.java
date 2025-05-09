@@ -19,4 +19,16 @@ public class ResidentService {
     public static void add(Resident r){
         data.add(r);
     }
+    
+    public static void delete(int id){
+        data.deleteById(id);
+    }
+    
+    public static Resident findById(int id){
+        return data.findById(id);
+    }
+    
+    public static void update(Resident resident){
+        data.update(resident);
+    }
 }
