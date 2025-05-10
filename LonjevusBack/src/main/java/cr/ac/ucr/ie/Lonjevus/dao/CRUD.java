@@ -16,5 +16,5 @@ public interface CRUD<T> {
     public void add(T t);
     public void update(T t);
     public void deleteById(Integer y);
-    public void getById(Integer y);
+    public T getById(Integer y);
 }

@@ -4,10 +4,12 @@
  */
 package cr.ac.ucr.ie.Lonjevus.dao;
 
+import cr.ac.ucr.ie.Lonjevus.domain.Task;
+
 /**
  *
  * @author User
  */
-public interface TaskDao {
+public interface TaskDao extends CRUD<Task>{
     
 }

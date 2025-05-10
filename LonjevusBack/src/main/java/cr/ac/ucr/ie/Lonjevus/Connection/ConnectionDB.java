@@ -23,15 +23,7 @@ public class ConnectionDB {
     
     private static Connection connect;
     
-    public static Connection getConnection() throws SQLException{
-        try{
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            
-        }catch(ClassNotFoundException e){
-            System.err.println("Ha ocurrido un error al intentar obtener la clase " + e.getMessage());
-            
-        }
-        
+    public static Connection getConnection() throws SQLException {        
         try{
             connect = DriverManager.getConnection(URL, USER, PASSWORD);
             System.out.println("Se ha establecido la conexion a la DB");
