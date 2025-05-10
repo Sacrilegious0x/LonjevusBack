@@ -4,17 +4,10 @@
  */
 package cr.ac.ucr.ie.Lonjevus.dao;
 
-import java.util.LinkedList;
-
 /**
  *
  * @author User
- * @param <T>
  */
-public interface CRUD<T> {
-    public LinkedList<T> getAll();
-    public void add(T t);
-    public void update(T t);
-    public void deleteById(Integer y);
-    public void getById(Integer y);
+public interface ScheduleDao extends CRUD<ScheduleDao>{
+    
 }
