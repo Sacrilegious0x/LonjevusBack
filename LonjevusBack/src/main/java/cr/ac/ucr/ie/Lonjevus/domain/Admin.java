@@ -15,10 +15,9 @@ public class Admin extends Person {
         
     }
 
-    public Admin(int id, String identification, String name, String email, String password, String photo, Schedule schedule, int oficeContact) {
-        super(id, identification, name, email, password, photo, schedule);
-        this.oficeContact = oficeContact;
-    }   
+    public Admin(int id, String identification, String name, double salary, String email, String password, String photoUrl, Schedule schedule) {
+        super(id, identification, name, salary, email, password, photoUrl, schedule);
+    }
 
     public int getOficeContact() {
         return oficeContact;
@@ -26,8 +25,6 @@ public class Admin extends Person {
 
     public void setOficeContact(int oficeContact) {
         this.oficeContact = oficeContact;
-    }
-    
-    
+    } 
     
 }

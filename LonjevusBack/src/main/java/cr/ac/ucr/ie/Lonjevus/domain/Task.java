@@ -10,16 +10,16 @@ package cr.ac.ucr.ie.Lonjevus.domain;
  */
 public class Task {
     private int id;
-    private Caregiver caregiver;
+    private int caregiverId;
     private String description;
     
-    private Task (){
+    public Task (){
         
     }
 
-    public Task(int id, Caregiver caregiver, String description) {
+    public Task(int id, int caregiverId, String description) {
         this.id = id;
-        this.caregiver = caregiver;
+        this.caregiverId = caregiverId;
         this.description = description;
     }
 
@@ -31,12 +31,12 @@ public class Task {
         this.id = id;
     }
 
-    public Caregiver getCaregiver() {
-        return caregiver;
+    public int getCaregiver() {
+        return caregiverId;
     }
 
-    public void setCaregiver(Caregiver caregiver) {
-        this.caregiver = caregiver;
+    public void setCaregiver(int caregiverId) {
+        this.caregiverId = caregiverId;
     }
 
     public String getDescription() {

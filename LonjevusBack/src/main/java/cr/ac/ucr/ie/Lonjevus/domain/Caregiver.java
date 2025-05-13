@@ -14,9 +14,9 @@ public class Caregiver extends Person {
     public Caregiver() {
     }
 
-    public Caregiver(int id, String identification, String name, String email, String password, String photo, Schedule schedule, String shift) {
-        super(id, identification, name, email, password, photo, schedule);
-        this.Shift = shift;
+    public Caregiver(int id, String identification, String name, double salary, String email, String password, String Shift, String photoUrl, Schedule schedule) {
+        super(id, identification, name, salary, email, password, photoUrl, schedule);
+        this.Shift = Shift;
     }
 
     public String getShift() {
@@ -26,6 +26,5 @@ public class Caregiver extends Person {
     public void setShift(String Shift) {
         this.Shift = Shift;
     }
-    
-    
+
 }

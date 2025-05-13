@@ -12,21 +12,23 @@ public class Person {
     private int id;
     private String identification;
     private String name;
+    private double salary;
     private String email;
     private String password;
-    private String photo;
+    private String photoUrl;
     private Schedule schedule;
     
     public Person(){
         
     }
-    public Person(int id, String identification, String name, String email, String password, String photo, Schedule schedule) {
+    public Person(int id, String identification, String name, double salary, String email, String password, String photoUrl, Schedule schedule) {
         this.id = id;
         this.identification = identification;
         this.name = name;
+        this.salary=salary;
         this.email = email;
         this.password = password;
-        this.photo = photo;
+        this.photoUrl = photoUrl;
         this.schedule = schedule;
     }
 
@@ -54,6 +56,14 @@ public class Person {
         this.name = name;
     }
 
+    public double getSalary() {
+        return salary;
+    }
+
+    public void setSalary(double salary) {
+        this.salary = salary;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -70,12 +80,12 @@ public class Person {
         this.password = password;
     }
 
-    public String getPhoto() {
-        return photo;
+    public String getPhotoUrl() {
+        return photoUrl;
     }
 
-    public void setPhoto(String photo) {
-        this.photo = photo;
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 
     public Schedule getSchedule() {
