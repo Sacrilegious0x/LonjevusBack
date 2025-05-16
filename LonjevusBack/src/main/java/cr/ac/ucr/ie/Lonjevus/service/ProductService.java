@@ -6,8 +6,8 @@ package cr.ac.ucr.ie.Lonjevus.service;
 
 /**
  *
- * @author User
+ * @author Usuario
  */
-public class NewClass {
+public class ProductService {
     
 }
