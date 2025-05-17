@@ -4,34 +4,34 @@
  */
 package cr.ac.ucr.ie.Lonjevus.service;
 
-import cr.ac.ucr.ie.Lonjevus.daoImplements.TaskDaoImplement;
-import cr.ac.ucr.ie.Lonjevus.domain.Task;
+import cr.ac.ucr.ie.Lonjevus.daoImplements.AdminDaoImplement;
+import cr.ac.ucr.ie.Lonjevus.domain.Admin;
 import java.util.LinkedList;
 
 /**
  *
  * @author User
  */
-public class TaskService {
-    private static TaskDaoImplement data = new TaskDaoImplement();
+public class AdminService {
+    private static  AdminDaoImplement data = new  AdminDaoImplement();
     
-    public static LinkedList<Task> getList(){
+    public LinkedList<Admin> getAll(){
         return data.getAll();
     }
     
-    public void addTask(Task t){
-           data.add(t);
+    public void addAdmin(Admin a){
+           data.add(a);
     }
     
-    public void updateTask(Task t){
-        data.update(t);
+    public void updateAdmin(Admin a){
+        data.update(a);
     }
     
-    public Task getById(int y){
+    public Admin getAdminById(int y){
         return data.getById(y);
     }
     
-    public void deleteTask(int y){
+    public void deleteAdmin(int y){
         data.deleteById(y);
     }
     

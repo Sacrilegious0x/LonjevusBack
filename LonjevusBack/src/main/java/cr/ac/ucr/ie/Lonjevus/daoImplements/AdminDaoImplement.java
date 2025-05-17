@@ -22,44 +22,88 @@ public class AdminDaoImplement implements AdminDao{
     @Override
     public LinkedList<Admin> getAll() {
         LinkedList<Admin> list = new LinkedList<>();
-        Admin admin = new Admin();
-        String sqlPs = ""; //Llamar procedimiento de almacenado
-        try{
-            Connection cn = ConnectionDB.getConnection();
-            CallableStatement smtp = cn.prepareCall(sqlPs);
-            
-            ResultSet rs = smtp.executeQuery();
-            
-            while(rs.next()){
-                admin.setId(rs.getInt(1));
-                admin.setIdentification(rs.getString(2));
-                admin.setName(rs.getString(3));
-                //....
-            }
-        }catch(SQLException e){
-            System.err.println("Error al ejecutar la consulta " + e);
-            
-        }
+     
         return list;
     }
 
     @Override
     public void add(Admin t) {
+        String sql = "spAddAdmin(?,?,?,?,?,?,?,?)";
+        try{
+            Connection cn = ConnectionDB.getConnection();
+            CallableStatement smtp = cn.prepareCall(sql);
+            smtp.setString(1, t.getIdentification());
+            smtp.setString(2, t.getName());
+            smtp.setDouble(3, t.getSalary());
+            smtp.setString(4, t.getEmail());
+            smtp.setString(5, t.getPassword());
+            smtp.setString(6, t.getOficeContact());
+            smtp.setString(7, t.getPhotoUrl());
+            smtp.setInt(8, t.getScheduleId());
+            smtp.executeQuery();
+       }catch(SQLException e){
+            System.err.println("Error al ejecutar la consulta "+e.getMessage());
+        }
         
     }
 
     @Override
     public void update(Admin t) {
-        
+          String sql = "spUpdateAdmin(?,?,?,?,?,?,?,?,?)";
+            try{
+            Connection cn = ConnectionDB.getConnection();
+            CallableStatement smtp = cn.prepareCall(sql);
+            smtp.setInt(1, t.getId());
+            smtp.setString(2, t.getIdentification());
+            smtp.setString(3, t.getName());
+            smtp.setDouble(4, t.getSalary());
+            smtp.setString(5, t.getEmail());
+            smtp.setString(6, t.getPassword());
+            smtp.setString(7, t.getOficeContact());
+            smtp.setString(8, t.getPhotoUrl());
+            smtp.setInt(9, t.getScheduleId());
+            smtp.executeQuery();
+       }catch(SQLException e){
+            System.err.println("Error al ejecutar la consulta "+e.getMessage());
+        }
     }
 
     @Override
     public void deleteById(Integer y) {
-       
+       String sql = "spCaregiverLogicalDelete(?)";
+          try{
+            Connection cn = ConnectionDB.getConnection();
+            CallableStatement smtp = cn.prepareCall(sql);
+            smtp.setInt(1, y);
+            smtp.executeQuery();
+        }catch(SQLException e){
+            System.err.println("Error al ejecutar la consulta " + e.getMessage());
+        }
     }
 
     @Override
     public Admin getById(Integer y) {
+        String sql = "spGetAdmin(?)";
+        try{
+            Connection cn = ConnectionDB.getConnection();
+            CallableStatement smtp = cn.prepareCall(sql);
+            ResultSet rs = smtp.executeQuery();
+            while(rs.next()){
+                Admin a = new Admin();
+                a.setId(rs.getInt(1));
+                a.setIdentification(rs.getString(2));
+                a.setName(rs.getString(3));
+                a.setSalary(rs.getInt(4));
+                a.setEmail(rs.getString(5));
+                a.setPassword(rs.getString(6));
+                a.setOficeContact(rs.getString(7));
+                a.setPhotoUrl(rs.getString(8));
+                a.setScheduleId(rs.getInt(9));
+                return a;
+            }
+        }catch(SQLException e){
+            System.err.println("Error al ejecutar la consutal" + e.getMessage());
+        }
         return null;
     }
     

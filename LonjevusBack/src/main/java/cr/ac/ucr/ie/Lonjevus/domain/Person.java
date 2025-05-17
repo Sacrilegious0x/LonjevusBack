@@ -16,20 +16,12 @@ public class Person {
     private String email;
     private String password;
     private String photoUrl;
+    private int scheduleId;
+    private boolean isActive;
     private Schedule schedule;
     
     public Person(){
         
-    }
-    public Person(int id, String identification, String name, double salary, String email, String password, String photoUrl, Schedule schedule) {
-        this.id = id;
-        this.identification = identification;
-        this.name = name;
-        this.salary=salary;
-        this.email = email;
-        this.password = password;
-        this.photoUrl = photoUrl;
-        this.schedule = schedule;
     }
 
     public int getId() {
@@ -88,6 +80,22 @@ public class Person {
         this.photoUrl = photoUrl;
     }
 
+    public int getScheduleId() {
+        return scheduleId;
+    }
+
+    public void setScheduleId(int scheduleId) {
+        this.scheduleId = scheduleId;
+    }
+
+    public boolean isIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
+    }
+
     public Schedule getSchedule() {
         return schedule;
     }
@@ -95,7 +103,6 @@ public class Person {
     public void setSchedule(Schedule schedule) {
         this.schedule = schedule;
     }
-    
-    
+ 
     
 }

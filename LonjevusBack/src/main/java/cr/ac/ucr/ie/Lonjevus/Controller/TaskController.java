@@ -8,13 +8,12 @@ import cr.ac.ucr.ie.Lonjevus.domain.Task;
 import cr.ac.ucr.ie.Lonjevus.service.TaskService;
 import java.util.Collections;
 import java.util.Map;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -36,5 +35,22 @@ public class TaskController {
         service.addTask(t);
         return getList();
     }
+    
+    @PostMapping("/updateTask")
+    public Map updateTask(@RequestBody Task t){
+        service.updateTask(t);
+        return getList();
+    }
+    
+    @DeleteMapping("/deleteTask/{id}")
+    public Map deleteTask(@PathVariable int id){
+        service.deleteTask(id);
+        return getList();
+    }
+    
+    @GetMapping("/getById/{id}")
+    public Task getById(@PathVariable int id){
+        return service.getById(id);
+    }  
     
 }

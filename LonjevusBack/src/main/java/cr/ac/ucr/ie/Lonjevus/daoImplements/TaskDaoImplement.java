@@ -61,16 +61,51 @@ public class TaskDaoImplement implements TaskDao {
 
     @Override
     public void update(Task t) {
+        String sql = "call spUpdateTask(?,?)";
+        try{
+            Connection cn = ConnectionDB.getConnection();
+            CallableStatement smtp = cn.prepareCall(sql);
+            smtp.setInt(1, t.getId());
+            smtp.setString(2, t.getDescription());
+            smtp.executeQuery();
+        }catch(SQLException e){
+            System.err.println("Error al ejecutar la consulta "+ e.getMessage());
+        }         
         
     }
 
     @Override
     public void deleteById(Integer y) {
-       
+       String sql = "call spDeleteTask(?)";
+       try{
+           Connection cn = ConnectionDB.getConnection();
+           CallableStatement smtp = cn.prepareCall(sql);
+           smtp.setInt(1, y);
+           smtp.executeQuery();
+       }catch(SQLException e){
+           System.err.println("Error al ejecutar la consulta " +e.getMessage());
+       }
     }
 
     @Override
     public Task getById(Integer y) {
+        String sql = "call spGetTaskById(?)";
+        try{
+            Connection cn = ConnectionDB.getConnection();
+            CallableStatement smtp = cn.prepareCall(sql);
+            smtp.setInt(1, y);
+            ResultSet rs = smtp.executeQuery();
+            while(rs.next()){
+                Task t = new Task();
+                t.setId(rs.getInt(1));
+                t.setCaregiver(rs.getInt(2));
+                t.setDescription(rs.getString(3));
+                return t;
+            }
+        }catch(SQLException e){
+            System.err.println("Error al ejecutar la consulta " + e.getMessage());
+        }
+        
       return null;
     }
     
