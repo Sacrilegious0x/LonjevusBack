@@ -62,7 +62,7 @@ public class ResidentDAOImplement implements ResidentDAO{
             CallableStatement stmt = cn.prepareCall(sql.toString());
             stmt.setString(1, r.getIdentification());
             stmt.setString(2, r.getName());
-            stmt.setInt(3, r.getAge());
+            stmt.setDate(3, java.sql.Date.valueOf(r.getBirthdate()));
             stmt.setString(4, r.getHealthStatus());
             stmt.setInt(5, r.getNumberRoom());
             stmt.setString(6, r.getPhoto());
@@ -78,7 +78,7 @@ public class ResidentDAOImplement implements ResidentDAO{
     @Override
     public void deleteById(int id) {
         StringBuilder sql = new StringBuilder();
-        sql.append("DELETE FROM resident WHERE id = " + id + ";");
+        sql.append("call deleteResident(?);");
 
         try {
             Connection cn = ConnectionDB.getConnection();
@@ -86,6 +86,7 @@ public class ResidentDAOImplement implements ResidentDAO{
                 System.out.println("Error: la conexión es NULL en ConnectionDB.getConnection()");
             }
             PreparedStatement ps = cn.prepareStatement(sql.toString());
+            ps.setInt(1, id);
             ps.executeUpdate();
             System.out.println("eliminado");
         } catch (SQLException e) {
@@ -131,7 +132,7 @@ public class ResidentDAOImplement implements ResidentDAO{
             ps.setInt(1, t.getId());
             ps.setString(2, t.getIdentification());
             ps.setString(3, t.getName());
-            ps.setInt(4, t.getAge());
+            ps.setDate(4, java.sql.Date.valueOf(t.getBirthdate()));
             ps.setString(5, t.getHealthStatus());
             ps.setInt(6, t.getNumberRoom());
             ps.setString(7, t.getPhoto());

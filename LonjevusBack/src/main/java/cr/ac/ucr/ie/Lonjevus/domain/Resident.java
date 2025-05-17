@@ -1,5 +1,8 @@
 package cr.ac.ucr.ie.Lonjevus.domain;
 
+import java.time.LocalDate;
+import org.springframework.format.annotation.DateTimeFormat;
+
 /**
  *
  * @author JOSHUACALETCESPEDESG
@@ -8,6 +11,8 @@ public class Resident {
     private int id;
     private String identification;
     private String name;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate birthdate;
     private int age;
     private String healthStatus;
     private int numberRoom;
@@ -91,4 +96,14 @@ public class Resident {
     public void setIsActive(boolean isActive) {
         this.isActive = isActive;
     }
+
+    public LocalDate getBirthdate() {
+        return birthdate;
+    }
+
+    public void setBirthdate(LocalDate birthdate) {
+        this.birthdate = birthdate;
+    }
+    
+    
 }
