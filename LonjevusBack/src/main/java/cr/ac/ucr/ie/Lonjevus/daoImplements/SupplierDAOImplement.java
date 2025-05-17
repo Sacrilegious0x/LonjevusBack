@@ -37,7 +37,12 @@ public class SupplierDAOImplement implements SupplierDAO {
                 supplier.setAddress(rs.getString(5));
                 supplier.setPhoto(rs.getString(6));
                 supplier.setIsActive(rs.getBoolean(7));
-                supp_list.add(supplier);
+                boolean temp = rs.getBoolean(7);
+                if(temp){
+                    supp_list.add(supplier);
+                }
+                
+                
 
             }
 

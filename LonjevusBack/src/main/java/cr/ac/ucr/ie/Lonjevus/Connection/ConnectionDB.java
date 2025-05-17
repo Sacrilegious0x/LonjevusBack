@@ -29,7 +29,6 @@ public class ConnectionDB {
             
         }catch(ClassNotFoundException e){
             System.err.println("Ha ocurrido un error al intentar obtener la clase " + e.getMessage());
-            
         }
         
         try{
