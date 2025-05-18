@@ -52,7 +52,7 @@ public class ResidentDAOImplement implements ResidentDAO{
     @Override
     public void add(Resident r) {
         StringBuilder sql = new StringBuilder();
-        sql.append("call insertResident(?, ?, ?, ?, ?, ?, ?)");
+        sql.append("call insertResident(?, ?, ?, ?, ?, ?)");
                
         try {
             Connection cn = ConnectionDB.getConnection();
@@ -66,7 +66,6 @@ public class ResidentDAOImplement implements ResidentDAO{
             stmt.setString(4, r.getHealthStatus());
             stmt.setInt(5, r.getNumberRoom());
             stmt.setString(6, r.getPhoto());
-            stmt.setBoolean(7, r.isIsActive());
             
             stmt.execute();
             System.out.println("agregado");
@@ -83,7 +82,7 @@ public class ResidentDAOImplement implements ResidentDAO{
         try {
             Connection cn = ConnectionDB.getConnection();
             if (cn == null) {
-                System.out.println("Error: la conexión es NULL en ConnectionDB.getConnection()");
+                System.out.println("Error: la conexión es NULL");
             }
             PreparedStatement ps = cn.prepareStatement(sql.toString());
             ps.setInt(1, id);
@@ -124,7 +123,7 @@ public class ResidentDAOImplement implements ResidentDAO{
     @Override
     public void update(Resident t) {
         StringBuilder sql = new StringBuilder();
-        sql.append("call updateResident (?,?,?,?,?,?,?,?)");
+        sql.append("call updateResident (?,?,?,?,?,?,?)");
         
         Connection cn = ConnectionDB.getConnection();
         try {
@@ -136,7 +135,6 @@ public class ResidentDAOImplement implements ResidentDAO{
             ps.setString(5, t.getHealthStatus());
             ps.setInt(6, t.getNumberRoom());
             ps.setString(7, t.getPhoto());
-            ps.setBoolean(8, t.isIsActive());
             ps.execute();
             System.out.println("LA QUERY\n"+sql.toString());
             System.out.println("Residente actualizado");
