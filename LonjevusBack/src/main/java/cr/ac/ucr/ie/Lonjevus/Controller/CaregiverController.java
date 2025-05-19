@@ -62,4 +62,12 @@ public class CaregiverController {
         serviceC.deleteCaregiver(id);
         return getAll();
     }
+    
+    @GetMapping("getcaregiverById/{id}")
+    public Caregiver getById(@PathVariable int id){
+        Caregiver c = serviceC.getCaregiverById(id);
+        Schedule shd = servicesS.getScheduleById(c.getScheduleId());
+        c.setSchedule(shd);
+        return c;
+    }
 }

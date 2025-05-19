@@ -9,17 +9,17 @@ package cr.ac.ucr.ie.Lonjevus.domain;
  * @author User
  */
 public class Admin extends Person {
-    private String oficeContact;
+    private String officeContact;
     
     public Admin(){
         
     }
-    public String getOficeContact() {
-        return oficeContact;
+    public String getOfficeContact() {
+        return officeContact;
     }
 
     public void setOficeContact(String oficeContact) {
-        this.oficeContact = oficeContact;
+        this.officeContact = oficeContact;
     } 
     
 }

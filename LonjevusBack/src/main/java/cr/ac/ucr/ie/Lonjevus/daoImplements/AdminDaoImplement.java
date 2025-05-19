@@ -17,19 +17,19 @@ import java.util.LinkedList;
  *
  * @author User
  */
-public class AdminDaoImplement implements AdminDao{
+public class AdminDaoImplement implements AdminDao {
 
     @Override
     public LinkedList<Admin> getAll() {
         LinkedList<Admin> list = new LinkedList<>();
-     
+
         return list;
     }
 
     @Override
     public void add(Admin t) {
-        String sql = "spAddAdmin(?,?,?,?,?,?,?,?)";
-        try{
+        String sql = "call spAddAdmin(?,?,?,?,?,?,?,?)";
+        try {
             Connection cn = ConnectionDB.getConnection();
             CallableStatement smtp = cn.prepareCall(sql);
             smtp.setString(1, t.getIdentification());
@@ -37,20 +37,20 @@ public class AdminDaoImplement implements AdminDao{
             smtp.setDouble(3, t.getSalary());
             smtp.setString(4, t.getEmail());
             smtp.setString(5, t.getPassword());
-            smtp.setString(6, t.getOficeContact());
+            smtp.setString(6, t.getOfficeContact());
             smtp.setString(7, t.getPhotoUrl());
             smtp.setInt(8, t.getScheduleId());
             smtp.executeQuery();
-       }catch(SQLException e){
-            System.err.println("Error al ejecutar la consulta "+e.getMessage());
+        } catch (SQLException e) {
+            System.err.println("Error al ejecutar la consulta " + e.getMessage());
         }
-        
+
     }
 
     @Override
     public void update(Admin t) {
-          String sql = "spUpdateAdmin(?,?,?,?,?,?,?,?,?)";
-            try{
+        String sql = "call spUpdateAdmin(?,?,?,?,?,?,?,?,?)";
+        try {
             Connection cn = ConnectionDB.getConnection();
             CallableStatement smtp = cn.prepareCall(sql);
             smtp.setInt(1, t.getId());
@@ -59,36 +59,37 @@ public class AdminDaoImplement implements AdminDao{
             smtp.setDouble(4, t.getSalary());
             smtp.setString(5, t.getEmail());
             smtp.setString(6, t.getPassword());
-            smtp.setString(7, t.getOficeContact());
+            smtp.setString(7, t.getOfficeContact());
             smtp.setString(8, t.getPhotoUrl());
             smtp.setInt(9, t.getScheduleId());
             smtp.executeQuery();
-       }catch(SQLException e){
-            System.err.println("Error al ejecutar la consulta "+e.getMessage());
+        } catch (SQLException e) {
+            System.err.println("Error al ejecutar la consulta " + e.getMessage());
         }
     }
 
     @Override
     public void deleteById(Integer y) {
-       String sql = "spCaregiverLogicalDelete(?)";
-          try{
+        String sql = "call spCaregiverLogicalDelete(?)";
+        try {
             Connection cn = ConnectionDB.getConnection();
             CallableStatement smtp = cn.prepareCall(sql);
             smtp.setInt(1, y);
             smtp.executeQuery();
-        }catch(SQLException e){
+        } catch (SQLException e) {
             System.err.println("Error al ejecutar la consulta " + e.getMessage());
         }
     }
 
     @Override
     public Admin getById(Integer y) {
-        String sql = "spGetAdmin(?)";
-        try{
+        String sql = "call spGetAdmin(?)";
+        try {
             Connection cn = ConnectionDB.getConnection();
             CallableStatement smtp = cn.prepareCall(sql);
+            smtp.setInt(1, y);
             ResultSet rs = smtp.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 Admin a = new Admin();
                 a.setId(rs.getInt(1));
                 a.setIdentification(rs.getString(2));
@@ -99,12 +100,43 @@ public class AdminDaoImplement implements AdminDao{
                 a.setOficeContact(rs.getString(7));
                 a.setPhotoUrl(rs.getString(8));
                 a.setScheduleId(rs.getInt(9));
+                a.setIsActive(rs.getBoolean(10));
                 return a;
             }
-        }catch(SQLException e){
+        } catch (SQLException e) {
             System.err.println("Error al ejecutar la consutal" + e.getMessage());
         }
         return null;
     }
-    
+
+    public Admin findByEmail(String email) {
+        // Debes tener un Stored Procedure que busque un admin por email.
+        // Supongamos que se llama "spGetAdminByEmail".
+        String sql = "call spGetAdminByEmail(?)";
+        Admin admin = null;
+        try (Connection cn = ConnectionDB.getConnection(); CallableStatement smtp = cn.prepareCall(sql)) {
+
+            smtp.setString(1, email);
+            try (ResultSet rs = smtp.executeQuery()) {
+                if (rs.next()) { // Si se encontró un admin con ese email
+                    admin = new Admin();
+                    admin.setId(rs.getInt(1)); // Usa nombres de columna, es más seguro
+                    admin.setIdentification(rs.getString(2));
+                    admin.setName(rs.getString(3));
+                    admin.setSalary(rs.getDouble(4));
+                    admin.setEmail(rs.getString(5));
+                    admin.setPassword(rs.getString(6));
+                    admin.setOficeContact(rs.getString(7));
+                    admin.setPhotoUrl(rs.getString(8));
+                    admin.setScheduleId(rs.getInt(9));
+                    admin.setIsActive(rs.getBoolean(10));
+                    return admin;
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al buscar admin por email: " + e.getMessage());
+            // Considera lanzar una excepción personalizada o manejarla de forma más robusta
+        }
+        return null;
+    }
 }

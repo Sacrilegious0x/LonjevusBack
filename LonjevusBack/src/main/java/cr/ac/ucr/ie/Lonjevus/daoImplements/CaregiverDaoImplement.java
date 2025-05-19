@@ -32,14 +32,14 @@ public class CaregiverDaoImplement implements CaregiverDao{
             while(rs.next()){
                 Caregiver c = new Caregiver();
                 c.setId(rs.getInt(1));
-                c.setName(rs.getString(2));
-                c.setIdentification(rs.getString(3));
-                c.setSalary(rs.getDouble(4));
-                c.setPhotoUrl(rs.getString(5));
-                c.setEmail(rs.getString(6));
-                c.setPassword(rs.getString(7));
-                c.setShift(rs.getString(8));
-                boolean temp = rs.getString(9).equalsIgnoreCase("1") ? true : false;
+                c.setIdentification(rs.getString(2));
+                c.setName(rs.getString(3));    
+                c.setSalary(rs.getDouble(4));               
+                c.setEmail(rs.getString(5));
+                c.setPassword(rs.getString(6));
+                c.setShift(rs.getString(7));
+                c.setPhotoUrl(rs.getString(8));
+                boolean temp = rs.getBoolean(9);
                 c.setIsActive(temp);
                 c.setScheduleId(rs.getInt(10));
                 if(temp){
@@ -117,7 +117,9 @@ public class CaregiverDaoImplement implements CaregiverDao{
        try{
          
             Connection cn = ConnectionDB.getConnection();
+            
             CallableStatement smtp = cn.prepareCall(sql);
+            smtp.setInt(1, y);
             ResultSet rs = smtp.executeQuery();
             while(rs.next()){
                 Caregiver t = new Caregiver();
@@ -129,7 +131,8 @@ public class CaregiverDaoImplement implements CaregiverDao{
                  t.setPassword(rs.getString(6));
                  t.setShift(rs.getString(7));
                  t.setPhotoUrl(rs.getString(8));
-                 t.setScheduleId(rs.getInt(9));
+                 t.setIsActive(rs.getBoolean(9));
+                 t.setScheduleId(rs.getInt(10));
                 return t;
             }
             

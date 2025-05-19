@@ -14,7 +14,7 @@ import java.util.LinkedList;
  */
 public class AdminService {
     private static  AdminDaoImplement data = new  AdminDaoImplement();
-    
+     
     public LinkedList<Admin> getAll(){
         return data.getAll();
     }
@@ -33,6 +33,17 @@ public class AdminService {
     
     public void deleteAdmin(int y){
         data.deleteById(y);
+    }
+    public Admin login(String email, String plainPassword) {
+    Admin admin = data.findByEmail(email); 
+
+        if (admin != null && admin.isIsActive()) {
+
+            if (admin.getPassword().equals(plainPassword)) {
+                return admin; 
+            }
+        }
+        return null; 
     }
     
 }
