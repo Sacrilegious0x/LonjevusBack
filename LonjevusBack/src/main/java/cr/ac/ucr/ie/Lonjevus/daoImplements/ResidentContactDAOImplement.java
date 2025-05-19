@@ -142,4 +142,5 @@ public class ResidentContactDAOImplement implements ResidentContactDAO {
             System.out.println(sql.toString() + "\nNo sirvio el query\n" + e.getMessage());
         }
     }
+
 }

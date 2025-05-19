@@ -180,4 +180,6 @@ public class ResidentDAOImplement implements ResidentDAO {
         return list;
     }
 
+  
+
 }
