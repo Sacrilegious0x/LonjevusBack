@@ -62,4 +62,27 @@ public class LocalStorageService {
         }
     }
     
+    public String save(MultipartFile file) {
+         String uploadDir = "uploads/photos/suppliers";
+        try {
+            // Crear carpeta si no existe
+            Path uploadPath = Paths.get(uploadDir);
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+
+            // nombre unico
+            String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+            Path filePath = uploadPath.resolve(fileName);
+
+            // Guardar archivo
+            Files.copy(file.getInputStream(), filePath);
+
+             return "photos/suppliers/" + fileName;// se muestra en la web
+        } catch (IOException e) {
+            throw new RuntimeException("Error al guardar archivo", e);
+        }
+    }
+
+    
 }
