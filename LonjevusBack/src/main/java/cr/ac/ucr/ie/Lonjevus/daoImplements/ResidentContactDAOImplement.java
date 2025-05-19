@@ -32,12 +32,12 @@ public class ResidentContactDAOImplement implements ResidentContactDAO {
         StringBuilder sql = new StringBuilder();
         sql.append("call getContacts(?);");
 
-        Connection cn = ConnectionDB.getConnection();
-        if (cn == null) {
-            System.out.println("ERROR: La conexion es NULL");
-        }
-
         try {
+            Connection cn = ConnectionDB.getConnection();
+            if (cn == null) {
+                System.out.println("ERROR: La conexion es NULL");
+            }
+
             PreparedStatement ps = cn.prepareStatement(sql.toString());
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
@@ -77,12 +77,12 @@ public class ResidentContactDAOImplement implements ResidentContactDAO {
             if (cn == null) {
                 System.out.println("Error: la conexión es NULL en ConnectionDB.getConnection()");
             }
-            
+
             Resident resident = ResidentService.findById(t.getIdResident());
             t.setResident(resident);
 
             PreparedStatement ps = cn.prepareCall(sql.toString());
-            
+
             ps.setString(1, t.getName());
             ps.setString(2, t.getPhoneNumber());
             ps.setString(3, t.getRelationShip());
@@ -95,7 +95,7 @@ public class ResidentContactDAOImplement implements ResidentContactDAO {
     }
 
     @Override
-    public void deleteById(int id) {
+    public void deleteById(Integer id) {
         StringBuilder sql = new StringBuilder();
         sql.append("call deleteContact(?);");
 
@@ -114,7 +114,7 @@ public class ResidentContactDAOImplement implements ResidentContactDAO {
     }
 
     @Override
-    public ResidentContact findById(int id) {
+    public ResidentContact findById(Integer id) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
@@ -129,7 +129,7 @@ public class ResidentContactDAOImplement implements ResidentContactDAO {
                 System.out.println("Error: la conexión es NULL en ConnectionDB.getConnection()");
             }
             PreparedStatement ps = cn.prepareCall(sql.toString());
-            
+
             ps.setInt(1, t.getId());
             ps.setString(2, t.getName());
             ps.setString(3, t.getPhoneNumber());
