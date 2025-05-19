@@ -9,7 +9,7 @@ import cr.ac.ucr.ie.Lonjevus.dao.InventoryDAO;
 import cr.ac.ucr.ie.Lonjevus.domain.Inventory;
 import cr.ac.ucr.ie.Lonjevus.domain.Product;
 import cr.ac.ucr.ie.Lonjevus.domain.Purchase;
-import cr.ac.ucr.ie.Lonjevus.domain.Supplier;
+//import cr.ac.ucr.ie.Lonjevus.domain.Supplier;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -43,11 +43,11 @@ public LinkedList<Inventory> getAll() {
             product.setName(rs.getString("product_name"));
             product.setExpirationDate(rs.getDate("expiration_date").toLocalDate());
 
-            Supplier supplier = new Supplier();
-            supplier.setId(rs.getInt("supplier_id"));
-            supplier.setName(rs.getString("supplier_name"));
+           // Supplier supplier = new Supplier();
+            //supplier.setId(rs.getInt("supplier_id"));
+            //supplier.setName(rs.getString("supplier_name"));
 
-            product.setSupplier(supplier);
+            //product.setSupplier(supplier);
             inventory.setProduct(product);
 
             Purchase purchase = new Purchase();

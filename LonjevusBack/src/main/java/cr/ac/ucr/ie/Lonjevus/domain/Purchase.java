@@ -8,18 +8,18 @@ public class Purchase {
     private Integer id;
     private LocalDate date;
     private BigDecimal amount;
-    private Admin admin;
+    //private Admin admin;
     private LinkedList<PurchaseProduct> items; //La relacion de muchos, la compra tiene 1 o muchos productos
 
     public Purchase() {
         this.items = new LinkedList<>();
     }
 
-    public Purchase(Integer id, LocalDate date, BigDecimal amount, Admin admin, LinkedList<PurchaseProduct> items) {
+    public Purchase(Integer id, LocalDate date, BigDecimal amount, LinkedList<PurchaseProduct> items) {
         this.id = id;
         this.date = date;
         this.amount = amount;
-        this.admin = admin;
+      //  this.admin = admin;
         this.items = items;
     }
 
@@ -35,9 +35,9 @@ public class Purchase {
         return amount;
     }
 
-    public Admin getAdmin() {
-        return admin;
-    }
+    // Admin getAdmin() {
+     //   return admin;
+    //}
 
     public LinkedList<PurchaseProduct> getItems() {
         return items;
@@ -55,15 +55,15 @@ public class Purchase {
         this.amount = amount;
     }
 
-    public void setAdmin(Admin admin) {
-        this.admin = admin;
-    }
+   // public void setAdmin(Admin admin) {
+     //   this.admin = admin;
+    //}
 
     public void setItems(LinkedList<PurchaseProduct> items) {
         this.items = items;
     }
 
-    public void setSupplier(Supplier supplier) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    //public void setSupplier(Supplier supplier) {
+      //  throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    //}
 }

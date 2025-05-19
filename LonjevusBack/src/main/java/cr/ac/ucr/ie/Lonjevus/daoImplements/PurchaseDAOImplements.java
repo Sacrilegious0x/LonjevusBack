@@ -6,7 +6,7 @@ package cr.ac.ucr.ie.Lonjevus.daoImplements;
 
 import cr.ac.ucr.ie.Lonjevus.Connection.ConnectionDB;
 import cr.ac.ucr.ie.Lonjevus.dao.PurchaseDAO;
-import cr.ac.ucr.ie.Lonjevus.domain.Admin;
+//import cr.ac.ucr.ie.Lonjevus.domain.Admin;
 import cr.ac.ucr.ie.Lonjevus.domain.Purchase;
 import cr.ac.ucr.ie.Lonjevus.domain.PurchaseProduct;
 import java.sql.CallableStatement;
@@ -45,9 +45,9 @@ public class PurchaseDAOImplements implements PurchaseDAO {
                     existingPurchase.setDate(rs.getDate("purchase_date").toLocalDate());
                     existingPurchase.setAmount(rs.getBigDecimal("purchase_amount"));
 
-                    Admin admin = new Admin();
-                    admin.setName(rs.getString("admin_name"));
-                    existingPurchase.setAdmin(admin);
+                    //Admin admin = new Admin();
+                    //admin.setName(rs.getString("admin_name"));
+                    //existingPurchase.setAdmin(admin);
 
                     existingPurchase.setItems(new LinkedList<>());
                     purchases.add(existingPurchase);
@@ -86,7 +86,7 @@ public class PurchaseDAOImplements implements PurchaseDAO {
             try (CallableStatement cs = cn.prepareCall(sqlPurchase)) {
                 cs.setDate(1, java.sql.Date.valueOf(purchase.getDate()));
                 cs.setBigDecimal(2, purchase.getAmount());
-                cs.setInt(3, purchase.getAdmin().getId());
+                //cs.setInt(3, purchase.getAdmin().getId());
 
                 ResultSet rs = cs.executeQuery();
                 if (rs.next()) {
@@ -180,10 +180,10 @@ public class PurchaseDAOImplements implements PurchaseDAO {
                     purchase.setDate(rs.getDate("purchase_date").toLocalDate());
                     purchase.setAmount(rs.getBigDecimal("purchase_amount"));
 
-                    Admin admin = new Admin();
-                    admin.setId(rs.getInt("admin_id"));
-                    admin.setName(rs.getString("admin_name"));
-                    purchase.setAdmin(admin);
+                    //Admin admin = new Admin();
+                    //admin.setId(rs.getInt("admin_id"));
+                    //admin.setName(rs.getString("admin_name"));
+                    //purchase.setAdmin(admin);
 
                     purchase.setItems(new LinkedList<>());
                 }
