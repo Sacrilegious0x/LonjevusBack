@@ -169,7 +169,7 @@ CREATE TABLE inventory (
     id INT PRIMARY KEY AUTO_INCREMENT,
     quantity INT,
     category VARCHAR(100),
-    photo VARCHAR(255),
+    photo Text,
     productId INT,
     supplierId INT,
     isActive BOOLEAN,
@@ -177,95 +177,136 @@ CREATE TABLE inventory (
     FOREIGN KEY (supplierId) REFERENCES supplier(id)
 );
 
+//TABLA DE LA RELACION N:M ENTRE COMPRA Y PRODUCTO
+CREATE TABLE purchase_product (
+    idPurchase INT,
+    idProduct INT,
+    quantity INT,
+    PRIMARY KEY (idPurchase, idProduct),
+    FOREIGN KEY (idPurchase) REFERENCES purchase(id),
+    FOREIGN KEY (idProduct) REFERENCES product(id)
+);
 
-//INSERTS
-INSERT INTO room (id, statusRoom, roomType, bedCount, isActive) VALUES (1, 'Disponible', 'Individual', 1, TRUE);
-INSERT INTO room (id, statusRoom, roomType, bedCount, isActive) VALUES (2, 'No disponible', 'Compartida', 3, TRUE);
-INSERT INTO room (id, statusRoom, roomType, bedCount, isActive) VALUES (3, 'Disponible', 'Compartida', 2, TRUE);
-INSERT INTO room (id, statusRoom, roomType, bedCount, isActive) VALUES (4, 'No disponible', 'Individual', 3, TRUE);
-INSERT INTO room (id, statusRoom, roomType, bedCount, isActive) VALUES (5, 'Disponible', 'Individual', 2, TRUE);
-INSERT INTO room (id, statusRoom, roomType, bedCount, isActive) VALUES (6, 'No disponible', 'Compartida', 3, TRUE);
-INSERT INTO room (id, statusRoom, roomType, bedCount, isActive) VALUES (7, 'Disponible', 'Compartida', 4, TRUE);
-INSERT INTO room (id, statusRoom, roomType, bedCount, isActive) VALUES (8, 'Disponible', 'Compartida', 1, TRUE);
-INSERT INTO room (id, statusRoom, roomType, bedCount, isActive) VALUES (9, 'Disponible', 'Compartida', 2, TRUE);
-INSERT INTO room (id, statusRoom, roomType, bedCount, isActive) VALUES (10, 'No disponible', 'Individual', 4, TRUE);
-INSERT INTO resident (id, identification, name, age, healthStatus, numberRoom, photo, isActive) VALUES (1, 'ID1000', 'Residente 1', 75, 'Estable', 9, 'foto_residente_1.jpg', TRUE);
-INSERT INTO resident (id, identification, name, age, healthStatus, numberRoom, photo, isActive) VALUES (2, 'ID1001', 'Residente 2', 86, 'Estable', 4, 'foto_residente_2.jpg', TRUE);
-INSERT INTO resident (id, identification, name, age, healthStatus, numberRoom, photo, isActive) VALUES (3, 'ID1002', 'Residente 3', 81, 'Mejorando', 7, 'foto_residente_3.jpg', TRUE);
-INSERT INTO resident (id, identification, name, age, healthStatus, numberRoom, photo, isActive) VALUES (4, 'ID1003', 'Residente 4', 78, 'Crítico', 6, 'foto_residente_4.jpg', TRUE);
-INSERT INTO resident (id, identification, name, age, healthStatus, numberRoom, photo, isActive) VALUES (5, 'ID1004', 'Residente 5', 72, 'Mejorando', 2, 'foto_residente_5.jpg', TRUE);
-INSERT INTO resident (id, identification, name, age, healthStatus, numberRoom, photo, isActive) VALUES (6, 'ID1005', 'Residente 6', 95, 'Mejorando', 3, 'foto_residente_6.jpg', TRUE);
-INSERT INTO resident (id, identification, name, age, healthStatus, numberRoom, photo, isActive) VALUES (7, 'ID1006', 'Residente 7', 65, 'Estable', 3, 'foto_residente_7.jpg', TRUE);
-INSERT INTO resident (id, identification, name, age, healthStatus, numberRoom, photo, isActive) VALUES (8, 'ID1007', 'Residente 8', 93, 'Estable', 6, 'foto_residente_8.jpg', TRUE);
-INSERT INTO resident (id, identification, name, age, healthStatus, numberRoom, photo, isActive) VALUES (9, 'ID1008', 'Residente 9', 84, 'Crítico', 8, 'foto_residente_9.jpg', TRUE);
-INSERT INTO resident (id, identification, name, age, healthStatus, numberRoom, photo, isActive) VALUES (10, 'ID1009', 'Residente 10', 87, 'Mejorando', 6, 'foto_residente_10.jpg', TRUE);
-INSERT INTO schedule (id, day, entryTime1, exitTime1, entryTime2, exitTime2, isActive) VALUES (1, 'Viernes', '08:00', '12:00', '13:00', '17:00', TRUE);
-INSERT INTO schedule (id, day, entryTime1, exitTime1, entryTime2, exitTime2, isActive) VALUES (2, 'Martes', '08:00', '12:00', '13:00', '17:00', TRUE);
-INSERT INTO schedule (id, day, entryTime1, exitTime1, entryTime2, exitTime2, isActive) VALUES (3, 'Viernes', '08:00', '12:00', '13:00', '17:00', TRUE);
-INSERT INTO schedule (id, day, entryTime1, exitTime1, entryTime2, exitTime2, isActive) VALUES (4, 'Viernes', '08:00', '12:00', '13:00', '17:00', TRUE);
-INSERT INTO schedule (id, day, entryTime1, exitTime1, entryTime2, exitTime2, isActive) VALUES (5, 'Viernes', '08:00', '12:00', '13:00', '17:00', TRUE);
-INSERT INTO schedule (id, day, entryTime1, exitTime1, entryTime2, exitTime2, isActive) VALUES (6, 'Martes', '08:00', '12:00', '13:00', '17:00', TRUE);
-INSERT INTO schedule (id, day, entryTime1, exitTime1, entryTime2, exitTime2, isActive) VALUES (7, 'Viernes', '08:00', '12:00', '13:00', '17:00', TRUE);
-INSERT INTO schedule (id, day, entryTime1, exitTime1, entryTime2, exitTime2, isActive) VALUES (8, 'Miércoles', '08:00', '12:00', '13:00', '17:00', TRUE);
-INSERT INTO schedule (id, day, entryTime1, exitTime1, entryTime2, exitTime2, isActive) VALUES (9, 'Miércoles', '08:00', '12:00', '13:00', '17:00', TRUE);
-INSERT INTO schedule (id, day, entryTime1, exitTime1, entryTime2, exitTime2, isActive) VALUES (10, 'Miércoles', '08:00', '12:00', '13:00', '17:00', TRUE);
-INSERT INTO person (id, name, identification, salary, photoSchedule, email, password, scheduleID, isActive) VALUES (1, 'Persona 1', 'PERS1000', 1045.53, 'foto_horario_1.jpg', 'persona1@correo.com', 'password123', 7, TRUE);
-INSERT INTO person (id, name, identification, salary, photoSchedule, email, password, scheduleID, isActive) VALUES (2, 'Persona 2', 'PERS1001', 999.04, 'foto_horario_2.jpg', 'persona2@correo.com', 'password123', 10, TRUE);
-INSERT INTO person (id, name, identification, salary, photoSchedule, email, password, scheduleID, isActive) VALUES (3, 'Persona 3', 'PERS1002', 1836.86, 'foto_horario_3.jpg', 'persona3@correo.com', 'password123', 6, TRUE);
-INSERT INTO person (id, name, identification, salary, photoSchedule, email, password, scheduleID, isActive) VALUES (4, 'Persona 4', 'PERS1003', 1132.98, 'foto_horario_4.jpg', 'persona4@correo.com', 'password123', 2, TRUE);
-INSERT INTO person (id, name, identification, salary, photoSchedule, email, password, scheduleID, isActive) VALUES (5, 'Persona 5', 'PERS1004', 1344.24, 'foto_horario_5.jpg', 'persona5@correo.com', 'password123', 7, TRUE);
-INSERT INTO person (id, name, identification, salary, photoSchedule, email, password, scheduleID, isActive) VALUES (6, 'Persona 6', 'PERS1005', 1992.7, 'foto_horario_6.jpg', 'persona6@correo.com', 'password123', 2, TRUE);
-INSERT INTO person (id, name, identification, salary, photoSchedule, email, password, scheduleID, isActive) VALUES (7, 'Persona 7', 'PERS1006', 575.91, 'foto_horario_7.jpg', 'persona7@correo.com', 'password123', 2, TRUE);
-INSERT INTO person (id, name, identification, salary, photoSchedule, email, password, scheduleID, isActive) VALUES (8, 'Persona 8', 'PERS1007', 1669.65, 'foto_horario_8.jpg', 'persona8@correo.com', 'password123', 1, TRUE);
-INSERT INTO person (id, name, identification, salary, photoSchedule, email, password, scheduleID, isActive) VALUES (9, 'Persona 9', 'PERS1008', 1440.23, 'foto_horario_9.jpg', 'persona9@correo.com', 'password123', 9, TRUE);
-INSERT INTO person (id, name, identification, salary, photoSchedule, email, password, scheduleID, isActive) VALUES (10, 'Persona 10', 'PERS1009', 1585.0, 'foto_horario_10.jpg', 'persona10@correo.com', 'password123', 3, TRUE);
-INSERT INTO administrator (id, officeContact) VALUES (1, 'Oficina 1');
-INSERT INTO administrator (id, officeContact) VALUES (2, 'Oficina 2');
-INSERT INTO administrator (id, officeContact) VALUES (3, 'Oficina 3');
-INSERT INTO administrator (id, officeContact) VALUES (4, 'Oficina 4');
-INSERT INTO administrator (id, officeContact) VALUES (5, 'Oficina 5');
-INSERT INTO administrator (id, officeContact) VALUES (6, 'Oficina 6');
-INSERT INTO administrator (id, officeContact) VALUES (7, 'Oficina 7');
-INSERT INTO administrator (id, officeContact) VALUES (8, 'Oficina 8');
-INSERT INTO administrator (id, officeContact) VALUES (9, 'Oficina 9');
-INSERT INTO administrator (id, officeContact) VALUES (10, 'Oficina 10');
-INSERT INTO caregiver (id, shift, residentId) VALUES (1, 'Mañana', 10);
-INSERT INTO caregiver (id, shift, residentId) VALUES (2, 'Tarde', 1);
-INSERT INTO caregiver (id, shift, residentId) VALUES (3, 'Noche', 8);
-INSERT INTO caregiver (id, shift, residentId) VALUES (4, 'Tarde', 7);
-INSERT INTO caregiver (id, shift, residentId) VALUES (5, 'Tarde', 3);
-INSERT INTO caregiver (id, shift, residentId) VALUES (6, 'Mañana', 5);
-INSERT INTO caregiver (id, shift, residentId) VALUES (7, 'Tarde', 3);
-INSERT INTO caregiver (id, shift, residentId) VALUES (8, 'Tarde', 8);
-INSERT INTO caregiver (id, shift, residentId) VALUES (9, 'Tarde', 7);
-INSERT INTO caregiver (id, shift, residentId) VALUES (10, 'Tarde', 9);
-INSERT INTO errand (id, caregiverId, description) VALUES (1, 1, 'Tarea 1');
-INSERT INTO errand (id, caregiverId, description) VALUES (2, 2, 'Tarea 2');
-INSERT INTO errand (id, caregiverId, description) VALUES (3, 7, 'Tarea 3');
-INSERT INTO errand (id, caregiverId, description) VALUES (4, 8, 'Tarea 4');
-INSERT INTO errand (id, caregiverId, description) VALUES (5, 6, 'Tarea 5');
-INSERT INTO errand (id, caregiverId, description) VALUES (6, 6, 'Tarea 6');
-INSERT INTO errand (id, caregiverId, description) VALUES (7, 3, 'Tarea 7');
-INSERT INTO errand (id, caregiverId, description) VALUES (8, 9, 'Tarea 8');
-INSERT INTO errand (id, caregiverId, description) VALUES (9, 4, 'Tarea 9');
-INSERT INTO errand (id, caregiverId, description) VALUES (10, 7, 'Tarea 10');
-INSERT INTO billing (id, sequence, date, amount, period, paymentMethod, administratorId, residentId, isActive) VALUES (1, 'SEQ100', '2023-03-12', 866.22, 'Trimestral', 'Efectivo', 8, 2, TRUE);
-INSERT INTO billing (id, sequence, date, amount, period, paymentMethod, administratorId, residentId, isActive) VALUES (2, 'SEQ101', '2023-03-08', 769.85, 'Trimestral', 'Efectivo', 1, 4, TRUE);
-INSERT INTO billing (id, sequence, date, amount, period, paymentMethod, administratorId, residentId, isActive) VALUES (3, 'SEQ102', '2023-04-30', 312.85, 'Trimestral', 'Transferencia', 10, 3, TRUE);
-INSERT INTO billing (id, sequence, date, amount, period, paymentMethod, administratorId, residentId, isActive) VALUES (4, 'SEQ103', '2023-07-04', 870.01, 'Mensual', 'Transferencia', 3, 1, TRUE);
-INSERT INTO billing (id, sequence, date, amount, period, paymentMethod, administratorId, residentId, isActive) VALUES (5, 'SEQ104', '2023-01-13', 460.3, 'Mensual', 'Transferencia', 7, 2, TRUE);
-INSERT INTO billing (id, sequence, date, amount, period, paymentMethod, administratorId, residentId, isActive) VALUES (6, 'SEQ105', '2023-12-16', 210.95, 'Trimestral', 'Efectivo', 5, 3, TRUE);
-INSERT INTO billing (id, sequence, date, amount, period, paymentMethod, administratorId, residentId, isActive) VALUES (7, 'SEQ106', '2023-05-27', 958.8, 'Mensual', 'Transferencia', 2, 10, TRUE);
-INSERT INTO billing (id, sequence, date, amount, period, paymentMethod, administratorId, residentId, isActive) VALUES (8, 'SEQ107', '2023-10-07', 864.48, 'Trimestral', 'Transferencia', 9, 2, TRUE);
-INSERT INTO billing (id, sequence, date, amount, period, paymentMethod, administratorId, residentId, isActive) VALUES (9, 'SEQ108', '2023-11-04', 278.42, 'Mensual', 'Efectivo', 9, 5, TRUE);
-INSERT INTO billing (id, sequence, date, amount, period, paymentMethod, administratorId, residentId, isActive) VALUES (10, 'SEQ109', '2023-07-30', 919.24, 'Trimestral', 'Transferencia', 4, 8, TRUE);
-INSERT INTO visit (id, name, visitDate, contact, relationship, photo, idresident, isActive) VALUES (1, 'Visitante 1', '2023-02-16', '88880001', 'Amigo', 'foto_visita_1.jpg', 4, TRUE);
-INSERT INTO visit (id, name, visitDate, contact, relationship, photo, idresident, isActive) VALUES (2, 'Visitante 2', '2023-07-18', '88880002', 'Amigo', 'foto_visita_2.jpg', 6, TRUE);
-INSERT INTO visit (id, name, visitDate, contact, relationship, photo, idresident, isActive) VALUES (3, 'Visitante 3', '2023-09-07', '88880003', 'Hijo', 'foto_visita_3.jpg', 7, TRUE);
-INSERT INTO visit (id, name, visitDate, contact, relationship, photo, idresident, isActive) VALUES (4, 'Visitante 4', '2023-08-13', '88880004', 'Hijo', 'foto_visita_4.jpg', 9, TRUE);
-INSERT INTO visit (id, name, visitDate, contact, relationship, photo, idresident, isActive) VALUES (5, 'Visitante 5', '2023-06-22', '88880005', 'Nieto', 'foto_visita_5.jpg', 1, TRUE);
-INSERT INTO visit (id, name, visitDate, contact, relationship, photo, idresident, isActive) VALUES (6, 'Visitante 6', '2023-06-10', '88880006', 'Hijo', 'foto_visita_6.jpg', 6, TRUE);
-INSERT INTO visit (id, name, visitDate, contact, relationship, photo, idresident, isActive) VALUES (7, 'Visitante 7', '2023-07-19', '88880007', 'Amigo', 'foto_visita_7.jpg', 3, TRUE);
-INSERT INTO visit (id, name, visitDate, contact, relationship, photo, idresident, isActive) VALUES (8, 'Visitante 8', '2023-09-02', '88880008', 'Nieto', 'foto_visita_8.jpg', 4, TRUE);
-INSERT INTO visit (id, name, visitDate, contact, relationship, photo, idresident, isActive) VALUES (9, 'Visitante 9', '2023-12-13', '88880009', 'Amigo', 'foto_visita_9.jpg', 7, TRUE);
-INSERT INTO visit (id, name, visitDate, contact, relationship, photo, idresident, isActive) VALUES (10, 'Visitante 10', '2023-05-06', '88880010', 'Hijo', 'foto_visita_10.jpg', 1, TRUE);
+SELECT * FROM PRODUCT
+SELECT * FROM PURCHASE
+SELECT * FROM PURCHASE_PRODUCT
+
+SELECT * FROM INVENTORY
+
+
+SELECT * FROM inventory WHERE isActive = 1;
+CALL get_all_inventory_full();
+
+
+DESCRIBE INVENTORY;
+CALL get_all_inventory();
+DROP PROCEDURE IF EXISTS get_all_inventory;
+
+
+
+
+
+
+
+
+
+
+
+-- Compra 1 tiene 2 productos
+INSERT INTO purchase_product (idPurchase, idProduct, quantity) VALUES (1, 2, 10);
+INSERT INTO purchase_product (idPurchase, idProduct, quantity) VALUES (1, 3, 5);
+
+-- Producto 2 se compró en 2 compras diferentes
+INSERT INTO purchase_product (idPurchase, idProduct, quantity) VALUES (2, 2, 7);
+
+
+//Inserts
+INSERT INTO schedule (day, entryTime1, exitTime1, entryTime2, exitTime2, isActive) VALUES
+('Lunes', '08:00', '12:00', '13:00', '17:00', TRUE),
+('Martes', '08:30', '12:30', '14:00', '18:00', TRUE),
+('Miércoles', '09:00', '13:00', '14:00', '18:00', TRUE);
+
+INSERT INTO person (name, identification, salary, photoSchedule, email, password, scheduleID, isActive) VALUES
+('Carlos Pérez', 'PER1001', 1200.00, 'horario1.jpg', 'carlos@mail.com', 'pass1', 1, TRUE),
+('Lucía Fernández', 'PER1002', 1400.50, 'horario2.jpg', 'lucia@mail.com', 'pass2', 2, TRUE),
+('Juan Solís', 'PER1003', 1350.75, 'horario3.jpg', 'juan@mail.com', 'pass3', 3, TRUE);
+
+INSERT INTO administrator (id, officeContact) VALUES
+(1, 'Oficina 101'),
+(2, 'Oficina 102'),
+(3, 'Oficina 103');
+ 
+
+INSERT INTO room (id, statusRoom, roomType, bedCount, isActive) VALUES
+(1, 'Disponible', 'Individual', 1, TRUE),
+(2, 'No disponible', 'Compartida', 2, TRUE),
+(3, 'Disponible', 'Individual', 1, TRUE);
+
+INSERT INTO resident (identification, name, age, healthStatus, numberRoom, photo, isActive) VALUES
+('ID101', 'Ana Soto', 75, 'Estable', 1, 'foto1.jpg', TRUE),
+('ID102', 'Luis Gómez', 82, 'Mejorando', 2, 'foto2.jpg', TRUE),
+('ID103', 'Elena Ruiz', 68, 'Crítico', 3, 'foto3.jpg', TRUE);
+
+INSERT INTO caregiver (id, shift, residentId) VALUES
+(1, 'Mañana', 4),
+(2, 'Tarde', 5),
+(3, 'Noche', 6);
+
+INSERT INTO errand (caregiverId, description) VALUES
+(1, 'Toma de presión'),
+(2, 'Asistencia al baño'),
+(3, 'Entrega de medicamentos');
+
+INSERT INTO visit (name, visitDate, contact, relationship, photo, idresident, isActive) VALUES
+('Pedro Morales', '2023-01-05', '88881234', 'Hijo', 'visita1.jpg', 4, TRUE),
+('María Jiménez', '2023-02-10', '88885678', 'Nieta', 'visita2.jpg', 5, TRUE),
+('Laura Vargas', '2023-03-15', '88889999', 'Amiga', 'visita3.jpg', 6, TRUE);
+
+INSERT INTO activity (name, description, type, date, startTime, endTime, location, status, responsibleId, isActive) VALUES
+('Taller de pintura', 'Actividad artística', 'Recreativa', '2023-04-01', '10:00', '12:00', 'Sala común', 'Activa', 1, TRUE),
+('Clases de yoga', 'Relajación y ejercicio', 'Física', '2023-04-02', '09:00', '10:30', 'Patio', 'Activa', 2, TRUE),
+('Cine foro', 'Película y discusión', 'Cultural', '2023-04-03', '15:00', '17:00', 'Sala TV', 'Activa', 3, TRUE);
+
+INSERT INTO resident_activity (resident_id, activity_id) VALUES
+(4, 1),
+(5, 2),
+(6, 3);
+
+INSERT INTO caregiver_resident (caregiver_id, resident_id) VALUES
+(1, 4),
+(2, 5),
+(3, 6);
+
+INSERT INTO supplier (name, phoneNumber, email, address, photo, isActive) VALUES
+('Proveedor A', '80000001', 'a@correo.com', 'San José', 'proveedorA.jpg', TRUE),
+('Proveedor B', '80000002', 'b@correo.com', 'Heredia', 'proveedorB.jpg', TRUE),
+('Proveedor C', '80000003', 'c@correo.com', 'Cartago', 'proveedorC.jpg', TRUE);
+
+INSERT INTO unit (unit_type, isActive) VALUES
+('ml', TRUE),
+('g', TRUE),
+('unidades', TRUE);
+
+INSERT INTO product (name, price, expirationDate, category, photo, unitId, supplierId, isActive) VALUES
+('Paracetamol', 200.00, '2024-12-31', 'Medicamento', 'paracetamol.jpg', 1, 1, TRUE),
+('Vitamina C', 150.00, '2025-01-15', 'Suplemento', 'vitaminac.jpg', 2, 2, TRUE),
+('Algodón', 50.00, '2026-06-10', 'Insumo', 'algodon.jpg', 3, 3, TRUE);
+
+INSERT INTO purchase (date, amount, idAdministrator, idProduct, isActive) VALUES
+('2023-05-01', 200.00, 1, 1, TRUE),
+('2023-05-02', 150.00, 2, 2, TRUE),
+('2023-05-03', 50.00, 3, 3, TRUE);
+
+INSERT INTO inventory (quantity, category, photo, productId, supplierId, isActive) VALUES
+(100, 'Medicamento', 'inv1.jpg', 1, 1, TRUE),
+(50, 'Suplemento', 'inv2.jpg', 2, 2, TRUE),
+(75, 'Insumo', 'inv3.jpg', 3, 3, TRUE);
+
+
+SELECT * FROM inventory
+SHOW CREATE PROCEDURE get_all_inventory;
+CALL get_all_inventory();get_all_products
+
+
+SELECT * FROM product
+

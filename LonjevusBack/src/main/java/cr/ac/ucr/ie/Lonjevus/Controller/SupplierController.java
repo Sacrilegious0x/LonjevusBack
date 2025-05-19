@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  *
- * @author User
+ * @author Usuario
  */
 @Controller
-public class NewController {
+public class SupplierController {
     
     @RequestMapping("/url")
     public String page(Model model) {

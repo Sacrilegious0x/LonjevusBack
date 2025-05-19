@@ -4,12 +4,12 @@
  */
 package cr.ac.ucr.ie.Lonjevus.dao;
 
-import cr.ac.ucr.ie.Lonjevus.domain.Inventary;
+import cr.ac.ucr.ie.Lonjevus.domain.Schedule;
 
 /**
  *
- * @author Usuario
+ * @author User
  */
-public interface InventaryDAO extends CRUD<Inventary>{
+public interface ScheduleDao extends CRUD<Schedule> {
     
 }

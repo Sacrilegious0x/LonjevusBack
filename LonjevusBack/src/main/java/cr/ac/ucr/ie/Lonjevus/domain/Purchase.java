@@ -1,33 +1,26 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cr.ac.ucr.ie.Lonjevus.domain;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.LinkedList;
 
-/**
- *
- * @author Usuario
- */
 public class Purchase {
     private Integer id;
     private LocalDate date;
-    private Product product;
     private BigDecimal amount;
-    private Administrator administrator;
-    private Boolean isActive;
+    private Admin admin;
+    private LinkedList<PurchaseProduct> items; //La relacion de muchos, la compra tiene 1 o muchos productos
 
-    public Purchase() {}
+    public Purchase() {
+        this.items = new LinkedList<>();
+    }
 
-    public Purchase(Integer id, LocalDate date, Product product, BigDecimal amount, Administrator administrator, Boolean isActive) {
+    public Purchase(Integer id, LocalDate date, BigDecimal amount, Admin admin, LinkedList<PurchaseProduct> items) {
         this.id = id;
         this.date = date;
-        this.product = product;
         this.amount = amount;
-        this.administrator = administrator;
-        this.isActive = isActive;
+        this.admin = admin;
+        this.items = items;
     }
 
     public Integer getId() {
@@ -38,20 +31,16 @@ public class Purchase {
         return date;
     }
 
-    public Product getProduct() {
-        return product;
-    }
-
     public BigDecimal getAmount() {
         return amount;
     }
 
-    public Administrator getAdministrator() {
-        return administrator;
+    public Admin getAdmin() {
+        return admin;
     }
 
-    public Boolean getIsActive() {
-        return isActive;
+    public LinkedList<PurchaseProduct> getItems() {
+        return items;
     }
 
     public void setId(Integer id) {
@@ -59,22 +48,22 @@ public class Purchase {
     }
 
     public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
+            this.date = date;
     }
 
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
-    public void setAdministrator(Administrator administrator) {
-        this.administrator = administrator;
+    public void setAdmin(Admin admin) {
+        this.admin = admin;
     }
 
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
+    public void setItems(LinkedList<PurchaseProduct> items) {
+        this.items = items;
+    }
+
+    public void setSupplier(Supplier supplier) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

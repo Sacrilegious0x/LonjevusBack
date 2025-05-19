@@ -3,33 +3,28 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package cr.ac.ucr.ie.Lonjevus.domain;
-
-import java.util.function.Supplier;
-
 /**
  *
  * @author Usuario
  */
-public class Inventary {
+public class Inventory {
     
     private Integer id;
     private Integer quantity;
     private String category;
     private String photoURL;
     private Product product;
-    private Supplier supplier;
-    private Boolean isActive;
+    private Purchase purchase;
 
-    public Inventary() {}
+    public Inventory() {}
 
-    public Inventary(Integer id, Integer quantity, String category, String photoURL, Product product, Supplier supplier, Boolean isActive) {
+    public Inventory(Integer id, Integer quantity, String category, String photoURL, Product product, Purchase purchase) {
         this.id = id;
         this.quantity = quantity;
         this.category = category;
         this.photoURL = photoURL;
         this.product = product;
-        this.supplier = supplier;
-        this.isActive = isActive;
+        this.purchase = purchase;
     }
 
     public Integer getId() {
@@ -52,12 +47,8 @@ public class Inventary {
         return product;
     }
 
-    public Supplier getSupplier() {
-        return supplier;
-    }
-
-    public Boolean getIsActive() {
-        return isActive;
+    public Purchase getPurchase() {
+        return purchase;
     }
 
     public void setId(Integer id) {
@@ -80,12 +71,8 @@ public class Inventary {
         this.product = product;
     }
 
-    public void setSupplier(Supplier supplier) {
-        this.supplier = supplier;
+    public void setPurchase(Purchase purchase) {
+        this.purchase = purchase;
     }
 
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
-    }
-    
 }

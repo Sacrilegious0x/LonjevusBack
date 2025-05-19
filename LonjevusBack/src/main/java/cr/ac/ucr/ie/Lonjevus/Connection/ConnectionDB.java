@@ -13,7 +13,7 @@ import java.sql.SQLException;
  * @author User
  */
 public class ConnectionDB {
-    
+
     private static final String DATABASE="LongevusDB";
     private static final String USER= "root";
     private static final String PASS="";
@@ -37,5 +37,4 @@ public class ConnectionDB {
         }
         return connect;
     }
-    
 }

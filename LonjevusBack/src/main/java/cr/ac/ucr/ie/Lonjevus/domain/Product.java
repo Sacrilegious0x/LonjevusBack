@@ -6,7 +6,8 @@ package cr.ac.ucr.ie.Lonjevus.domain;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.function.Supplier;
+
+
 
 /**
  *
@@ -22,11 +23,10 @@ public class Product {
     private String photoURL;
     private Unit unit;
     private Supplier supplier;
-    private Boolean isActive;
 
     public Product() {}
 
-    public Product(Integer id, String name, BigDecimal price, String category, LocalDate expirationDate, String photoURL, Unit unit, Supplier supplier, Boolean isActive) {
+    public Product(Integer id, String name, BigDecimal price, String category, LocalDate expirationDate, String photoURL, Unit unit, Supplier supplier) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -35,7 +35,6 @@ public class Product {
         this.photoURL = photoURL;
         this.unit = unit;
         this.supplier = supplier;
-        this.isActive = isActive;
     }
 
     public Integer getId() {
@@ -70,10 +69,6 @@ public class Product {
         return supplier;
     }
 
-    public Boolean getIsActive() {
-        return isActive;
-    }
-
     public void setId(Integer id) {
         this.id = id;
     }
@@ -106,10 +101,6 @@ public class Product {
         this.supplier = supplier;
     }
 
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
-    }
-    
     
     
     

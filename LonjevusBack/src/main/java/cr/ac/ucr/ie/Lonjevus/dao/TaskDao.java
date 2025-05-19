@@ -4,18 +4,12 @@
  */
 package cr.ac.ucr.ie.Lonjevus.dao;
 
-import java.util.LinkedList;
+import cr.ac.ucr.ie.Lonjevus.domain.Task;
 
 /**
  *
  * @author User
- * @param <T>
  */
-
-public interface CRUD<T> {
-    public LinkedList<T> getAll();
-    public void add(T t);
-    public void update(T t);
-    public void deleteById(Integer y);
-    public T findById(Integer y);
+public interface TaskDao extends CRUD<Task>{
+    
 }
