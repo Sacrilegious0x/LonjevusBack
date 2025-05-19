@@ -13,6 +13,7 @@ public class ResidentContact {
     private String name;
     private String phoneNumber;
     private String relationShip;
+    private int idResident;
     private Resident resident;
     
     public ResidentContact(){
@@ -49,6 +50,14 @@ public class ResidentContact {
 
     public void setRelationShip(String relationShip) {
         this.relationShip = relationShip;
+    }
+
+    public int getIdResident() {
+        return idResident;
+    }
+
+    public void setIdResident(int idResident) {
+        this.idResident = idResident;
     }
 
     public Resident getResident() {

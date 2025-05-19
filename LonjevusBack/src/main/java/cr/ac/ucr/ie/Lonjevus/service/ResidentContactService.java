@@ -24,6 +24,10 @@ public class ResidentContactService {
     }
     
     public static void updateContact(ResidentContact rC){
-        r.add(rC);
+        r.update(rC);
+    }
+    
+    public static void deleteContact(int id){
+        r.deleteById(id);
     }
 }

@@ -28,6 +28,10 @@ public class ResidentService {
         return data.findById(id);
     }
     
+    public static LinkedList<Resident> findByNameorIdentification(String value){
+        return data.getByNameorId(value);
+    }
+    
     public static void update(Resident resident){
         data.update(resident);
     }

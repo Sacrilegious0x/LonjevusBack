@@ -14,6 +14,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
+import java.util.LinkedList;
 import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,11 +38,6 @@ import org.springframework.web.multipart.MultipartFile;
 //@Controller
 public class ResidentController {
 
-    /*@RequestMapping("/url")
-    public String page(Model model) {
-        model.addAttribute("attribute", "value");
-        return "view.name";
-    }*/
     @GetMapping("/hello")
     public String sayHello() {
         return "Hello World!";
@@ -80,6 +76,8 @@ public class ResidentController {
 
             }
             resident.setPhoto(fileName);
+        }else {
+            resident.setPhoto("foto.jpg");
         }
 
         ResidentService.add(resident);
@@ -97,12 +95,48 @@ public class ResidentController {
     public Resident seachById(@RequestParam int id) {
         return ResidentService.findById(id);
     }
+    
+    @GetMapping("/findResidentByNameorIdentification")
+    public LinkedList<Resident> getResidentByNameorIdentification(@RequestParam String value){
+        return ResidentService.findByNameorIdentification(value);
+    }
 
     @PostMapping("/updateResident")
-    public String updateResident(@RequestBody Resident r) {
-        if (r.getId() != 0) {
-            System.out.println("\nLOS DATOS DEL RESIDENTE\n" + r.toString());
-            ResidentService.update(r);
+    public String updateResident(@RequestParam int id, @RequestParam String identification, @RequestParam String name,
+            @RequestParam String birthdate, @RequestParam String healthStatus,
+            @RequestParam int numberRoom, @RequestParam(required = false) MultipartFile photo) {
+        
+        Resident resident = new Resident();
+        resident.setId(id);
+        resident.setIdentification(identification);
+        resident.setName(name);
+        resident.setBirthdate(LocalDate.parse(birthdate));
+        resident.setHealthStatus(healthStatus);
+        resident.setNumberRoom(numberRoom);
+
+        if (photo != null && !photo.isEmpty()) {
+            String fileName = photo.getOriginalFilename();
+            Path path = Paths.get("uploads/residentes");
+
+            try {
+                if (!Files.exists(path)) {
+                    Files.createDirectories(path);
+                }
+
+                Path filePath = path.resolve(fileName);
+                Files.copy(photo.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+
+            }
+            resident.setPhoto(fileName);
+        } else {
+            String currentPhoto = ResidentService.findById(id).getPhoto();
+            resident.setPhoto(currentPhoto);
+        }
+        
+        if (ResidentService.findById(id) != null) {        
+            System.out.println("\nLOS DATOS DEL RESIDENTE\n" + resident.toString());
+            ResidentService.update(resident);
 
             return "Residente actualizado";
         }
@@ -112,5 +146,23 @@ public class ResidentController {
     @GetMapping("/getContacts")
     public List<ResidentContact> getContacts(@RequestParam int id) {
         return ResidentContactService.getAll(id);
+    }
+    
+    @PostMapping("/addContact")
+    public String addContact(@RequestBody ResidentContact r){
+        ResidentContactService.addContact(r);
+        return "Contacto agregado";
+    }
+    
+    @DeleteMapping("/deleteContact")
+    public String deleteContact(@RequestParam int id){
+        ResidentContactService.deleteContact(id);
+        return "Contacto eliminado";
+    }
+    
+    @PostMapping("/updateContact")
+    public String updateContact(@RequestBody ResidentContact r){
+        ResidentContactService.updateContact(r);
+        return "Contacto actualizado";
     }
 }
