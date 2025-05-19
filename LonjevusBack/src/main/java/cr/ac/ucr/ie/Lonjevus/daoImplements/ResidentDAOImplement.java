@@ -22,12 +22,13 @@ public class ResidentDAOImplement implements ResidentDAO {
         StringBuilder sql = new StringBuilder();
         sql.append("call getResidents();");
 
-        Connection cn = ConnectionDB.getConnection();
+        
+        try {
+            Connection cn = ConnectionDB.getConnection();
         if (cn == null) {
             System.out.println("ERROR: La conexion es NULL");
         }
         PreparedStatement ps;
-        try {
             ps = cn.prepareStatement(sql.toString());
             ResultSet rs = ps.executeQuery();
             Resident resident;
@@ -75,7 +76,7 @@ public class ResidentDAOImplement implements ResidentDAO {
     }
 
     @Override
-    public void deleteById(int id) {
+    public void deleteById(Integer id) {
         StringBuilder sql = new StringBuilder();
         sql.append("call deleteResident(?);");
 
@@ -94,12 +95,13 @@ public class ResidentDAOImplement implements ResidentDAO {
     }
 
     @Override
-    public Resident findById(int id) {
+    public Resident findById(Integer id) {
         StringBuilder sql = new StringBuilder();
         sql.append("call getResidentById(?)");
         Resident resident = new Resident();
-        Connection cn = ConnectionDB.getConnection();
+        
         try {
+            Connection cn = ConnectionDB.getConnection();
             PreparedStatement ps = cn.prepareStatement(sql.toString());
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
@@ -126,8 +128,9 @@ public class ResidentDAOImplement implements ResidentDAO {
         StringBuilder sql = new StringBuilder();
         sql.append("call updateResident (?,?,?,?,?,?,?)");
 
-        Connection cn = ConnectionDB.getConnection();
+        
         try {
+            Connection cn = ConnectionDB.getConnection();
             PreparedStatement ps = cn.prepareStatement(sql.toString());
             ps.setInt(1, t.getId());
             ps.setString(2, t.getIdentification());
@@ -151,8 +154,9 @@ public class ResidentDAOImplement implements ResidentDAO {
         sql.append("call getResidentByNameOrIdentification(?)");
         LinkedList<Resident> list = new LinkedList<>();
         
-        Connection cn = ConnectionDB.getConnection();
+        
         try {
+            Connection cn = ConnectionDB.getConnection();
             PreparedStatement ps = cn.prepareStatement(sql.toString());
             ps.setString(1, value);
             ResultSet rs = ps.executeQuery();
