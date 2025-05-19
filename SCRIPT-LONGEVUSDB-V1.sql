@@ -143,8 +143,13 @@ CREATE TABLE product (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(100),
     price DECIMAL(10, 2),
+<<<<<<< HEAD
     category NVARCHAR(30),
     expirationDate DATE,
+=======
+	expirationDate DATE,
+    category NVARCHAR(30),
+>>>>>>> britany
     photo NVARCHAR(200),
     unitId INT,
     supplierId INT,
@@ -156,9 +161,15 @@ CREATE TABLE product (
 CREATE TABLE purchase (
     id INT PRIMARY KEY AUTO_INCREMENT,
     date DATE,
+<<<<<<< HEAD
     idProduct int,
     amount DECIMAL(10, 2),
     idAdministrator INT,
+=======
+    amount DECIMAL(10, 2),
+    idAdministrator INT,
+    idProduct int,
+>>>>>>> britany
     isActive BOOLEAN,
     FOREIGN KEY (idAdministrator) REFERENCES administrator(id),
     FOREIGN KEY (idProduct) REFERENCES product(id)
@@ -169,10 +180,152 @@ CREATE TABLE inventory (
     id INT PRIMARY KEY AUTO_INCREMENT,
     quantity INT,
     category VARCHAR(100),
+<<<<<<< HEAD
     photo VARCHAR(255),
+=======
+    photo Text,
+>>>>>>> britany
     productId INT,
     supplierId INT,
     isActive BOOLEAN,
     FOREIGN KEY (productId) REFERENCES product(id),
     FOREIGN KEY (supplierId) REFERENCES supplier(id)
+<<<<<<< HEAD
 );
+=======
+);
+
+//TABLA DE LA RELACION N:M ENTRE COMPRA Y PRODUCTO
+CREATE TABLE purchase_product (
+    idPurchase INT,
+    idProduct INT,
+    quantity INT,
+    PRIMARY KEY (idPurchase, idProduct),
+    FOREIGN KEY (idPurchase) REFERENCES purchase(id),
+    FOREIGN KEY (idProduct) REFERENCES product(id)
+);
+
+SELECT * FROM PRODUCT
+SELECT * FROM PURCHASE
+SELECT * FROM PURCHASE_PRODUCT
+
+SELECT * FROM INVENTORY
+
+
+SELECT * FROM inventory WHERE isActive = 1;
+CALL get_all_inventory_full();
+
+
+DESCRIBE INVENTORY;
+CALL get_all_inventory();
+DROP PROCEDURE IF EXISTS get_all_inventory;
+
+
+
+
+
+
+
+
+
+
+
+-- Compra 1 tiene 2 productos
+INSERT INTO purchase_product (idPurchase, idProduct, quantity) VALUES (1, 2, 10);
+INSERT INTO purchase_product (idPurchase, idProduct, quantity) VALUES (1, 3, 5);
+
+-- Producto 2 se compró en 2 compras diferentes
+INSERT INTO purchase_product (idPurchase, idProduct, quantity) VALUES (2, 2, 7);
+
+
+//Inserts
+INSERT INTO schedule (day, entryTime1, exitTime1, entryTime2, exitTime2, isActive) VALUES
+('Lunes', '08:00', '12:00', '13:00', '17:00', TRUE),
+('Martes', '08:30', '12:30', '14:00', '18:00', TRUE),
+('Miércoles', '09:00', '13:00', '14:00', '18:00', TRUE);
+
+INSERT INTO person (name, identification, salary, photoSchedule, email, password, scheduleID, isActive) VALUES
+('Carlos Pérez', 'PER1001', 1200.00, 'horario1.jpg', 'carlos@mail.com', 'pass1', 1, TRUE),
+('Lucía Fernández', 'PER1002', 1400.50, 'horario2.jpg', 'lucia@mail.com', 'pass2', 2, TRUE),
+('Juan Solís', 'PER1003', 1350.75, 'horario3.jpg', 'juan@mail.com', 'pass3', 3, TRUE);
+
+INSERT INTO administrator (id, officeContact) VALUES
+(1, 'Oficina 101'),
+(2, 'Oficina 102'),
+(3, 'Oficina 103');
+ 
+
+INSERT INTO room (id, statusRoom, roomType, bedCount, isActive) VALUES
+(1, 'Disponible', 'Individual', 1, TRUE),
+(2, 'No disponible', 'Compartida', 2, TRUE),
+(3, 'Disponible', 'Individual', 1, TRUE);
+
+INSERT INTO resident (identification, name, age, healthStatus, numberRoom, photo, isActive) VALUES
+('ID101', 'Ana Soto', 75, 'Estable', 1, 'foto1.jpg', TRUE),
+('ID102', 'Luis Gómez', 82, 'Mejorando', 2, 'foto2.jpg', TRUE),
+('ID103', 'Elena Ruiz', 68, 'Crítico', 3, 'foto3.jpg', TRUE);
+
+INSERT INTO caregiver (id, shift, residentId) VALUES
+(1, 'Mañana', 4),
+(2, 'Tarde', 5),
+(3, 'Noche', 6);
+
+INSERT INTO errand (caregiverId, description) VALUES
+(1, 'Toma de presión'),
+(2, 'Asistencia al baño'),
+(3, 'Entrega de medicamentos');
+
+INSERT INTO visit (name, visitDate, contact, relationship, photo, idresident, isActive) VALUES
+('Pedro Morales', '2023-01-05', '88881234', 'Hijo', 'visita1.jpg', 4, TRUE),
+('María Jiménez', '2023-02-10', '88885678', 'Nieta', 'visita2.jpg', 5, TRUE),
+('Laura Vargas', '2023-03-15', '88889999', 'Amiga', 'visita3.jpg', 6, TRUE);
+
+INSERT INTO activity (name, description, type, date, startTime, endTime, location, status, responsibleId, isActive) VALUES
+('Taller de pintura', 'Actividad artística', 'Recreativa', '2023-04-01', '10:00', '12:00', 'Sala común', 'Activa', 1, TRUE),
+('Clases de yoga', 'Relajación y ejercicio', 'Física', '2023-04-02', '09:00', '10:30', 'Patio', 'Activa', 2, TRUE),
+('Cine foro', 'Película y discusión', 'Cultural', '2023-04-03', '15:00', '17:00', 'Sala TV', 'Activa', 3, TRUE);
+
+INSERT INTO resident_activity (resident_id, activity_id) VALUES
+(4, 1),
+(5, 2),
+(6, 3);
+
+INSERT INTO caregiver_resident (caregiver_id, resident_id) VALUES
+(1, 4),
+(2, 5),
+(3, 6);
+
+INSERT INTO supplier (name, phoneNumber, email, address, photo, isActive) VALUES
+('Proveedor A', '80000001', 'a@correo.com', 'San José', 'proveedorA.jpg', TRUE),
+('Proveedor B', '80000002', 'b@correo.com', 'Heredia', 'proveedorB.jpg', TRUE),
+('Proveedor C', '80000003', 'c@correo.com', 'Cartago', 'proveedorC.jpg', TRUE);
+
+INSERT INTO unit (unit_type, isActive) VALUES
+('ml', TRUE),
+('g', TRUE),
+('unidades', TRUE);
+
+INSERT INTO product (name, price, expirationDate, category, photo, unitId, supplierId, isActive) VALUES
+('Paracetamol', 200.00, '2024-12-31', 'Medicamento', 'paracetamol.jpg', 1, 1, TRUE),
+('Vitamina C', 150.00, '2025-01-15', 'Suplemento', 'vitaminac.jpg', 2, 2, TRUE),
+('Algodón', 50.00, '2026-06-10', 'Insumo', 'algodon.jpg', 3, 3, TRUE);
+
+INSERT INTO purchase (date, amount, idAdministrator, idProduct, isActive) VALUES
+('2023-05-01', 200.00, 1, 1, TRUE),
+('2023-05-02', 150.00, 2, 2, TRUE),
+('2023-05-03', 50.00, 3, 3, TRUE);
+
+INSERT INTO inventory (quantity, category, photo, productId, supplierId, isActive) VALUES
+(100, 'Medicamento', 'inv1.jpg', 1, 1, TRUE),
+(50, 'Suplemento', 'inv2.jpg', 2, 2, TRUE),
+(75, 'Insumo', 'inv3.jpg', 3, 3, TRUE);
+
+
+SELECT * FROM inventory
+SHOW CREATE PROCEDURE get_all_inventory;
+CALL get_all_inventory();get_all_products
+
+
+SELECT * FROM product
+
+>>>>>>> britany

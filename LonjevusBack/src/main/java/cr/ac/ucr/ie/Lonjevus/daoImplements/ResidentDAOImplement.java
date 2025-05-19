@@ -22,12 +22,23 @@ public class ResidentDAOImplement implements ResidentDAO {
         StringBuilder sql = new StringBuilder();
         sql.append("call getResidents();");
 
+<<<<<<< HEAD
         try {
             Connection cn = ConnectionDB.getConnection();
             if (cn == null) {
                 System.out.println("ERROR: La conexion es NULL");
             }
             PreparedStatement ps = cn.prepareStatement(sql.toString());
+=======
+        
+        try {
+            Connection cn = ConnectionDB.getConnection();
+        if (cn == null) {
+            System.out.println("ERROR: La conexion es NULL");
+        }
+        PreparedStatement ps;
+            ps = cn.prepareStatement(sql.toString());
+>>>>>>> developer
             ResultSet rs = ps.executeQuery();
             Resident resident;
             while (rs.next()) {
@@ -97,6 +108,10 @@ public class ResidentDAOImplement implements ResidentDAO {
         StringBuilder sql = new StringBuilder();
         sql.append("call getResidentById(?)");
         Resident resident = new Resident();
+<<<<<<< HEAD
+=======
+        
+>>>>>>> developer
         try {
             Connection cn = ConnectionDB.getConnection();
             PreparedStatement ps = cn.prepareStatement(sql.toString());
@@ -125,6 +140,10 @@ public class ResidentDAOImplement implements ResidentDAO {
         StringBuilder sql = new StringBuilder();
         sql.append("call updateResident (?,?,?,?,?,?,?)");
 
+<<<<<<< HEAD
+=======
+        
+>>>>>>> developer
         try {
             Connection cn = ConnectionDB.getConnection();
             PreparedStatement ps = cn.prepareStatement(sql.toString());
@@ -149,7 +168,12 @@ public class ResidentDAOImplement implements ResidentDAO {
         StringBuilder sql = new StringBuilder();
         sql.append("call getResidentByNameOrIdentification(?)");
         LinkedList<Resident> list = new LinkedList<>();
+<<<<<<< HEAD
 
+=======
+        
+        
+>>>>>>> developer
         try {
             Connection cn = ConnectionDB.getConnection();
             PreparedStatement ps = cn.prepareStatement(sql.toString());
@@ -174,5 +198,7 @@ public class ResidentDAOImplement implements ResidentDAO {
 
         return list;
     }
+
+  
 
 }
