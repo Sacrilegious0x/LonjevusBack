@@ -110,8 +110,6 @@ public class AdminDaoImplement implements AdminDao {
     }
 
     public Admin findByEmail(String email) {
-        // Debes tener un Stored Procedure que busque un admin por email.
-        // Supongamos que se llama "spGetAdminByEmail".
         String sql = "call spGetAdminByEmail(?)";
         Admin admin = null;
         try (Connection cn = ConnectionDB.getConnection(); CallableStatement smtp = cn.prepareCall(sql)) {
@@ -135,7 +133,7 @@ public class AdminDaoImplement implements AdminDao {
             }
         } catch (SQLException e) {
             System.err.println("Error al buscar admin por email: " + e.getMessage());
-            // Considera lanzar una excepción personalizada o manejarla de forma más robusta
+           
         }
         return null;
     }

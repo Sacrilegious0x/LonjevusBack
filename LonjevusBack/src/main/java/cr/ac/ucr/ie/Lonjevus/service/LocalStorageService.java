@@ -15,9 +15,10 @@ import org.springframework.web.multipart.MultipartFile;
  * @author User
  */
 public class LocalStorageService {
-    private final String uploadDirA = "uploads/photos/admin";
+   
     
     public String saveAdminPhoto(MultipartFile file) throws IOException {
+           String uploadDirA = "uploads/photos/admin";
     try {
             // Crear carpeta si no existe
             Path uploadPath = Paths.get(uploadDirA);
@@ -37,6 +38,28 @@ public class LocalStorageService {
             throw new RuntimeException("Error al guardar archivo", e);
         }
 
-}
+    }
+    
+    public String saveCaregiverPhoto(MultipartFile file){
+        String uploadDirA = "uploads/photos/caregiver";
+    try {
+            // Crear carpeta si no existe
+            Path uploadPath = Paths.get(uploadDirA);
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+
+            // nombre unico
+            String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+            Path filePath = uploadPath.resolve(fileName);
+
+            // Guardar archivo
+            Files.copy(file.getInputStream(), filePath);
+
+             return "photos/caregiver/" + fileName;// se muestra en la web
+        } catch (IOException e) {
+            throw new RuntimeException("Error al guardar archivo", e);
+        }
+    }
     
 }

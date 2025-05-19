@@ -9,6 +9,7 @@ import cr.ac.ucr.ie.Lonjevus.domain.Schedule;
 import cr.ac.ucr.ie.Lonjevus.service.AdminService;
 import cr.ac.ucr.ie.Lonjevus.service.LocalStorageService;
 import cr.ac.ucr.ie.Lonjevus.service.ScheduleService;
+import java.io.IOException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -45,17 +46,14 @@ public class AdminController {
             Schedule shd = a.getSchedule();
             int idSchedule = servicesS.addAndReturn(shd);
             a.setScheduleId(idSchedule);
-            if (photoFile != null && !photoFile.isEmpty()) {
-                System.out.println("Esto es la foto: " + photoFile.getOriginalFilename());
-                String photoPath = localStorageService.saveAdminPhoto(photoFile);
-                System.out.println("Esto es la ruta REAL de la foto: " + photoPath);
+            if (photoFile != null && !photoFile.isEmpty()) {               
+                String photoPath = localStorageService.saveAdminPhoto(photoFile);             
                 a.setPhotoUrl(photoPath);
             }
             serviceA.addAdmin(a);
 
             return ResponseEntity.ok("Administrador creado exitosamente");
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error al crear administrador");
         }
@@ -68,7 +66,7 @@ public class AdminController {
             if (a == null) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Administrador no encontrado con ID: " + id);
             }
-            if (a.getScheduleId() != 0) { // O la condición que uses para un ID válido
+            if (a.getScheduleId() != 0) {
                 Schedule shd = servicesS.getScheduleById(a.getScheduleId());
                 a.setSchedule(shd);
             }
@@ -85,12 +83,9 @@ public class AdminController {
             @RequestPart(value = "photo") MultipartFile photoFile) {
         try {
             Schedule shd = a.getSchedule();
-            System.out.println("ID DEL HORARIO " + shd.getId());
             servicesS.updateSchedule(shd);
-            if (photoFile != null && !photoFile.isEmpty()) {
-                System.out.println("Esto es la foto: " + photoFile.getOriginalFilename());
+            if (photoFile != null && !photoFile.isEmpty()) {               
                 String photoPath = localStorageService.saveAdminPhoto(photoFile);
-                System.out.println("Esto es la ruta REAL de la foto: " + photoPath);
                 a.setPhotoUrl(photoPath);
             }
             System.out.println("ID DEL ADMIN" + a.getId());
