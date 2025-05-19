@@ -40,5 +40,4 @@ public class ConnectionDB {
         }
         return connect;
     }
-
 }

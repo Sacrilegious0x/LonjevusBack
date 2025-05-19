@@ -32,12 +32,13 @@ public class ResidentContactDAOImplement implements ResidentContactDAO {
         StringBuilder sql = new StringBuilder();
         sql.append("call getContacts(?);");
 
-        Connection cn = ConnectionDB.getConnection();
+        
+
+        try {
+            Connection cn = ConnectionDB.getConnection();
         if (cn == null) {
             System.out.println("ERROR: La conexion es NULL");
         }
-
-        try {
             PreparedStatement ps = cn.prepareStatement(sql.toString());
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
@@ -95,7 +96,7 @@ public class ResidentContactDAOImplement implements ResidentContactDAO {
     }
 
     @Override
-    public void deleteById(int id) {
+    public void deleteById(Integer id) {
         StringBuilder sql = new StringBuilder();
         sql.append("call deleteContact(?);");
 
@@ -114,7 +115,7 @@ public class ResidentContactDAOImplement implements ResidentContactDAO {
     }
 
     @Override
-    public ResidentContact findById(int id) {
+    public ResidentContact findById(Integer id) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
@@ -141,4 +142,5 @@ public class ResidentContactDAOImplement implements ResidentContactDAO {
             System.out.println(sql.toString() + "\nNo sirvio el query\n" + e.getMessage());
         }
     }
+
 }
