@@ -41,11 +41,7 @@ public class SupplierDAOImplement implements SupplierDAO {
                 if(temp){
                     supp_list.add(supplier);
                 }
-                
-                
-
             }
-
         } catch (SQLException e) {
             System.out.println("Error de SQL" + e.getMessage());
         }
