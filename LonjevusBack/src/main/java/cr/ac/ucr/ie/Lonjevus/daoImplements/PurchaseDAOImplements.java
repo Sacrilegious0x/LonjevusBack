@@ -6,6 +6,8 @@ package cr.ac.ucr.ie.Lonjevus.daoImplements;
 
 import cr.ac.ucr.ie.Lonjevus.Connection.ConnectionDB;
 import cr.ac.ucr.ie.Lonjevus.dao.PurchaseDAO;
+import cr.ac.ucr.ie.Lonjevus.domain.Inventory;
+import cr.ac.ucr.ie.Lonjevus.domain.Product;
 //import cr.ac.ucr.ie.Lonjevus.domain.Admin;
 import cr.ac.ucr.ie.Lonjevus.domain.Purchase;
 import cr.ac.ucr.ie.Lonjevus.domain.PurchaseProduct;
@@ -28,12 +30,12 @@ public class PurchaseDAOImplements implements PurchaseDAO {
         try (Connection cn = ConnectionDB.getConnection(); CallableStatement stmt = cn.prepareCall(sql); ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                int purchaseId = rs.getInt("purchase_id");
+                String purchaseId = rs.getString("purchase_id");
 
-                // Buscar si la compra ya fue agregada
+                //Buscar si la compra ya fue agregada
                 Purchase existingPurchase = null;
                 for (Purchase p : purchases) {
-                    if (p.getId() == purchaseId) {
+                    if (p.getId().equals(purchaseId)) {
                         existingPurchase = p;
                         break;
                     }
@@ -48,7 +50,6 @@ public class PurchaseDAOImplements implements PurchaseDAO {
                     //Admin admin = new Admin();
                     //admin.setName(rs.getString("admin_name"));
                     //existingPurchase.setAdmin(admin);
-
                     existingPurchase.setItems(new LinkedList<>());
                     purchases.add(existingPurchase);
                 }
@@ -81,26 +82,50 @@ public class PurchaseDAOImplements implements PurchaseDAO {
 
             //INSERT A LA TABLA DE COMPRAS
             String sqlPurchase = "CALL insert_purchase(?, ?, ?)";
-            int purchaseId = 0;
+            String purchaseId = null;
 
             try (CallableStatement cs = cn.prepareCall(sqlPurchase)) {
                 cs.setDate(1, java.sql.Date.valueOf(purchase.getDate()));
                 cs.setBigDecimal(2, purchase.getAmount());
+                cs.setInt(3, 1);
                 //cs.setInt(3, purchase.getAdmin().getId());
 
                 ResultSet rs = cs.executeQuery();
                 if (rs.next()) {
-                    purchaseId = rs.getInt("new_purchase_id");
+                    purchaseId = rs.getString("new_purchase_id");
                 }
             }
             //INSERT A LA TABLA DE LA RELACION N:M
-            String sqlDetail = "CALL insert_purchase_product(?, ?, ?)";
+            String sqlDetail = "CALL insert_purchase_product(?, ?, ?, ?)";
             for (PurchaseProduct item : purchase.getItems()) {
                 try (CallableStatement csItem = cn.prepareCall(sqlDetail)) {
-                    csItem.setInt(1, purchaseId);
+                    csItem.setString(1, purchaseId);
                     csItem.setInt(2, item.getIdProduct());
                     csItem.setInt(3, item.getQuantity());
+                    csItem.setDate(4, java.sql.Date.valueOf(item.getExpirationDate()));
                     csItem.executeUpdate();
+                }
+            }
+
+            //TAMBIEN SE VAN A AGREGAR LOS PRODUCTOS DE LA COMPRA AL INVENARIO
+            InventoryDAOImplements inventoryDAO = new InventoryDAOImplements();
+            for (PurchaseProduct item : purchase.getItems()) {
+                for (int i = 0; i < item.getQuantity(); i++) {
+                    Inventory inv = new Inventory();
+                    inv.setQuantity(1);
+                    inv.setCategory("Default");
+                    inv.setPhotoURL("default.png");
+
+                    Product product = new Product();
+                    product.setId(item.getIdProduct());
+                    product.setExpirationDate(item.getExpirationDate());
+                    inv.setProduct(product);
+
+                    Purchase pur = new Purchase();
+                    pur.setId(purchaseId);
+                    inv.setPurchase(pur);
+
+                    inventoryDAO.addWithConnection(inv, cn); //Se estaban bloqueando las conexiones, la solucion es reutilizarla
                 }
             }
 
@@ -121,24 +146,25 @@ public class PurchaseDAOImplements implements PurchaseDAO {
 
             String updateSQL = "CALL update_purchase(?, ?, ?)";
             try (CallableStatement stmt = cn.prepareCall(updateSQL)) {
-                stmt.setInt(1, purchase.getId());
+                stmt.setString(1, purchase.getId());
                 stmt.setDate(2, java.sql.Date.valueOf(purchase.getDate()));
-                stmt.setBigDecimal(3, purchase.getAmount()); // ← ¡Agrega esto!
+                stmt.setBigDecimal(3, purchase.getAmount());
                 stmt.executeUpdate();
             }
 
             String deleteOld = "CALL delete_purchase_products(?)";
             try (CallableStatement stmt = cn.prepareCall(deleteOld)) {
-                stmt.setInt(1, purchase.getId());
+                stmt.setString(1, purchase.getId());
                 stmt.executeUpdate();
             }
 
-            String insertProduct = "CALL insert_purchase_product(?, ?, ?)";
+            String insertProduct = "CALL insert_purchase_product(?, ?, ?, ?)";
             for (PurchaseProduct item : purchase.getItems()) {
                 try (CallableStatement stmt = cn.prepareCall(insertProduct)) {
-                    stmt.setInt(1, purchase.getId());
+                    stmt.setString(1, purchase.getId());
                     stmt.setInt(2, item.getIdProduct());
                     stmt.setInt(3, item.getQuantity());
+                    stmt.setDate(4, java.sql.Date.valueOf(item.getExpirationDate()));
                     stmt.executeUpdate();
                 }
             }
@@ -151,11 +177,11 @@ public class PurchaseDAOImplements implements PurchaseDAO {
     }
 
     @Override
-    public void deleteById(Integer id) {
+    public void deleteById(String id) {
         String sql = "CALL delete_purchase_by_id(?)";
 
         try (Connection cn = ConnectionDB.getConnection(); CallableStatement stmt = cn.prepareCall(sql)) {
-            stmt.setInt(1, id);
+            stmt.setString(1, id);
             stmt.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -164,19 +190,19 @@ public class PurchaseDAOImplements implements PurchaseDAO {
     }
 
     @Override
-    public Purchase findById(Integer id) {
+    public Purchase findById(String id) {
         Purchase purchase = null;
         String sql = "CALL get_purchase_with_details_by_id(?);";
 
         try (Connection cn = ConnectionDB.getConnection(); CallableStatement stmt = cn.prepareCall(sql)) {
 
-            stmt.setInt(1, id);
+            stmt.setString(1, id);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
                 if (purchase == null) {
                     purchase = new Purchase();
-                    purchase.setId(rs.getInt("purchase_id"));
+                    purchase.setId(rs.getString("purchase_id"));
                     purchase.setDate(rs.getDate("purchase_date").toLocalDate());
                     purchase.setAmount(rs.getBigDecimal("purchase_amount"));
 
@@ -184,7 +210,6 @@ public class PurchaseDAOImplements implements PurchaseDAO {
                     //admin.setId(rs.getInt("admin_id"));
                     //admin.setName(rs.getString("admin_name"));
                     //purchase.setAdmin(admin);
-
                     purchase.setItems(new LinkedList<>());
                 }
 
@@ -201,6 +226,16 @@ public class PurchaseDAOImplements implements PurchaseDAO {
         }
 
         return purchase;
+    }
+
+    @Override
+    public Purchase findById(Integer y) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void deleteById(Integer x) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 }

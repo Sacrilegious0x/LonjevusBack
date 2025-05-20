@@ -9,10 +9,13 @@ import cr.ac.ucr.ie.Lonjevus.dao.InventoryDAO;
 import cr.ac.ucr.ie.Lonjevus.domain.Inventory;
 import cr.ac.ucr.ie.Lonjevus.domain.Product;
 import cr.ac.ucr.ie.Lonjevus.domain.Purchase;
+import cr.ac.ucr.ie.Lonjevus.domain.Supplier;
 //import cr.ac.ucr.ie.Lonjevus.domain.Supplier;
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.ResultSet;
+import java.time.LocalDate;
 import java.util.LinkedList;
 
 /**
@@ -21,86 +24,87 @@ import java.util.LinkedList;
  */
 public class InventoryDAOImplements implements InventoryDAO {
 
- 
-@Override
-public LinkedList<Inventory> getAll() {
-    LinkedList<Inventory> list = new LinkedList<>();
-    String sql = "CALL get_all_inventory_full();";
+    @Override
+    public LinkedList<Inventory> getAll() {
+        LinkedList<Inventory> list = new LinkedList<>();
+        String sql = "CALL get_all_inventory();";
 
-    try (Connection cn = ConnectionDB.getConnection();
-         CallableStatement stmt = cn.prepareCall(sql);
-         ResultSet rs = stmt.executeQuery()) {
+        try (Connection cn = ConnectionDB.getConnection(); 
+             CallableStatement stmt = cn.prepareCall(sql);
+             ResultSet rs = stmt.executeQuery()) {
 
-        while (rs.next()) {
-            Inventory inventory = new Inventory();
-            inventory.setId(rs.getInt("inventory_id"));
-            inventory.setQuantity(rs.getInt("total_quantity"));
-            inventory.setCategory(rs.getString("category"));
-            inventory.setPhotoURL(rs.getString("photo_url"));
+            while (rs.next()) {
+                int quantity = rs.getInt("quantity");
+                String category = rs.getString("category");
+                String photoURL = rs.getString("photo_url");
 
-            Product product = new Product();
-            product.setId(rs.getInt("product_id"));
-            product.setName(rs.getString("product_name"));
-            product.setExpirationDate(rs.getDate("expiration_date").toLocalDate());
+                Product product = new Product();
+                product.setId(rs.getInt("product_id"));
+                product.setName(rs.getString("product_name"));
+                Date sqlDate = rs.getDate("expiration_date");
+                if (sqlDate != null) {
+                    product.setExpirationDate(sqlDate.toLocalDate());
+                } else {
+                    product.setExpirationDate(null);
+                }
 
-           // Supplier supplier = new Supplier();
-            //supplier.setId(rs.getInt("supplier_id"));
-            //supplier.setName(rs.getString("supplier_name"));
+                Supplier supplier = new Supplier();
+                supplier.setId(rs.getInt("supplier_id"));
+                supplier.setName(rs.getString("supplier_name"));
+                product.setSupplier(supplier);
 
-            //product.setSupplier(supplier);
-            inventory.setProduct(product);
+                Purchase purchase = new Purchase();
+                purchase.setId(rs.getString("purchase_id"));
 
-            Purchase purchase = new Purchase();
-            purchase.setId(rs.getInt("purchase_id"));
-            inventory.setPurchase(purchase);
+                Inventory inventory = new Inventory();
+                inventory.setId(rs.getInt("inventory_id"));
+                inventory.setQuantity(quantity);
+                inventory.setCategory(category);
+                inventory.setPhotoURL(photoURL);
+                inventory.setProduct(product);
+                inventory.setPurchase(purchase);
 
-            list.add(inventory);
+                list.add(inventory);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-
-    return list;
-}
-
-
-    @Override
-    public void add(Inventory t) {
+        return list;
     }
 
     @Override
-    public void update(Inventory inventory) {
-        String sql = "CALL update_inventory_by_id(?, ?, ?)";
+    public void add(Inventory inventory) {
+        String sql = "CALL insert_inventory(?, ?, ?, ?, ?)";
 
-        try {
-            Connection cn = ConnectionDB.getConnection();
-            CallableStatement stmt = cn.prepareCall(sql);
-            stmt.setInt(1, inventory.getId());
-            stmt.setInt(2, inventory.getQuantity());
-            stmt.setString(3, inventory.getCategory());
+        try (Connection cn = ConnectionDB.getConnection(); 
+                CallableStatement stmt = cn.prepareCall(sql)) {
+
+            stmt.setInt(1, inventory.getProduct().getId());
+            stmt.setString(2, inventory.getCategory());
+            stmt.setString(3, inventory.getPhotoURL());
+            stmt.setInt(4, inventory.getQuantity());
+            stmt.setString(5, inventory.getPurchase().getId());
 
             stmt.executeUpdate();
-
-            stmt.close();
-            cn.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Override
+   public void update(Inventory inventory) {
+}
+
+
+    @Override
     public void deleteById(Integer id) {
         String sql = "CALL delete_inventory_logically_by_id(?)";
 
-        try {
-            Connection cn = ConnectionDB.getConnection();
-            CallableStatement stmt = cn.prepareCall(sql);
+        try (Connection cn = ConnectionDB.getConnection(); CallableStatement stmt = cn.prepareCall(sql)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
-
-            stmt.close();
-            cn.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -111,5 +115,66 @@ public LinkedList<Inventory> getAll() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    
+    @Override
+    public LinkedList<Inventory> findByExpirationDate(LocalDate expirationDate) {
+        LinkedList<Inventory> list = new LinkedList<>();
+        String sql = "CALL get_inventory_by_expiration(?)";
+
+        try (Connection cn = ConnectionDB.getConnection(); CallableStatement stmt = cn.prepareCall(sql)) {
+
+            stmt.setDate(1, Date.valueOf(expirationDate));
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int quantity = rs.getInt("quantity");
+                String category = rs.getString("category");
+                String photoURL = rs.getString("photo_url");
+
+                Product product = new Product();
+                product.setId(rs.getInt("product_id"));
+                product.setName(rs.getString("product_name"));
+                Date sqlDate = rs.getDate("expiration_date");
+                if (sqlDate != null) {
+                    product.setExpirationDate(sqlDate.toLocalDate());
+                }
+
+                Supplier supplier = new Supplier();
+                supplier.setId(rs.getInt("supplier_id"));
+                supplier.setName(rs.getString("supplier_name"));
+                product.setSupplier(supplier);
+
+                Purchase purchase = new Purchase();
+                purchase.setId(rs.getString("purchase_id"));
+
+                Inventory inventory = new Inventory();
+                inventory.setId(rs.getInt("inventory_id"));
+                inventory.setQuantity(quantity);
+                inventory.setCategory(category);
+                inventory.setPhotoURL(photoURL);
+                inventory.setProduct(product);
+                inventory.setPurchase(purchase);
+
+                list.add(inventory);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+    public void addWithConnection(Inventory inventory, Connection cn) throws Exception {
+        String sql = "CALL insert_inventory(?, ?, ?, ?, ?)";
+
+        try (CallableStatement stmt = cn.prepareCall(sql)) {
+            stmt.setInt(1, inventory.getProduct().getId());
+            stmt.setString(2, inventory.getCategory());
+            stmt.setString(3, inventory.getPhotoURL());
+            stmt.setInt(4, inventory.getQuantity());
+            stmt.setString(5, inventory.getPurchase().getId());
+            stmt.executeUpdate();
+        }
+    }
+
 }

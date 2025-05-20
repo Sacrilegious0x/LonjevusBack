@@ -58,10 +58,8 @@ public class CaregiverController {
             int idSchedule = servicesS.addAndReturn(shd);
             c.setScheduleId(idSchedule);
             
-            if (photoFile != null && !photoFile.isEmpty()) {
-                System.out.println("Esto es la foto: " + photoFile.getOriginalFilename());
-                String photoPath = localStorageService.saveCaregiverPhoto(photoFile);
-                System.out.println("Esto es la ruta REAL de la foto: " + photoPath);
+            if (photoFile != null && !photoFile.isEmpty()) {               
+                String photoPath = localStorageService.saveCaregiverPhoto(photoFile);               
                 c.setPhotoUrl(photoPath);
             }
 
@@ -100,7 +98,7 @@ public class CaregiverController {
     public ResponseEntity<String> deleteCaregiver(@PathVariable int id) {
          try {
             serviceC.deleteCaregiver(id);  
-            return ResponseEntity.ok("Administrador eliminado exitosamente");
+            return ResponseEntity.ok("Trabajador eliminado exitosamente");
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -112,8 +110,7 @@ public class CaregiverController {
     public Caregiver getById(@PathVariable int id) {
         Caregiver c = serviceC.getCaregiverById(id);
         Schedule shd = servicesS.getScheduleById(c.getScheduleId());
-        c.setSchedule(shd);
-        System.out.println("DATOS QUE SE MANDAN AL FRONT " + c.toString());
+        c.setSchedule(shd);       
         return c;
     }
 }
