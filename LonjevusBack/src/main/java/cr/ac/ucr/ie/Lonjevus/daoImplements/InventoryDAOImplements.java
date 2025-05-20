@@ -3,14 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package cr.ac.ucr.ie.Lonjevus.daoImplements;
-
 import cr.ac.ucr.ie.Lonjevus.Connection.ConnectionDB;
 import cr.ac.ucr.ie.Lonjevus.dao.InventoryDAO;
 import cr.ac.ucr.ie.Lonjevus.domain.Inventory;
 import cr.ac.ucr.ie.Lonjevus.domain.Product;
 import cr.ac.ucr.ie.Lonjevus.domain.Purchase;
 import cr.ac.ucr.ie.Lonjevus.domain.Supplier;
-//import cr.ac.ucr.ie.Lonjevus.domain.Supplier;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Date;
@@ -29,9 +27,7 @@ public class InventoryDAOImplements implements InventoryDAO {
         LinkedList<Inventory> list = new LinkedList<>();
         String sql = "CALL get_all_inventory();";
 
-        try (Connection cn = ConnectionDB.getConnection(); 
-             CallableStatement stmt = cn.prepareCall(sql);
-             ResultSet rs = stmt.executeQuery()) {
+        try (Connection cn = ConnectionDB.getConnection(); CallableStatement stmt = cn.prepareCall(sql); ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
                 int quantity = rs.getInt("quantity");
@@ -78,8 +74,7 @@ public class InventoryDAOImplements implements InventoryDAO {
     public void add(Inventory inventory) {
         String sql = "CALL insert_inventory(?, ?, ?, ?, ?)";
 
-        try (Connection cn = ConnectionDB.getConnection(); 
-                CallableStatement stmt = cn.prepareCall(sql)) {
+        try (Connection cn = ConnectionDB.getConnection(); CallableStatement stmt = cn.prepareCall(sql)) {
 
             stmt.setInt(1, inventory.getProduct().getId());
             stmt.setString(2, inventory.getCategory());

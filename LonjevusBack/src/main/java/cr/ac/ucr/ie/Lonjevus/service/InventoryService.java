@@ -14,26 +14,29 @@ import java.util.LinkedList;
  * @author Usuario
  */
 public class InventoryService {
-
+    
     private static InventoryDAOImplements inventoryDAO;
-
-    public InventoryService() {
+    
+     public InventoryService() {
         this.inventoryDAO = new InventoryDAOImplements();
     }
-
-    public static LinkedList<Inventory> getAll() {
+    
+    public static LinkedList<Inventory> getAll(){
         return inventoryDAO.getAll();
     }
+    
+   public void updateInventory(Inventory inventory) {
+}
 
-    public void updateInventory(Inventory inventory) {
-    }
 
     public void deleteInventoryById(int id) {
-        inventoryDAO.deleteById(id);
-    }
+    inventoryDAO.deleteById(id);
+}
 
     public LinkedList<Inventory> findByExpirationDate(LocalDate expirationDate) {
         return inventoryDAO.findByExpirationDate(expirationDate);
     }
+    
 
+    
 }

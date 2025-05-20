@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/inventory")
-@CrossOrigin(origins = "http://localhost:5173") 
+@CrossOrigin(origins = "http://localhost:5173")
 public class InventoryController {
 
     private final InventoryService inventoryS;
@@ -44,18 +44,15 @@ public class InventoryController {
     }
 
     @DeleteMapping("/delete/{id}")
-public ResponseEntity<Void> deleteInventory(@PathVariable int id) {
-    inventoryS.deleteInventoryById(id);
-    return ResponseEntity.ok().build();
-}
+    public ResponseEntity<Void> deleteInventory(@PathVariable int id) {
+        inventoryS.deleteInventoryById(id);
+        return ResponseEntity.ok().build();
+    }
 
-@GetMapping("/expiration")
-public ResponseEntity<List<Inventory>> getByExpirationDate(@RequestParam("date") String date) {
-    LocalDate expirationDate = LocalDate.parse(date);
-    List<Inventory> result = inventoryS.findByExpirationDate(expirationDate);
-    return ResponseEntity.ok(result);
-}
-
-
-
+    @GetMapping("/expiration")
+    public ResponseEntity<List<Inventory>> getByExpirationDate(@RequestParam("date") String date) {
+        LocalDate expirationDate = LocalDate.parse(date);
+        List<Inventory> result = inventoryS.findByExpirationDate(expirationDate);
+        return ResponseEntity.ok(result);
+    }
 }

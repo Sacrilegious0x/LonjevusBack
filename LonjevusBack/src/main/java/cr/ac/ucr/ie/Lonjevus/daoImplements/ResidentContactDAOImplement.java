@@ -89,7 +89,6 @@ public class ResidentContactDAOImplement implements ResidentContactDAO {
             ps.setString(3, t.getRelationShip());
             ps.setInt(4, t.getResident().getId());
             ps.execute();
-            System.out.println("contacto agregado");
         } catch (SQLException e) {
             System.out.println(sql.toString() + "\nNo sirvio el query\n" + e.getMessage());
         }
@@ -107,8 +106,7 @@ public class ResidentContactDAOImplement implements ResidentContactDAO {
             }
             PreparedStatement ps = cn.prepareStatement(sql.toString());
             ps.setInt(1, id);
-            ps.executeUpdate();
-            System.out.println("eliminado");
+            ps.executeUpdate();           
         } catch (SQLException e) {
             System.out.println(sql.toString() + "\nNo sirvio el query\n" + e.getMessage());
         }
@@ -136,8 +134,7 @@ public class ResidentContactDAOImplement implements ResidentContactDAO {
             ps.setString(3, t.getPhoneNumber());
             ps.setString(4, t.getRelationShip());
 
-            ps.execute();
-            System.out.println("contacto actualizado");
+            ps.execute();         
         } catch (SQLException e) {
             System.out.println(sql.toString() + "\nNo sirvio el query\n" + e.getMessage());
         }
