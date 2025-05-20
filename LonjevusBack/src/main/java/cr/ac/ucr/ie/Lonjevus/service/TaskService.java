@@ -28,11 +28,15 @@ public class TaskService {
     }
     
     public Task getById(int y){
-        return data.getById(y);
+        return data.findById(y);
     }
     
     public void deleteTask(int y){
         data.deleteById(y);
+    }
+    
+    public LinkedList<Task> getCaregiverTask(int y){
+        return data.getCaregiverTask(y);
     }
     
 }

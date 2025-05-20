@@ -28,7 +28,7 @@ public class AdminService {
     }
     
     public Admin getAdminById(int y){
-        return data.getById(y);
+        return data.findById(y);
     }
     
     public void deleteAdmin(int y){

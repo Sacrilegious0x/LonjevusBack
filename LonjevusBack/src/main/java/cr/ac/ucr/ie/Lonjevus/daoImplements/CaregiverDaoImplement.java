@@ -77,7 +77,7 @@ public class CaregiverDaoImplement implements CaregiverDao{
 
     @Override
     public void update(Caregiver t) {
-         String sql = "call spUpdateCaregiver(?,?,?,?,?,?,?,?,?)";
+         String sql = "call spUpdateCaregiver(?,?,?,?,?,?,?,?)";
        try{
             Connection cn = ConnectionDB.getConnection();
             CallableStatement smtp = cn.prepareCall(sql);
@@ -85,11 +85,10 @@ public class CaregiverDaoImplement implements CaregiverDao{
             smtp.setString(2,t.getName());
             smtp.setString(3, t.getIdentification());
             smtp.setDouble(4, t.getSalary());
-            smtp.setString(5, t.getEmail());
-            smtp.setString(6, t.getPassword());
-            smtp.setString(7, t.getShift());
-            smtp.setString(8, t.getPhotoUrl());
-            smtp.setInt(9, t.getScheduleId());
+            smtp.setString(5, t.getEmail());     
+            smtp.setString(6, t.getShift());
+            smtp.setString(7, t.getPhotoUrl());
+            smtp.setInt(8, t.getScheduleId());
             smtp.executeQuery();
        }catch(SQLException e){
             System.err.println("Error al ejecutar la consulta "+e.getMessage());
@@ -111,7 +110,7 @@ public class CaregiverDaoImplement implements CaregiverDao{
     }
 
     @Override
-    public Caregiver getById(Integer y) {
+    public Caregiver findById(Integer y) {
         
         String sql = "call spGetCaregiverById(?)";
        try{
@@ -126,7 +125,7 @@ public class CaregiverDaoImplement implements CaregiverDao{
                  t.setId(rs.getInt(1));
                  t.setIdentification(rs.getString(2));
                  t.setName(rs.getString(3));
-                 t.setSalary(rs.getInt(4));
+                 t.setSalary(rs.getDouble(4));
                  t.setEmail(rs.getString(5));
                  t.setPassword(rs.getString(6));
                  t.setShift(rs.getString(7));

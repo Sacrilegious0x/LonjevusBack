@@ -28,7 +28,7 @@ public class CaregiverService {
     }
     
     public Caregiver getCaregiverById(int y){
-        return data.getById(y);
+        return data.findById(y);
     }
     
     public void deleteCaregiver(int y){

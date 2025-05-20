@@ -73,13 +73,27 @@ public class CaregiverController {
         return null;
     }
 
-    @PostMapping("/updateCaregiver")
-    public Map updateCaregiver(@RequestBody Caregiver c) {
-        Schedule shd = c.getSchedule();
-        servicesS.updateSchedule(shd);
-        c.setScheduleId(shd.getId());
-        serviceC.updateCaregiver(c);
-        return getAll();
+    @PostMapping(value = "/updateCaregiver/{id}",  consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> updateCaregiver(@RequestPart("caregiverData") Caregiver c,
+            @RequestPart(value = "photo") MultipartFile photoFile) {
+        try{
+            Schedule shd = c.getSchedule();
+            servicesS.updateSchedule(shd);
+            if (photoFile != null && !photoFile.isEmpty()) {               
+                String photoPath = localStorageService.saveCaregiverPhoto(photoFile);
+                c.setPhotoUrl(photoPath);
+            }
+            
+            c.setScheduleId(shd.getId());
+            System.out.println("id del horario por parametro " + c.getScheduleId());
+            serviceC.updateCaregiver(c);
+             return ResponseEntity.ok("Trabajador actualizado exitosamente");
+        }catch(Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al crear trabajador");
+        }
+        
+         
     }
 
     @DeleteMapping("/deleteCaregiver/{id}")
@@ -99,6 +113,7 @@ public class CaregiverController {
         Caregiver c = serviceC.getCaregiverById(id);
         Schedule shd = servicesS.getScheduleById(c.getScheduleId());
         c.setSchedule(shd);
+        System.out.println("DATOS QUE SE MANDAN AL FRONT " + c.toString());
         return c;
     }
 }
