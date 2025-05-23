@@ -41,7 +41,8 @@ public class SupplierController {
             @RequestParam("email") String email,
             @RequestParam("address") String address,
             @RequestParam("isActive") boolean isActive,
-            @RequestParam("photo") MultipartFile photo
+            //@RequestParam("photo") MultipartFile photo,
+            @RequestParam(value = "photo", required = false) MultipartFile photo
     ) {       
         Supplier supplier = new Supplier();
         supplier.setName(name);
@@ -73,7 +74,8 @@ public class SupplierController {
             @RequestParam("email") String email,
             @RequestParam("address") String address,
             @RequestParam("isActive") boolean isActive,
-            @RequestParam("photo") MultipartFile photo){
+            //@RequestParam("photo") MultipartFile photo)
+            @RequestParam(value = "photo", required = false) MultipartFile photo){
         
             Supplier supplier = new Supplier();
             supplier.setId(id);
@@ -82,8 +84,12 @@ public class SupplierController {
             supplier.setEmail(email);
             supplier.setAddress(address);
             supplier.setIsActive(isActive);
-            String photoPath = localStorageService.save(photo);
-            supplier.setPhoto(photoPath);
+            if (photo!=null){
+              String photoPath = localStorageService.save(photo);
+              supplier.setPhoto(photoPath);
+            }
+            
+            
         
         
         SupplierService.updateSupplier(supplier);

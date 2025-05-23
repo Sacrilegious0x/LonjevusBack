@@ -61,7 +61,9 @@ public class SupplierDAOImplement implements SupplierDAO {
             stmt.setString(2, supplier.getPhoneNumber());
             stmt.setString(3, supplier.getEmail());
             stmt.setString(4, supplier.getAddress());
-            stmt.setString(5, supplier.getPhoto());
+            if(supplier.getPhoto()!=null){
+                stmt.setString(5, supplier.getPhoto());
+            }
             stmt.setBoolean(6, supplier.isIsActive());
 
             stmt.executeUpdate();
