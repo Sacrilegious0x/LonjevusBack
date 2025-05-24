@@ -11,5 +11,8 @@ import cr.ac.ucr.ie.Lonjevus.domain.Purchase;
  * @author Usuario
  */
 public interface PurchaseDAO extends CRUD<Purchase>{
+    Purchase findById(String id);
+    void deleteById(String id);
+
     
 }

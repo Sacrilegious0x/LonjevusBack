@@ -35,4 +35,8 @@ public class TaskService {
         data.deleteById(y);
     }
     
+    public LinkedList<Task> getCaregiverTask(int y){
+        return data.getCaregiverTask(y);
+    }
+    
 }

@@ -8,6 +8,7 @@ import cr.ac.ucr.ie.Lonjevus.domain.Task;
 import cr.ac.ucr.ie.Lonjevus.service.TaskService;
 import java.util.Collections;
 import java.util.Map;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,8 +24,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequestMapping("task")
 @RestController
+@CrossOrigin(origins = "http://localhost:5173")
 public class TaskController {
-    public static TaskService service = new TaskService();
+   public static TaskService service = new TaskService();
     
     @GetMapping("/listTask") 
     public Map getList(){
@@ -36,7 +38,7 @@ public class TaskController {
         return getList();
     }
     
-    @PostMapping("/updateTask")
+    @PostMapping("/updateTask/{id}")
     public Map updateTask(@RequestBody Task t){
         service.updateTask(t);
         return getList();
@@ -51,6 +53,11 @@ public class TaskController {
     @GetMapping("/getById/{id}")
     public Task getById(@PathVariable int id){
         return service.getById(id);
-    }  
+    } 
+    
+    @GetMapping("/listTaskByCaregiver/{id}") 
+    public Map getList(@PathVariable int id){
+        return Collections.singletonMap("data", service.getCaregiverTask(id));
+    }
     
 }
