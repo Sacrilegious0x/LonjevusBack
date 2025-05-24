@@ -1,10 +1,20 @@
 
 package cr.ac.ucr.ie.Lonjevus.domain;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
+@Entity
+@Table(name="supplier")
 public class Supplier {
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    
     private String name;
     private String phoneNumber;
     private String email;

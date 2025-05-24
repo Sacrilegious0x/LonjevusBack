@@ -29,6 +29,8 @@ public class SupplierController {
         this.localStorageService = localStorageService;
     }
     
+
+    
     @RequestMapping("/list")
     public Map getList() {
         return Collections.singletonMap("suppliers", SupplierService.getAllSupplier());

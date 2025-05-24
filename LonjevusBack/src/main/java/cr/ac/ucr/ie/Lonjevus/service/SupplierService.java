@@ -1,34 +1,38 @@
 
 package cr.ac.ucr.ie.Lonjevus.service;
 
-import cr.ac.ucr.ie.Lonjevus.daoImplements.SupplierDAOImplement;
+import cr.ac.ucr.ie.Longevus.repository.ISupplierRepository;
 import cr.ac.ucr.ie.Lonjevus.domain.Supplier;
 import java.util.LinkedList;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 
-
+@Service
 public class SupplierService {
+
     
-    private static SupplierDAOImplement data = new SupplierDAOImplement();
+    @Autowired
+    private static ISupplierRepository repo;
     
     public static LinkedList<Supplier> getAllSupplier(){
-        return data.getAll();
+         return (LinkedList<Supplier>) repo.findAll();
     }
     
     public static void addSupplier(Supplier supplier){
-        data.add(supplier);
+        repo.save(supplier);
     }
     
     public static void deleteSupplierById(int id){
-        data.deleteById(id);
+        repo.deleteById(id);
     }
     
     public static Supplier getBySupplierId(int id){
-        return data.findById(id);
+        return repo.getById(id);
     }
     
     public static void updateSupplier(Supplier supplier){
-        data.update(supplier);
+        repo.save(supplier);
     }
     
 }
