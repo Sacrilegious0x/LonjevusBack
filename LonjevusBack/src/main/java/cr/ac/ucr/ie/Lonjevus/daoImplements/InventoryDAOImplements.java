@@ -3,7 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package cr.ac.ucr.ie.Lonjevus.daoImplements;
-
 import cr.ac.ucr.ie.Lonjevus.Connection.ConnectionDB;
 import cr.ac.ucr.ie.Lonjevus.dao.InventoryDAO;
 import cr.ac.ucr.ie.Lonjevus.domain.Inventory;

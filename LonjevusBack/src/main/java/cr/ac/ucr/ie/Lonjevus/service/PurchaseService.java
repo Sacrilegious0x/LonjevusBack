@@ -12,6 +12,15 @@ import java.util.LinkedList;
  *
  * @author Usuario
  */
+
+import cr.ac.ucr.ie.Lonjevus.daoImplements.PurchaseDAOImplements;
+import cr.ac.ucr.ie.Lonjevus.domain.Purchase;
+import java.util.LinkedList;
+
+/**
+ *
+ * @author Usuario
+ */
 public class PurchaseService {
     private static final PurchaseDAOImplements purchaseDAO = new PurchaseDAOImplements();
 
@@ -38,4 +47,3 @@ public class PurchaseService {
 
 
 }
-

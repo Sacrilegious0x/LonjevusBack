@@ -27,13 +27,7 @@ public class RoleService {
     public List<Permission> getPermissions(int roleId) {
         return permDao.getByRole(roleId);
     }
-
-    /**
-     * Guarda (actualiza) el conjunto de permisos de un rol.Cada Permission ya tiene su moduleId,no  se ocupa
-     otra DAO para buscar codigos o ids de módulos.
-     * @param roleId
-     * @param perms
-     */
+    
     public static void savePermissions(int roleId, List<Permission> perms) {
         for (Permission p : perms) {
             permDao.updatePermission(roleId, p.getModuleId(), p);

@@ -1,24 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/springframework/Controller.java to edit this template
- */
 package cr.ac.ucr.ie.Lonjevus.Controller;
 
 import cr.ac.ucr.ie.Lonjevus.domain.Purchase;
 import cr.ac.ucr.ie.Lonjevus.service.PurchaseService;
 import java.util.LinkedList;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  *
@@ -46,34 +32,30 @@ public class PurchaseController {
             return ResponseEntity.status(500).body("{\"message\": \"Error al registrar la compra\"}");
         }
     }
-    
+
     @GetMapping("/{id}")
-public ResponseEntity<?> getPurchaseById(@PathVariable String id) {
-    try {
-        Purchase purchase = purchaseService.getPurchaseById(id);
-        return ResponseEntity.ok(purchase);
-    } catch (Exception e) {
-        return ResponseEntity.status(404).body("Compra no encontrada");
+    public ResponseEntity<?> getPurchaseById(@PathVariable String id) {
+        try {
+            Purchase purchase = purchaseService.getPurchaseById(id);
+            return ResponseEntity.ok(purchase);
+        } catch (Exception e) {
+            return ResponseEntity.status(404).body("Compra no encontrada");
+        }
     }
-}
 
-    
     @PutMapping("/update/{id}")
-public ResponseEntity<?> updatePurchase(@PathVariable String id, @RequestBody Purchase purchase) {
-    try {
-        purchaseService.updatePurchase(id, purchase);
-        return ResponseEntity.ok("Compra actualizada correctamente");
-    } catch (Exception e) {
-        return ResponseEntity.status(500).body("Error al actualizar");
+    public ResponseEntity<?> updatePurchase(@PathVariable String id, @RequestBody Purchase purchase) {
+        try {
+            purchaseService.updatePurchase(id, purchase);
+            return ResponseEntity.ok("Compra actualizada correctamente");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error al actualizar");
+        }
     }
-}
 
-@DeleteMapping("/{id}")
-public ResponseEntity<Void> deletePurchase(@PathVariable String id) {
-    purchaseService.deletePurchase(id);
-    return ResponseEntity.noContent().build();
-}
-
-
-
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePurchase(@PathVariable String id) {
+        purchaseService.deletePurchase(id);
+        return ResponseEntity.noContent().build();
+    }
 }
