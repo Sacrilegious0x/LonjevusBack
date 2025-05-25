@@ -33,10 +33,6 @@ public class ProductController {
         return productService.getAllProducts();
     }
 
-    //Guadar un producto
-    @PostMapping("/add")
-    public void addProduct(@RequestBody Product product) {
-        productService.addProduct(product);
-    }
+ 
 
 }

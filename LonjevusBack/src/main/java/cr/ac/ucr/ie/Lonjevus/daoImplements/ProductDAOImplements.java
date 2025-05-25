@@ -7,7 +7,7 @@ package cr.ac.ucr.ie.Lonjevus.daoImplements;
 import cr.ac.ucr.ie.Lonjevus.Connection.ConnectionDB;
 import cr.ac.ucr.ie.Lonjevus.dao.ProductDAO;
 import cr.ac.ucr.ie.Lonjevus.domain.Product;
-//import cr.ac.ucr.ie.Lonjevus.domain.Supplier;
+import cr.ac.ucr.ie.Lonjevus.domain.Supplier;
 import cr.ac.ucr.ie.Lonjevus.domain.Unit;
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -38,19 +38,19 @@ public class ProductDAOImplements implements ProductDAO {
 
 
                 Unit unit = new Unit();
-                unit.setId(rs.getInt("unit_id"));
+                unit.setId(rs.getInt("unitId"));
                 unit.setUnitType(rs.getString("unit_type"));
                 p.setUnit(unit);
 
 
-                //Supplier supplier = new Supplier();
-                //supplier.setId(rs.getInt("supplier_id"));
-                //supplier.setName(rs.getString("supplier_name"));
-                //supplier.setPhoneNumber(rs.getString("phoneNumber"));
-                //supplier.setEmail(rs.getString("email"));
-                //supplier.setAddress(rs.getString("address"));
-                //supplier.setPhotoURL(rs.getString("supplier_photo"));
-                //p.setSupplier(supplier);
+                Supplier supplier = new Supplier();
+                supplier.setId(rs.getInt("supplier_id"));
+                supplier.setName(rs.getString("supplier_name"));
+                supplier.setPhoneNumber(rs.getString("phoneNumber"));
+                supplier.setEmail(rs.getString("email"));
+                supplier.setAddress(rs.getString("address"));
+                supplier.setPhoto(rs.getString("supplier_photo"));
+                p.setSupplier(supplier);
 
                 list.add(p);
             }
@@ -70,7 +70,7 @@ public class ProductDAOImplements implements ProductDAO {
             stmt.setString(4, p.getCategory());
             stmt.setString(5, p.getPhotoURL());
             stmt.setInt(6, p.getUnit().getId());
-            //stmt.setInt(7, p.getSupplier().getId());
+            stmt.setInt(7, p.getSupplier().getId());
             stmt.execute();
         } catch (Exception e) {
             e.printStackTrace();
@@ -88,7 +88,7 @@ public class ProductDAOImplements implements ProductDAO {
             stmt.setString(5, p.getCategory());
             stmt.setString(6, p.getPhotoURL());
             stmt.setInt(7, p.getUnit().getId());
-          //  stmt.setInt(8, p.getSupplier().getId());
+            stmt.setInt(8, p.getSupplier().getId());
             stmt.execute();
         } catch (Exception e) {
             e.printStackTrace();

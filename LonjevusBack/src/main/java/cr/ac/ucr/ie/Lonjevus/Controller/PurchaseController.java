@@ -48,7 +48,7 @@ public class PurchaseController {
     }
     
     @GetMapping("/{id}")
-public ResponseEntity<?> getPurchaseById(@PathVariable int id) {
+public ResponseEntity<?> getPurchaseById(@PathVariable String id) {
     try {
         Purchase purchase = purchaseService.getPurchaseById(id);
         return ResponseEntity.ok(purchase);
@@ -59,7 +59,7 @@ public ResponseEntity<?> getPurchaseById(@PathVariable int id) {
 
     
     @PutMapping("/update/{id}")
-public ResponseEntity<?> updatePurchase(@PathVariable int id, @RequestBody Purchase purchase) {
+public ResponseEntity<?> updatePurchase(@PathVariable String id, @RequestBody Purchase purchase) {
     try {
         purchaseService.updatePurchase(id, purchase);
         return ResponseEntity.ok("Compra actualizada correctamente");
@@ -69,7 +69,7 @@ public ResponseEntity<?> updatePurchase(@PathVariable int id, @RequestBody Purch
 }
 
 @DeleteMapping("/{id}")
-public ResponseEntity<Void> deletePurchase(@PathVariable Integer id) {
+public ResponseEntity<Void> deletePurchase(@PathVariable String id) {
     purchaseService.deletePurchase(id);
     return ResponseEntity.noContent().build();
 }

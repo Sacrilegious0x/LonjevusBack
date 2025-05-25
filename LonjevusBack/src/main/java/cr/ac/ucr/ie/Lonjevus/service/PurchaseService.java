@@ -23,16 +23,16 @@ public class PurchaseService {
     purchaseDAO.add(purchase);
 }
     
-   public void updatePurchase(int id, Purchase purchase) {
-    purchase.setId(id); 
+   public void updatePurchase(String id, Purchase purchase) {
+    purchase.setId(String.valueOf(id));
     purchaseDAO.update(purchase);
 }
    
-   public Purchase getPurchaseById(int id) {
+   public Purchase getPurchaseById(String id) {
     return purchaseDAO.findById(id);
 }
    
-   public void deletePurchase(Integer id) {
+   public void deletePurchase(String id) {
     purchaseDAO.deleteById(id);
 }
 
