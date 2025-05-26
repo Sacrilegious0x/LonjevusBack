@@ -1,14 +1,19 @@
 
 package cr.ac.ucr.ie.Lonjevus.domain;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name="supplier")
+@SQLDelete(sql = "UPDATE supplier SET isActive = 0 WHERE id = ?")
+@Where(clause = "isActive = 1")
 public class Supplier {
     
     @Id
@@ -16,10 +21,15 @@ public class Supplier {
     private int id;
     
     private String name;
+    
+    @Column(name = "phoneNumber")
     private String phoneNumber;
+    
     private String email;
     private String address;
     private String photo;
+    
+    @Column(name = "isActive")
     private boolean isActive;
 
     public Supplier(int id, String name, String phoneNumber, String email, String address, String photo, boolean isActive) {

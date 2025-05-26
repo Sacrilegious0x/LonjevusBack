@@ -1,8 +1,8 @@
 package cr.ac.ucr.ie.Lonjevus.Controller;
 
 import cr.ac.ucr.ie.Lonjevus.domain.Supplier;
+import cr.ac.ucr.ie.Lonjevus.service.ISupplierService;
 import cr.ac.ucr.ie.Lonjevus.service.LocalStorageService;
-import cr.ac.ucr.ie.Lonjevus.service.SupplierService;
 import java.util.Collections;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +29,13 @@ public class SupplierController {
         this.localStorageService = localStorageService;
     }
     
+    @Autowired
+    private ISupplierService service;
 
     
     @RequestMapping("/list")
     public Map getList() {
-        return Collections.singletonMap("suppliers", SupplierService.getAllSupplier());
+        return Collections.singletonMap("suppliers", service.getAllSuppliers());
     }
 
     @PostMapping(path = "/save", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -54,19 +56,20 @@ public class SupplierController {
         supplier.setIsActive(isActive);
         String photoPath = localStorageService.save(photo);
         supplier.setPhoto(photoPath);
-        SupplierService.addSupplier(supplier);
+        service.save(supplier);
+        //SupplierService.addSupplier(supplier);
         return getList();
     }
     
     @DeleteMapping("/delete")
     public Map deleteSupplier(@RequestParam int id) {
-        SupplierService.deleteSupplierById(id);
+        service.delete(id);
         return getList();
     }
     
     @GetMapping("/getById")
     public Supplier getSupplierById(@RequestParam int id) {
-        return SupplierService.getBySupplierId(id);
+        return service.getById(id);
     }
     
     @PostMapping("/update")
@@ -89,12 +92,12 @@ public class SupplierController {
             if (photo!=null){
               String photoPath = localStorageService.save(photo);
               supplier.setPhoto(photoPath);
+            }else{
+              supplier.setPhoto(service.getById(id).getPhoto());
             }
             
-            
-        
-        
-        SupplierService.updateSupplier(supplier);
+        service.save(supplier);
+        //SupplierService.updateSupplier(supplier);
         return getList();
     }
     
