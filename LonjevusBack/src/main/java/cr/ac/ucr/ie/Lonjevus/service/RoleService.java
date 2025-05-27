@@ -4,10 +4,10 @@
  */
 package cr.ac.ucr.ie.Lonjevus.service;
 
-import cr.ac.ucr.ie.Lonjevus.dao.PermissionDAO;
-import cr.ac.ucr.ie.Lonjevus.dao.RoleDAO;
-import cr.ac.ucr.ie.Lonjevus.daoImplements.PermissionDAOImplement;
-import cr.ac.ucr.ie.Lonjevus.daoImplements.RoleDAOImplement;
+import cr.ac.ucr.ie.Lonjevus.jpa.PermissionDAO;
+import cr.ac.ucr.ie.Lonjevus.jpa.RoleDAO;
+import cr.ac.ucr.ie.Lonjevus.repository.PermissionDAOImplement;
+import cr.ac.ucr.ie.Lonjevus.repository.RoleDAOImplement;
 import cr.ac.ucr.ie.Lonjevus.domain.Permission;
 import cr.ac.ucr.ie.Lonjevus.domain.Role;
 import java.util.List;

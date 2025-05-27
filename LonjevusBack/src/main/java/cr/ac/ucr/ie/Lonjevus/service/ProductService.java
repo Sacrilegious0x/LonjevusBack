@@ -4,7 +4,7 @@
  */
 package cr.ac.ucr.ie.Lonjevus.service;
 
-import cr.ac.ucr.ie.Lonjevus.daoImplements.ProductDAOImplements;
+import cr.ac.ucr.ie.Lonjevus.repository.ProductDAOImplements;
 import cr.ac.ucr.ie.Lonjevus.domain.Product;
 import java.util.LinkedList;
 

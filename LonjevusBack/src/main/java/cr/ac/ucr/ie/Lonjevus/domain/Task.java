@@ -4,24 +4,45 @@
  */
 package cr.ac.ucr.ie.Lonjevus.domain;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
+
 /**
  *
  * @author User
  */
+@Entity
+@Table(name = "task")
 public class Task {
+   @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private int caregiverId;
+
+    @ManyToOne
+    @JoinColumn(name = "caregiverId")
+    private Caregiver caregiver;
+
+    @Column(name = "description")
     private String description;
     
     public Task (){
         
     }
 
-    public Task(int id, int caregiverId, String description) {
+    public Task(int id, Caregiver caregiver, String description) {
         this.id = id;
-        this.caregiverId = caregiverId;
+        this.caregiver = caregiver;
         this.description = description;
     }
+
+    
 
     public int getId() {
         return id;
@@ -31,12 +52,12 @@ public class Task {
         this.id = id;
     }
 
-    public int getCaregiver() {
-        return caregiverId;
+    public Caregiver getCaregiver() {
+        return caregiver;
     }
 
-    public void setCaregiver(int caregiverId) {
-        this.caregiverId = caregiverId;
+    public void setCaregiver(Caregiver caregiver) {
+        this.caregiver = caregiver;
     }
 
     public String getDescription() {

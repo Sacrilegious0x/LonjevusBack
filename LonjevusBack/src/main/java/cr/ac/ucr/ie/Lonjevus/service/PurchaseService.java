@@ -4,7 +4,7 @@
  */
 package cr.ac.ucr.ie.Lonjevus.service;
 
-import cr.ac.ucr.ie.Lonjevus.daoImplements.PurchaseDAOImplements;
+import cr.ac.ucr.ie.Lonjevus.repository.PurchaseDAOImplements;
 import cr.ac.ucr.ie.Lonjevus.domain.Purchase;
 import java.util.LinkedList;
 
@@ -13,7 +13,7 @@ import java.util.LinkedList;
  * @author Usuario
  */
 
-import cr.ac.ucr.ie.Lonjevus.daoImplements.PurchaseDAOImplements;
+import cr.ac.ucr.ie.Lonjevus.repository.PurchaseDAOImplements;
 import cr.ac.ucr.ie.Lonjevus.domain.Purchase;
 import java.util.LinkedList;
 
