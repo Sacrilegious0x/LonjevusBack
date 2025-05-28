@@ -25,7 +25,7 @@ public class ScheduleService {
     }
     
     public Schedule getScheduleById(int y){
-        return data.getById(y);
+        return data.findById(y);
     }
     
     public void deleteSchedule(int y){

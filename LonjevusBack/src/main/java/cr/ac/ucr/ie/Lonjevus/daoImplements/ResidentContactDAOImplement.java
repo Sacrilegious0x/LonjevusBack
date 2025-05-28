@@ -32,22 +32,11 @@ public class ResidentContactDAOImplement implements ResidentContactDAO {
         StringBuilder sql = new StringBuilder();
         sql.append("call getContacts(?);");
 
-<<<<<<< HEAD
-        try {
-            Connection cn = ConnectionDB.getConnection();
-            if (cn == null) {
-                System.out.println("ERROR: La conexion es NULL");
-            }
-
-=======
-        
-
         try {
             Connection cn = ConnectionDB.getConnection();
         if (cn == null) {
             System.out.println("ERROR: La conexion es NULL");
         }
->>>>>>> developer
             PreparedStatement ps = cn.prepareStatement(sql.toString());
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();

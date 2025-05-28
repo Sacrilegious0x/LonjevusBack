@@ -88,7 +88,7 @@ public class TaskDaoImplement implements TaskDao {
     }
 
     @Override
-    public Task getById(Integer y) {
+    public Task findById(Integer y) {
         String sql = "call spGetTaskById(?)";
         try{
             Connection cn = ConnectionDB.getConnection();

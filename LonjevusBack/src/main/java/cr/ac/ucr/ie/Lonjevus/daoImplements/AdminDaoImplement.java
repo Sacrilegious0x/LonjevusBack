@@ -82,7 +82,7 @@ public class AdminDaoImplement implements AdminDao {
     }
 
     @Override
-    public Admin getById(Integer y) {
+    public Admin findById(Integer y) {
         String sql = "call spGetAdmin(?)";
         try {
             Connection cn = ConnectionDB.getConnection();
@@ -137,4 +137,5 @@ public class AdminDaoImplement implements AdminDao {
         }
         return null;
     }
+
 }

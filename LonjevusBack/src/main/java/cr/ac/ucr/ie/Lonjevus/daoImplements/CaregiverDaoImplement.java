@@ -111,7 +111,7 @@ public class CaregiverDaoImplement implements CaregiverDao{
     }
 
     @Override
-    public Caregiver getById(Integer y) {
+    public Caregiver findById(Integer y) {
         
         String sql = "call spGetCaregiverById(?)";
        try{

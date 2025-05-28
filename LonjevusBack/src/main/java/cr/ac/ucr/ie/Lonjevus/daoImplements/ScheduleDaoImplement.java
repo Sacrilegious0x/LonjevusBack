@@ -77,7 +77,7 @@ public class ScheduleDaoImplement implements ScheduleDao{
     }
 
     @Override
-    public Schedule getById(Integer y) {
+    public Schedule findById(Integer y) {
         String sql = "call spGetScheduleById(?)";
         try{
             Connection cn = ConnectionDB.getConnection();

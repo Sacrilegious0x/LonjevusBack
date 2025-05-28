@@ -6,6 +6,7 @@ package cr.ac.ucr.ie.Lonjevus.Controller;
 
 import cr.ac.ucr.ie.Lonjevus.domain.Resident;
 import cr.ac.ucr.ie.Lonjevus.domain.ResidentContact;
+import cr.ac.ucr.ie.Lonjevus.service.LocalStorageService;
 import cr.ac.ucr.ie.Lonjevus.service.ResidentContactService;
 import cr.ac.ucr.ie.Lonjevus.service.ResidentService;
 import java.io.IOException;
@@ -36,11 +37,8 @@ import org.springframework.web.multipart.MultipartFile;
 //@Controller
 public class ResidentController {
 
-    @GetMapping("/hello")
-    public String sayHello() {
-        return "Hello World!";
-    }
-
+    LocalStorageService localS = new LocalStorageService();
+    
     @GetMapping("/residents")
     public List<Resident> getResidents() {
         return ResidentService.getAll();
@@ -60,20 +58,8 @@ public class ResidentController {
         resident.setNumberRoom(numberRoom);
 
         if (photo != null && !photo.isEmpty()) {
-            String fileName = photo.getOriginalFilename();
-            Path path = Paths.get("uploads/residentes");
-
-            try {
-                if (!Files.exists(path)) {
-                    Files.createDirectories(path);
-                }
-
-                Path filePath = path.resolve(fileName);
-                Files.copy(photo.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException e) {
-
-            }
-            resident.setPhoto(fileName);
+            String photoPath = localS.saveResidentPhoto(photo);
+            resident.setPhoto(photoPath);
         }else {
             resident.setPhoto("foto.jpg");
         }
@@ -113,32 +99,14 @@ public class ResidentController {
         resident.setNumberRoom(numberRoom);
 
         if (photo != null && !photo.isEmpty()) {
-            String fileName = photo.getOriginalFilename();
-            Path path = Paths.get("uploads/residentes");
-
-            try {
-                if (!Files.exists(path)) {
-                    Files.createDirectories(path);
-                }
-
-                Path filePath = path.resolve(fileName);
-                Files.copy(photo.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException e) {
-
-            }
-            resident.setPhoto(fileName);
-        } else {
-            String currentPhoto = ResidentService.findById(id).getPhoto();
-            resident.setPhoto(currentPhoto);
+            String photoPath = localS.saveResidentPhoto(photo);
+            resident.setPhoto(photoPath);
+        }else {
+            resident.setPhoto("foto.jpg");
         }
         
-        if (ResidentService.findById(id) != null) {        
-            System.out.println("\nLOS DATOS DEL RESIDENTE\n" + resident.toString());
-            ResidentService.update(resident);
-
-            return "Residente actualizado";
-        }
-        return "El residente no existe";
+        ResidentService.update(resident);
+        return "Residente Actualizado";
     }
 
     @GetMapping("/getContacts")
