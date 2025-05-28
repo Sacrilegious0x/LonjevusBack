@@ -67,9 +67,7 @@ public class ResidentDAOImplement implements ResidentDAO {
             ps.setString(4, r.getHealthStatus());
             ps.setInt(5, r.getNumberRoom());
             ps.setString(6, r.getPhoto());
-
             ps.execute();
-            System.out.println("agregado");
         } catch (SQLException e) {
             System.out.println(sql.toString() + "\nNo sirvio el query\n" + e.getMessage());
         }
@@ -87,8 +85,7 @@ public class ResidentDAOImplement implements ResidentDAO {
             }
             PreparedStatement ps = cn.prepareStatement(sql.toString());
             ps.setInt(1, id);
-            ps.executeUpdate();
-            System.out.println("eliminado");
+            ps.executeUpdate();;
         } catch (SQLException e) {
             System.out.println(sql.toString() + "\nNo sirvio el query\n" + e.getMessage());
         }
@@ -122,7 +119,6 @@ public class ResidentDAOImplement implements ResidentDAO {
         return resident;
     }
 
-    @Override
     public void update(Resident t) {
         StringBuilder sql = new StringBuilder();
         sql.append("call updateResident (?,?,?,?,?,?,?)");

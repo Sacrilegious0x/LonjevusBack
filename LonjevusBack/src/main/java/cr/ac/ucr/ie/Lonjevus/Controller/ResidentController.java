@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,7 +36,7 @@ import org.springframework.web.multipart.MultipartFile;
 //@Controller
 public class ResidentController {
 
-    LocalStorageService localS = new LocalStorageService();
+    private static LocalStorageService localS = new LocalStorageService();
     
     @GetMapping("/residents")
     public List<Resident> getResidents() {
@@ -60,7 +59,8 @@ public class ResidentController {
         if (photo != null && !photo.isEmpty()) {
             String photoPath = localS.saveResidentPhoto(photo);
             resident.setPhoto(photoPath);
-        }else {
+
+        } else {
             resident.setPhoto("foto.jpg");
         }
 
@@ -79,9 +79,9 @@ public class ResidentController {
     public Resident seachById(@RequestParam int id) {
         return ResidentService.findById(id);
     }
-    
+
     @GetMapping("/findResidentByNameorIdentification")
-    public LinkedList<Resident> getResidentByNameorIdentification(@RequestParam String value){
+    public LinkedList<Resident> getResidentByNameorIdentification(@RequestParam String value) {
         return ResidentService.findByNameorIdentification(value);
     }
 
@@ -113,21 +113,21 @@ public class ResidentController {
     public List<ResidentContact> getContacts(@RequestParam int id) {
         return ResidentContactService.getAll(id);
     }
-    
+
     @PostMapping("/addContact")
-    public String addContact(@RequestBody ResidentContact r){
+    public String addContact(@RequestBody ResidentContact r) {
         ResidentContactService.addContact(r);
         return "Contacto agregado";
     }
-    
+
     @DeleteMapping("/deleteContact")
-    public String deleteContact(@RequestParam int id){
+    public String deleteContact(@RequestParam int id) {
         ResidentContactService.deleteContact(id);
         return "Contacto eliminado";
     }
-    
+
     @PostMapping("/updateContact")
-    public String updateContact(@RequestBody ResidentContact r){
+    public String updateContact(@RequestBody ResidentContact r) {
         ResidentContactService.updateContact(r);
         return "Contacto actualizado";
     }

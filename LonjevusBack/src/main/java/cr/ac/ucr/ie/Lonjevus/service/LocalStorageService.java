@@ -106,5 +106,4 @@ public class LocalStorageService {
             throw new RuntimeException("Error al guardar archivo", e);
         }
     }
-
 }

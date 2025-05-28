@@ -58,10 +58,8 @@ public class CaregiverController {
             int idSchedule = servicesS.addAndReturn(shd);
             c.setScheduleId(idSchedule);
             
-            if (photoFile != null && !photoFile.isEmpty()) {
-                System.out.println("Esto es la foto: " + photoFile.getOriginalFilename());
-                String photoPath = localStorageService.saveCaregiverPhoto(photoFile);
-                System.out.println("Esto es la ruta REAL de la foto: " + photoPath);
+            if (photoFile != null && !photoFile.isEmpty()) {               
+                String photoPath = localStorageService.saveCaregiverPhoto(photoFile);               
                 c.setPhotoUrl(photoPath);
             }
 
@@ -73,20 +71,34 @@ public class CaregiverController {
         return null;
     }
 
-    @PostMapping("/updateCaregiver")
-    public Map updateCaregiver(@RequestBody Caregiver c) {
-        Schedule shd = c.getSchedule();
-        servicesS.updateSchedule(shd);
-        c.setScheduleId(shd.getId());
-        serviceC.updateCaregiver(c);
-        return getAll();
+    @PostMapping(value = "/updateCaregiver/{id}",  consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> updateCaregiver(@RequestPart("caregiverData") Caregiver c,
+            @RequestPart(value = "photo") MultipartFile photoFile) {
+        try{
+            Schedule shd = c.getSchedule();
+            servicesS.updateSchedule(shd);
+            if (photoFile != null && !photoFile.isEmpty()) {               
+                String photoPath = localStorageService.saveCaregiverPhoto(photoFile);
+                c.setPhotoUrl(photoPath);
+            }
+            
+            c.setScheduleId(shd.getId());
+            System.out.println("id del horario por parametro " + c.getScheduleId());
+            serviceC.updateCaregiver(c);
+             return ResponseEntity.ok("Trabajador actualizado exitosamente");
+        }catch(Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al crear trabajador");
+        }
+        
+         
     }
 
     @DeleteMapping("/deleteCaregiver/{id}")
     public ResponseEntity<String> deleteCaregiver(@PathVariable int id) {
          try {
             serviceC.deleteCaregiver(id);  
-            return ResponseEntity.ok("Administrador eliminado exitosamente");
+            return ResponseEntity.ok("Trabajador eliminado exitosamente");
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -98,7 +110,7 @@ public class CaregiverController {
     public Caregiver getById(@PathVariable int id) {
         Caregiver c = serviceC.getCaregiverById(id);
         Schedule shd = servicesS.getScheduleById(c.getScheduleId());
-        c.setSchedule(shd);
+        c.setSchedule(shd);       
         return c;
     }
 }

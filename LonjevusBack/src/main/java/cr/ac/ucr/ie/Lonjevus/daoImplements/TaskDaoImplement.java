@@ -46,11 +46,12 @@ public class TaskDaoImplement implements TaskDao {
 
     @Override
     public void add(Task t) {
+        System.out.println("AGREGANDO TASK AL CAREGIVER");
         String sql = "call spAddTask(?,?)";
         try{
            Connection cn = ConnectionDB.getConnection();
             CallableStatement smtp = cn.prepareCall(sql);
-            smtp.setInt(1, 1);//t.getCaregiver().getId()
+            smtp.setInt(1, t.getCaregiver());
             smtp.setString(2, t.getDescription());
             smtp.executeQuery();
         }catch(SQLException e){
@@ -109,4 +110,29 @@ public class TaskDaoImplement implements TaskDao {
       return null;
     }
     
+    public LinkedList<Task> getCaregiverTask(int y){
+        System.out.println("LLAMADO GET TASK DEL CAREGIVER");
+        String sql = "call spGetCaregiverTask(?)";
+        LinkedList<Task> list = new LinkedList<>();
+        try{
+            Connection cn = ConnectionDB.getConnection();
+            CallableStatement smtp = cn.prepareCall(sql);
+            smtp.setInt(1, y);
+            ResultSet rs = smtp.executeQuery();
+            while(rs.next()){
+                Task t = new Task();
+                t.setId(rs.getInt(1));
+                t.setCaregiver(rs.getInt(2));
+                t.setDescription(rs.getString(3));
+                list.add(t);
+            }
+           
+            
+        }catch(SQLException e){
+            System.err.println("Error al ejecutar la consulta " + e.getMessage());
+        }
+        return list;
+    }
+
+ 
 }

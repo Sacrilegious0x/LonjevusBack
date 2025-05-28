@@ -12,6 +12,15 @@ import java.util.LinkedList;
  *
  * @author Usuario
  */
+
+import cr.ac.ucr.ie.Lonjevus.daoImplements.PurchaseDAOImplements;
+import cr.ac.ucr.ie.Lonjevus.domain.Purchase;
+import java.util.LinkedList;
+
+/**
+ *
+ * @author Usuario
+ */
 public class PurchaseService {
     private static final PurchaseDAOImplements purchaseDAO = new PurchaseDAOImplements();
 
@@ -23,19 +32,18 @@ public class PurchaseService {
     purchaseDAO.add(purchase);
 }
     
-   public void updatePurchase(int id, Purchase purchase) {
-    purchase.setId(id); 
+   public void updatePurchase(String id, Purchase purchase) {
+    purchase.setId(String.valueOf(id));
     purchaseDAO.update(purchase);
 }
    
-   public Purchase getPurchaseById(int id) {
+   public Purchase getPurchaseById(String id) {
     return purchaseDAO.findById(id);
 }
    
-   public void deletePurchase(Integer id) {
+   public void deletePurchase(String id) {
     purchaseDAO.deleteById(id);
 }
 
 
 }
-

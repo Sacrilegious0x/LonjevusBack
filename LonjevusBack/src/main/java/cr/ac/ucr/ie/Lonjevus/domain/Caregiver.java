@@ -20,6 +20,5 @@ public class Caregiver extends Person {
 
     public void setShift(String Shift) {
         this.Shift = Shift;
-    }
-
+    }   
 }

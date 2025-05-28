@@ -49,7 +49,7 @@ public class AdminDaoImplement implements AdminDao {
 
     @Override
     public void update(Admin t) {
-        String sql = "call spUpdateAdmin(?,?,?,?,?,?,?,?,?)";
+        String sql = "call spUpdateAdmin(?,?,?,?,?,?,?,?)";
         try {
             Connection cn = ConnectionDB.getConnection();
             CallableStatement smtp = cn.prepareCall(sql);
@@ -58,10 +58,9 @@ public class AdminDaoImplement implements AdminDao {
             smtp.setString(3, t.getName());
             smtp.setDouble(4, t.getSalary());
             smtp.setString(5, t.getEmail());
-            smtp.setString(6, t.getPassword());
-            smtp.setString(7, t.getOfficeContact());
-            smtp.setString(8, t.getPhotoUrl());
-            smtp.setInt(9, t.getScheduleId());
+            smtp.setString(6, t.getOfficeContact());
+            smtp.setString(7, t.getPhotoUrl());
+            smtp.setInt(8, t.getScheduleId());
             smtp.executeQuery();
         } catch (SQLException e) {
             System.err.println("Error al ejecutar la consulta " + e.getMessage());

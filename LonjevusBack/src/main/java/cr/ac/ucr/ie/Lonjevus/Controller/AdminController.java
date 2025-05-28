@@ -85,8 +85,7 @@ public class AdminController {
                 String photoPath = localStorageService.saveAdminPhoto(photoFile);
                 a.setPhotoUrl(photoPath);
             }
-            System.out.println("ID DEL ADMIN" + a.getId());
-            a.setScheduleId(a.getId());
+            a.setScheduleId(shd.getId());
             serviceA.updateAdmin(a);
             return ResponseEntity.ok("Administrador actualizado exitosamente");
         } catch (Exception e) {

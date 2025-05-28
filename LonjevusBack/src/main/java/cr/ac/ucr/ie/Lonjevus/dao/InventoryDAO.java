@@ -5,11 +5,14 @@
 package cr.ac.ucr.ie.Lonjevus.dao;
 
 import cr.ac.ucr.ie.Lonjevus.domain.Inventory;
+import java.time.LocalDate;
+import java.util.LinkedList;
 
 /**
  *
  * @author Usuario
  */
 public interface InventoryDAO extends CRUD<Inventory>{
-    
+    LinkedList<Inventory> findByExpirationDate(LocalDate expirationDate);
+
 }

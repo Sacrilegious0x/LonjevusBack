@@ -22,11 +22,11 @@ public class Product {
     private LocalDate expirationDate;
     private String photoURL;
     private Unit unit;
-    //private Supplier supplier;
+    private Supplier supplier;
 
     public Product() {}
 
-    public Product(Integer id, String name, BigDecimal price, String category, LocalDate expirationDate, String photoURL, Unit unit) {
+    public Product(Integer id, String name, BigDecimal price, String category, LocalDate expirationDate, String photoURL, Unit unit, Supplier supplier) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -34,7 +34,7 @@ public class Product {
         this.expirationDate = expirationDate;
         this.photoURL = photoURL;
         this.unit = unit;
-       // this.supplier = supplier;
+       this.supplier = supplier;
     }
 
     public Integer getId() {
@@ -65,9 +65,9 @@ public class Product {
         return unit;
     }
 
-  // public Supplier getSupplier() {
-    //    return supplier;
-    //}
+   public Supplier getSupplier() {
+      return supplier;
+    }
 
     public void setId(Integer id) {
         this.id = id;
@@ -97,9 +97,9 @@ public class Product {
         this.unit = unit;
     }
 
-   // public void setSupplier(Supplier supplier) {
-     //   this.supplier = supplier;
-    //}
+    public void setSupplier(Supplier supplier) {
+        this.supplier = supplier;
+    }
 
     
     
