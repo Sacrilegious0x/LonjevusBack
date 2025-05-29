@@ -30,33 +30,31 @@ public class PermissionController {
     private IPermissionService permissionService;
 
     // Obtener todos los permisos
-    @RequestMapping("/list")
+    @RequestMapping("/listss")
     public Map getAllPermissions() {
         return Collections.singletonMap("permissions", permissionService.getAllPermissions());
     }
 
     // Obtener permiso por ID
-    @GetMapping("/getById")
-    public ResponseEntity<Permission> getPermissionById(@PathVariable("id") int id) {
-        Permission permission = permissionService.getById(id);
-        if (permission != null) {
-            return ResponseEntity.ok(permission);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    @GetMapping("/list/{roleId}")
+    public List<Permission> getPermissionsByRole(@PathVariable int roleId) {
+        
+        return permissionService.findByRoleId(roleId);
+        
     }
+
 
     // Crear o actualizar un permiso
-    @PostMapping("/save")
-    public ResponseEntity<Permission> createOrUpdatePermission(@RequestBody Permission permission) {
-        permissionService.save(permission);
-        return ResponseEntity.ok(permission);
+    @PostMapping("/save/{roleId}")
+    public ResponseEntity<Void> createOrUpdatePermission(@PathVariable int roleId,
+            @RequestBody List<Permission> perms) {
+       
+        perms.forEach(perm -> perm.setRoleId(roleId));
+        
+        perms.forEach(perm -> permissionService.save(perm));
+        
+        return ResponseEntity.ok().build();
     }
 
-    // Eliminar un permiso
-    @DeleteMapping("/delete")
-    public Map deletePermission(@RequestParam int id) {
-        permissionService.delete(id);
-        return getAllPermissions();
-    }
+
 }

@@ -5,6 +5,7 @@
 package cr.ac.ucr.ie.Lonjevus.service;
 
 import cr.ac.ucr.ie.Lonjevus.domain.Permission;
+import cr.ac.ucr.ie.Lonjevus.domain.PermissionId;
 import java.util.List;
 
 /**
@@ -15,7 +16,8 @@ public interface IPermissionService {
     
      void save(Permission permission);
     List<Permission> getAllPermissions();
-    void delete(int permissionId);
-    Permission getById(int permissionId);
+    void delete(PermissionId id);
+    Permission getById(PermissionId id);
+    List<Permission> findByRoleId(int roleId);
     
 }
