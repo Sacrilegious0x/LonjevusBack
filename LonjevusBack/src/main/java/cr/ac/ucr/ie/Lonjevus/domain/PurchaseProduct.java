@@ -1,22 +1,24 @@
 package cr.ac.ucr.ie.Lonjevus.domain;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 public class PurchaseProduct {
-    private Integer idPurchase;
+    private String idPurchase;
     private Integer idProduct;
     private Integer quantity;
 
     private String productName;
     private BigDecimal price;
+    private LocalDate expirationDate; 
 
     public PurchaseProduct() {}
 
-    public Integer getIdPurchase() {
+    public String getIdPurchase() {
         return idPurchase;
     }
 
-    public void setIdPurchase(Integer idPurchase) {
+    public void setIdPurchase(String idPurchase) {
         this.idPurchase = idPurchase;
     }
 
@@ -51,4 +53,13 @@ public class PurchaseProduct {
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
+
+    public LocalDate getExpirationDate() {
+        return expirationDate;
+    }
+
+    public void setExpirationDate(LocalDate expirationDate) {
+        this.expirationDate = expirationDate;
+    }
+    
 }

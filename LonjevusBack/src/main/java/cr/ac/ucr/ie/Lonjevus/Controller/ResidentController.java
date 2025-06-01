@@ -6,6 +6,7 @@ package cr.ac.ucr.ie.Lonjevus.Controller;
 
 import cr.ac.ucr.ie.Lonjevus.domain.Resident;
 import cr.ac.ucr.ie.Lonjevus.domain.ResidentContact;
+import cr.ac.ucr.ie.Lonjevus.service.LocalStorageService;
 import cr.ac.ucr.ie.Lonjevus.service.ResidentContactService;
 import cr.ac.ucr.ie.Lonjevus.service.ResidentService;
 import java.io.IOException;
@@ -21,7 +22,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,12 +35,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 //@Controller
 public class ResidentController {
-
-    @GetMapping("/hello")
-    public String sayHello() {
-        return "Hello World!";
-    }
-
+    private static LocalStorageService localS = new LocalStorageService();
     @GetMapping("/residents")
     public List<Resident> getResidents() {
         return ResidentService.getAll();
@@ -60,21 +55,9 @@ public class ResidentController {
         resident.setNumberRoom(numberRoom);
 
         if (photo != null && !photo.isEmpty()) {
-            String fileName = photo.getOriginalFilename();
-            Path path = Paths.get("uploads/residentes");
-
-            try {
-                if (!Files.exists(path)) {
-                    Files.createDirectories(path);
-                }
-
-                Path filePath = path.resolve(fileName);
-                Files.copy(photo.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException e) {
-
-            }
-            resident.setPhoto(fileName);
-        }else {
+            String photoPath = localS.saveResidentPhoto(photo);
+            resident.setPhoto(photoPath);
+        } else {
             resident.setPhoto("foto.jpg");
         }
 
@@ -93,9 +76,9 @@ public class ResidentController {
     public Resident seachById(@RequestParam int id) {
         return ResidentService.findById(id);
     }
-    
+
     @GetMapping("/findResidentByNameorIdentification")
-    public LinkedList<Resident> getResidentByNameorIdentification(@RequestParam String value){
+    public LinkedList<Resident> getResidentByNameorIdentification(@RequestParam String value) {
         return ResidentService.findByNameorIdentification(value);
     }
 
@@ -113,53 +96,35 @@ public class ResidentController {
         resident.setNumberRoom(numberRoom);
 
         if (photo != null && !photo.isEmpty()) {
-            String fileName = photo.getOriginalFilename();
-            Path path = Paths.get("uploads/residentes");
-
-            try {
-                if (!Files.exists(path)) {
-                    Files.createDirectories(path);
-                }
-
-                Path filePath = path.resolve(fileName);
-                Files.copy(photo.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-            } catch (IOException e) {
-
-            }
-            resident.setPhoto(fileName);
-        } else {
-            String currentPhoto = ResidentService.findById(id).getPhoto();
-            resident.setPhoto(currentPhoto);
+            String photoPath = localS.saveResidentPhoto(photo);
+            resident.setPhoto(photoPath);
+        }else {
+            resident.setPhoto("foto.jpg");
         }
         
-        if (ResidentService.findById(id) != null) {        
-            System.out.println("\nLOS DATOS DEL RESIDENTE\n" + resident.toString());
-            ResidentService.update(resident);
-
-            return "Residente actualizado";
-        }
-        return "El residente no existe";
+        ResidentService.update(resident);
+        return "Residente Actualizado";
     }
 
     @GetMapping("/getContacts")
     public List<ResidentContact> getContacts(@RequestParam int id) {
         return ResidentContactService.getAll(id);
     }
-    
+
     @PostMapping("/addContact")
-    public String addContact(@RequestBody ResidentContact r){
+    public String addContact(@RequestBody ResidentContact r) {
         ResidentContactService.addContact(r);
         return "Contacto agregado";
     }
-    
+
     @DeleteMapping("/deleteContact")
-    public String deleteContact(@RequestParam int id){
+    public String deleteContact(@RequestParam int id) {
         ResidentContactService.deleteContact(id);
         return "Contacto eliminado";
     }
-    
+
     @PostMapping("/updateContact")
-    public String updateContact(@RequestBody ResidentContact r){
+    public String updateContact(@RequestBody ResidentContact r) {
         ResidentContactService.updateContact(r);
         return "Contacto actualizado";
     }

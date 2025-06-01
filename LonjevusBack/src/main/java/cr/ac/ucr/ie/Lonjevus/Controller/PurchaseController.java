@@ -46,34 +46,31 @@ public class PurchaseController {
             return ResponseEntity.status(500).body("{\"message\": \"Error al registrar la compra\"}");
         }
     }
-    
+
     @GetMapping("/{id}")
-public ResponseEntity<?> getPurchaseById(@PathVariable int id) {
-    try {
-        Purchase purchase = purchaseService.getPurchaseById(id);
-        return ResponseEntity.ok(purchase);
-    } catch (Exception e) {
-        return ResponseEntity.status(404).body("Compra no encontrada");
+    public ResponseEntity<?> getPurchaseById(@PathVariable String id) {
+        try {
+            Purchase purchase = purchaseService.getPurchaseById(id);
+            return ResponseEntity.ok(purchase);
+        } catch (Exception e) {
+            return ResponseEntity.status(404).body("Compra no encontrada");
+        }
     }
-}
 
-    
     @PutMapping("/update/{id}")
-public ResponseEntity<?> updatePurchase(@PathVariable int id, @RequestBody Purchase purchase) {
-    try {
-        purchaseService.updatePurchase(id, purchase);
-        return ResponseEntity.ok("Compra actualizada correctamente");
-    } catch (Exception e) {
-        return ResponseEntity.status(500).body("Error al actualizar");
+    public ResponseEntity<?> updatePurchase(@PathVariable String id, @RequestBody Purchase purchase) {
+        try {
+            purchaseService.updatePurchase(id, purchase);
+            return ResponseEntity.ok("Compra actualizada correctamente");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error al actualizar");
+        }
     }
-}
 
-@DeleteMapping("/{id}")
-public ResponseEntity<Void> deletePurchase(@PathVariable Integer id) {
-    purchaseService.deletePurchase(id);
-    return ResponseEntity.noContent().build();
-}
-
-
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePurchase(@PathVariable String id) {
+        purchaseService.deletePurchase(id);
+        return ResponseEntity.noContent().build();
+    }
 
 }

@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.util.LinkedList;
 
 public class Purchase {
-    private Integer id;
+    private String id;
     private LocalDate date;
     private BigDecimal amount;
     //private Admin admin;
@@ -15,7 +15,7 @@ public class Purchase {
         this.items = new LinkedList<>();
     }
 
-    public Purchase(Integer id, LocalDate date, BigDecimal amount, LinkedList<PurchaseProduct> items) {
+    public Purchase(String id, LocalDate date, BigDecimal amount, LinkedList<PurchaseProduct> items) {
         this.id = id;
         this.date = date;
         this.amount = amount;
@@ -23,7 +23,7 @@ public class Purchase {
         this.items = items;
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
@@ -43,7 +43,7 @@ public class Purchase {
         return items;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -63,7 +63,7 @@ public class Purchase {
         this.items = items;
     }
 
-    //public void setSupplier(Supplier supplier) {
-      //  throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    //}
+    public void setSupplier(Supplier supplier) {
+        
+    }
 }
