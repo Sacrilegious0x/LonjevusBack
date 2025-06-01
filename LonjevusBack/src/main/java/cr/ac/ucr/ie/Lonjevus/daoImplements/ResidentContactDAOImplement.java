@@ -77,8 +77,8 @@ public class ResidentContactDAOImplement implements ResidentContactDAO {
                 System.out.println("Error: la conexión es NULL en ConnectionDB.getConnection()");
             }
 
-            Resident resident = ResidentService.findById(t.getIdResident());
-            t.setResident(resident);
+            //Resident resident = ResidentService.findById(t.getIdResident());
+            //t.setResident(resident);
 
             PreparedStatement ps = cn.prepareCall(sql.toString());
 
