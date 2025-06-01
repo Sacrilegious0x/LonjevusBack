@@ -4,24 +4,42 @@
  */
 package cr.ac.ucr.ie.Lonjevus.domain;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+        
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
-
-
-/**
- *
- * @author Usuario
- */
+@Entity
+@Table(name="product")
+@SQLDelete(sql = "UPDATE product SET isActive = 0 WHERE id = ?")
+@Where(clause = "isActive = 1")
 public class Product {
     
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    
     private String name;
     private BigDecimal price;
     private String category;
     private LocalDate expirationDate;
     private String photoURL;
+    
+    @ManyToOne
+    @JoinColumn(name = "unitId", nullable = false)
     private Unit unit;
+    
+    @ManyToOne
+    @JoinColumn(name = "supplierId", nullable = false)
     private Supplier supplier;
 
     public Product() {}
