@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
  * @author JOSHUACALETCESPEDESG
  */
 @Service
-public class ResidentContactJPA implements IResidentContactService {
+public class ResidentContactServiceJPA implements IResidentContactService {
 
     @Autowired
     private IResidentContactRepository contactRepository;

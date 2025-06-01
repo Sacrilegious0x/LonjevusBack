@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/springframework/Controller.java to edit this template
- */
 package cr.ac.ucr.ie.Lonjevus.Controller;
 
 import cr.ac.ucr.ie.Lonjevus.domain.Resident;
@@ -9,15 +5,7 @@ import cr.ac.ucr.ie.Lonjevus.domain.ResidentContact;
 import cr.ac.ucr.ie.Lonjevus.service.IResidentContactService;
 import cr.ac.ucr.ie.Lonjevus.service.IResidentService;
 import cr.ac.ucr.ie.Lonjevus.service.LocalStorageService;
-import cr.ac.ucr.ie.Lonjevus.service.ResidentContactService;
-import cr.ac.ucr.ie.Lonjevus.service.ResidentService;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
-import java.util.LinkedList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -88,11 +76,6 @@ public class ResidentController {
     @GetMapping("/findResident")
     public Resident seachById(@RequestParam int id) {
         return service.getById(id);
-    }
-
-    @GetMapping("/findResidentByNameorIdentification")
-    public LinkedList<Resident> getResidentByNameorIdentification(@RequestParam String value) {
-        return ResidentService.findByNameorIdentification(value);
     }
 
     @PostMapping("/updateResident")
