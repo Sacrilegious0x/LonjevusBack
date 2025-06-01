@@ -54,9 +54,6 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
-        <!-- Dependencias comentadas opcionales (developer) -->
-        <!--
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jdbc</artifactId>
@@ -86,7 +83,6 @@
             <version>0.11.5</version>
             <scope>runtime</scope>
         </dependency>
-        -->
     </dependencies>
 
     <build>

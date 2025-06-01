@@ -1,43 +1,110 @@
 package cr.ac.ucr.ie.Lonjevus.Controller;
 
 import cr.ac.ucr.ie.Lonjevus.domain.Inventory;
-import cr.ac.ucr.ie.Lonjevus.service.InventoryService;
-import java.time.LocalDate;
-import java.util.List;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import cr.ac.ucr.ie.Lonjevus.domain.Product;
+import cr.ac.ucr.ie.Lonjevus.domain.Purchase;
+import cr.ac.ucr.ie.Lonjevus.service.IInventoryService;
+import cr.ac.ucr.ie.Lonjevus.service.LocalStorageService;
 
-/**
- *
- * @author Usuario
- */
+import java.time.LocalDate;
+import java.util.Collections;
+import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 @RestController
 @RequestMapping("/api/inventory")
 @CrossOrigin(origins = "http://localhost:5173")
 public class InventoryController {
 
-    private final InventoryService inventoryS;
+    @Autowired
+    private IInventoryService service;
 
-    public InventoryController() {
-        this.inventoryS = new InventoryService();
-    }
+    @Autowired
+    private LocalStorageService localStorageService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<Inventory>> getAllInventory() {
-        List<Inventory> list = inventoryS.getAll();
-        return ResponseEntity.ok(list);
+    public Map<String, Object> getList() {
+        return Collections.singletonMap("inventory", service.getAll());
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deleteInventory(@PathVariable int id) {
-        inventoryS.deleteInventoryById(id);
-        return ResponseEntity.ok().build();
+    @PostMapping(path = "/save", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Map<String, Object> saveInventory(
+            @RequestParam("quantity") int quantity,
+            @RequestParam("category") String category,
+            @RequestParam("productId") int productId,
+            @RequestParam("purchaseId") String purchaseId,
+            @RequestParam(value = "photo", required = false) MultipartFile photo) {
+
+        Inventory inventory = new Inventory();
+        inventory.setQuantity(quantity);
+        inventory.setCategory(category);
+
+        if (photo != null) {
+            inventory.setPhotoURL(localStorageService.save(photo));
+        }
+
+        Product product = new Product();
+        product.setId(productId);
+        inventory.setProduct(product);
+
+        Purchase purchase = new Purchase();
+        purchase.setId(purchaseId);
+        inventory.setPurchase(purchase);
+
+        service.save(inventory);
+        return getList();
+    }
+
+    @PostMapping(path = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Map<String, Object> updateInventory(
+            @RequestParam("id") int id,
+            @RequestParam("quantity") int quantity,
+            @RequestParam("category") String category,
+            @RequestParam("productId") int productId,
+            @RequestParam("purchaseId") String purchaseId,
+            @RequestParam(value = "photo", required = false) MultipartFile photo) {
+
+        Inventory inventory = service.getById(id);
+        if (inventory == null) {
+            throw new RuntimeException("No se encontró el inventario con ID: " + id);
+        }
+
+        inventory.setQuantity(quantity);
+        inventory.setCategory(category);
+
+        if (photo != null) {
+            inventory.setPhotoURL(localStorageService.save(photo));
+        }
+
+        Product product = new Product();
+        product.setId(productId);
+        inventory.setProduct(product);
+
+        Purchase purchase = new Purchase();
+        purchase.setId(purchaseId);
+        inventory.setPurchase(purchase);
+
+        service.save(inventory);
+        return getList();
+    }
+
+    @DeleteMapping("/delete")
+    public Map<String, Object> deleteInventory(@RequestParam int id) {
+        service.delete(id);
+        return getList();
+    }
+
+    @GetMapping("/getById")
+    public Inventory getInventoryById(@RequestParam int id) {
+        return service.getById(id);
     }
 
     @GetMapping("/expiration")
-    public ResponseEntity<List<Inventory>> getByExpirationDate(@RequestParam("date") String date) {
+    public Map<String, Object> getByExpirationDate(@RequestParam("date") String date) {
         LocalDate expirationDate = LocalDate.parse(date);
-        List<Inventory> result = inventoryS.findByExpirationDate(expirationDate);
-        return ResponseEntity.ok(result);
+        return Collections.singletonMap("inventory", service.findByExpirationDate(expirationDate));
     }
 }

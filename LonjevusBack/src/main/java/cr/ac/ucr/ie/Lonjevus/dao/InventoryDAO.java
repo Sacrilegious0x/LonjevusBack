@@ -14,4 +14,5 @@ import java.util.LinkedList;
  */
 public interface InventoryDAO extends CRUD<Inventory>{
     LinkedList<Inventory> findByExpirationDate(LocalDate expirationDate);
+
 }
