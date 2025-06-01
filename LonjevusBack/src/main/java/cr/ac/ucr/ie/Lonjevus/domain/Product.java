@@ -13,21 +13,21 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+        
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
-
-
-/**
- *
- * @author Usuario
- */
 @Entity
-@Table(name = "product") 
+@Table(name="product")
+@SQLDelete(sql = "UPDATE product SET isActive = 0 WHERE id = ?")
+@Where(clause = "isActive = 1")
 public class Product {
-
+    
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
+    
     private String name;
 
     private BigDecimal price;
@@ -37,6 +37,7 @@ public class Product {
     private LocalDate expirationDate;
 
     private String photoURL;
+<<<<<<< HEAD
 
     @ManyToOne
     @JoinColumn(name = "unitId")
@@ -44,6 +45,15 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "supplierId")
+=======
+    
+    @ManyToOne
+    @JoinColumn(name = "unitId", nullable = false)
+    private Unit unit;
+    
+    @ManyToOne
+    @JoinColumn(name = "supplierId", nullable = false)
+>>>>>>> developer
     private Supplier supplier;
 
     public Product() {}

@@ -3,14 +3,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
 package cr.ac.ucr.ie.Lonjevus.service;
-import cr.ac.ucr.ie.Lonjevus.domain.Product;
+
+
+import cr.ac.ucr.ie.Lonjevus.domain.Unit;
 import java.util.List;
 
-public interface IProductService {
+public interface IUnitService {
     
-    void save(Product product);
-    List<Product> getAllProducts();
-    void delete(int productId);
-    Product getById(int productId);
+    void save(Unit unit);
+    List<Unit> getAllUnits();
+    void delete(int unitId);
+    Unit getById(int unitId);
     
 }

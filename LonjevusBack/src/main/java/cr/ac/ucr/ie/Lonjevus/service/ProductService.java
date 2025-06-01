@@ -8,10 +8,7 @@ import cr.ac.ucr.ie.Lonjevus.daoImplements.ProductDAOImplements;
 import cr.ac.ucr.ie.Lonjevus.domain.Product;
 import java.util.LinkedList;
 
-/**
- *
- * @author Usuario
- */
+
 public class ProductService {
     
     private static ProductDAOImplements productDAOImplements= new ProductDAOImplements();

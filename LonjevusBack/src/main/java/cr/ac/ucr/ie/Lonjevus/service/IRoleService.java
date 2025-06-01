@@ -3,14 +3,19 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
 package cr.ac.ucr.ie.Lonjevus.service;
-import cr.ac.ucr.ie.Lonjevus.domain.Product;
+
+import cr.ac.ucr.ie.Lonjevus.domain.Role;
 import java.util.List;
 
-public interface IProductService {
+/**
+ *
+ * @author Usuario
+ */
+public interface IRoleService {
     
-    void save(Product product);
-    List<Product> getAllProducts();
-    void delete(int productId);
-    Product getById(int productId);
+    void save(Role role);
+    List<Role> getAllRoles();
+    void delete(int roleId);
+    Role getById(int roleId);
     
 }

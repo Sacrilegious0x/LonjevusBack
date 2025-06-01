@@ -1,6 +1,7 @@
 package cr.ac.ucr.ie.Lonjevus.dao;
 
 import java.util.LinkedList;
+
     public interface CRUD<T> {
     public LinkedList<T> getAll();
     public void add(T t);
@@ -9,5 +10,6 @@ import java.util.LinkedList;
     public T findById(Integer y);
 
     }
+
     
 

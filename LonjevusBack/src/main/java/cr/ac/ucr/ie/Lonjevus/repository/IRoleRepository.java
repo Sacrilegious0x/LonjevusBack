@@ -4,13 +4,13 @@
  */
 package cr.ac.ucr.ie.Lonjevus.repository;
 
-import cr.ac.ucr.ie.Lonjevus.domain.Product;
+import cr.ac.ucr.ie.Lonjevus.domain.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
  *
  * @author Usuario
  */
-public interface IProductRepository extends JpaRepository<Product,Integer> {
+public interface IRoleRepository extends JpaRepository<Role,Integer> {
     
 }
