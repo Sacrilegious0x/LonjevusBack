@@ -32,11 +32,11 @@ public class Person {
     @Column(name = "email")
     private String email;
     @Column(name = "password")
-    @JsonIgnore
+    //@JsonIgnore
     private String password;
     @Column(name = "photoUrl")
     private String photoUrl;
-    @Column(name = "isActive")
+    @Column(name = "isActive" ,columnDefinition = "tinyint(1) default 1")
     private boolean isActive;
     @OneToOne
     @JoinColumn(name = "scheduleID")
@@ -118,5 +118,5 @@ public class Person {
         this.schedule = schedule;
     }
  
-    
+        
 }

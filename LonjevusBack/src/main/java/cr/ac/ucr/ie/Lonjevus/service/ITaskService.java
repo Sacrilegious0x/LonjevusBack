@@ -13,7 +13,7 @@ import java.util.LinkedList;
  */
 public interface ITaskService {
     void save (Task t);
-    LinkedList<Task> getAll();
+    LinkedList<Task> findByCaregiverId(int id);
     void delete(int taskId);
     void update(int taskId, Task t);
     Task getById(int taskId);

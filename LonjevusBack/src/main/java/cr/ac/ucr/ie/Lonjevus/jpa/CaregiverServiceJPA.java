@@ -10,11 +10,13 @@ import cr.ac.ucr.ie.Lonjevus.service.ICaregiverService;
 import java.util.LinkedList;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author User
  */
+@Service
 public class CaregiverServiceJPA implements ICaregiverService {
 
     @Autowired
@@ -45,8 +47,10 @@ public class CaregiverServiceJPA implements ICaregiverService {
             caregiver.setSalary(c.getSalary());
             caregiver.setEmail(c.getEmail());
             caregiver.setShift(c.getShift());   
+            //System.out.println("URL DE LA FOTO EN ACTUALIZAR " + c.getPhotoUrl());
             caregiver.setPhotoUrl(c.getPhotoUrl());
             caregiver.setSchedule(c.getSchedule());
+            caregiverRepository.save(caregiver);
         }
     }
     

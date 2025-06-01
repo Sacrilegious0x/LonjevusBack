@@ -5,8 +5,7 @@
 package cr.ac.ucr.ie.Lonjevus.Controller;
 
 import cr.ac.ucr.ie.Lonjevus.domain.Task;
-import cr.ac.ucr.ie.Lonjevus.jpa.TaskServiceJPA;
-import cr.ac.ucr.ie.Lonjevus.service.TaskService;
+import cr.ac.ucr.ie.Lonjevus.service.ITaskService;
 import java.util.Collections;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "http://localhost:5173")
 public class TaskController {
    @Autowired
-   private TaskServiceJPA service;
+   private ITaskService service;
     
     @PostMapping("/saveTask")
     public ResponseEntity<String> saveTask(@RequestBody Task t) {

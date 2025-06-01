@@ -26,10 +26,10 @@ public class TaskServiceJPA implements ITaskService {
          taskRepository.save(t);
     }
 
-    @Override
-    public LinkedList<Task> getAll() {
-      return new LinkedList<>(taskRepository.findAll());
-    }
+//    @Override
+//    public LinkedList<Task> getAll() {
+//      return new LinkedList<>(taskRepository.findAll());
+//    }
 
     @Override
     public void delete(int taskId) {
