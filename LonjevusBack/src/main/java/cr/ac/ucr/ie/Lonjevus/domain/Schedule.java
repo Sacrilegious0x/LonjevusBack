@@ -4,16 +4,33 @@
  */
 package cr.ac.ucr.ie.Lonjevus.domain;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import org.hibernate.annotations.Collate;
+
 /**
  *
  * @author User
  */
+@Entity
+@Table(name = "schedule")
 public class Schedule {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name="days")
     private String days;
+    @Column(name="entryTime1")
     private String entryTime1;
+    @Column(name="exitTime1")
     private String exitTime1;
+    @Column(name="entryTime2")
     private String entryTime2;
+    @Column(name="exitTime2")
     private String exitTime2;
     
     public Schedule(){

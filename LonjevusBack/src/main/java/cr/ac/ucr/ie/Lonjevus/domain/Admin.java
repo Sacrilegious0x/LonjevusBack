@@ -4,11 +4,24 @@
  */
 package cr.ac.ucr.ie.Lonjevus.domain;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
+
+
 /**
  *
  * @author User
  */
+@Entity
+@Table(name="administrator")
+@SQLDelete(sql = "UPDATE administrator SET isActive = 0 WHERE id = ?")
+@Where(clause = "isActive = 1")
 public class Admin extends Person {
+    @Column(name="officeContact")
     private String officeContact;
     
     public Admin(){
