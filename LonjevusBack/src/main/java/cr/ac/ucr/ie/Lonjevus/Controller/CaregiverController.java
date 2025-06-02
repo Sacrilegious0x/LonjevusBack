@@ -6,12 +6,13 @@ package cr.ac.ucr.ie.Lonjevus.Controller;
 
 import cr.ac.ucr.ie.Lonjevus.domain.Caregiver;
 import cr.ac.ucr.ie.Lonjevus.domain.Schedule;
-import cr.ac.ucr.ie.Lonjevus.service.CaregiverService;
+import cr.ac.ucr.ie.Lonjevus.service.ICaregiverService;
+import cr.ac.ucr.ie.Lonjevus.service.IScheduleService;
 import cr.ac.ucr.ie.Lonjevus.service.LocalStorageService;
-import cr.ac.ucr.ie.Lonjevus.service.ScheduleService;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -34,57 +35,52 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/caregiver")
 @CrossOrigin(origins = "http://localhost:5173")
 public class CaregiverController {
-
-    private CaregiverService serviceC = new CaregiverService();
-    private ScheduleService servicesS = new ScheduleService();
-    private LocalStorageService localStorageService = new LocalStorageService();
+    @Autowired
+    private ICaregiverService caregiverService;
+    @Autowired
+    private IScheduleService scheduleService;
+    @Autowired
+    private LocalStorageService localStorageService;
 
     @GetMapping("/listCaregiver")
     public Map getAll() {
-        List<Caregiver> caregivers = serviceC.getAll();
-        for (Caregiver c : caregivers) {
-            Schedule shd = servicesS.getScheduleById(c.getScheduleId());
-            c.setSchedule(shd);
-        }
-
+        List<Caregiver> caregivers = caregiverService.getAll(); 
         return Collections.singletonMap("data", caregivers);
     }
 
     @PostMapping(value = "/addCaregiver", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> addCaregiver(@RequestPart("caregiverData") Caregiver c,
-            @RequestPart(value = "photo") MultipartFile photoFile) {
+    public ResponseEntity<String> addCaregiver(@RequestPart("caregiverData") Caregiver caregiver,
+            @RequestPart(value = "photo", required = false) MultipartFile photoFile) {
         try {
-            Schedule shd = c.getSchedule();
-            int idSchedule = servicesS.addAndReturn(shd);
-            c.setScheduleId(idSchedule);
+            if (caregiver.getSchedule() != null && caregiver.getSchedule().getId() == 0) {
+                scheduleService.save(caregiver.getSchedule());
+            }
             
             if (photoFile != null && !photoFile.isEmpty()) {               
                 String photoPath = localStorageService.saveCaregiverPhoto(photoFile);               
-                c.setPhotoUrl(photoPath);
+                caregiver.setPhotoUrl(photoPath);
             }
 
-            serviceC.addCaregiver(c);
+            caregiverService.save(caregiver);
+            return ResponseEntity.ok("Cuidador creado exitosamente");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error al crear trabajador");
         }
-        return null;
     }
 
     @PostMapping(value = "/updateCaregiver/{id}",  consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> updateCaregiver(@RequestPart("caregiverData") Caregiver c,
-            @RequestPart(value = "photo") MultipartFile photoFile) {
+            @RequestPart(value = "photo", required = false) MultipartFile photoFile) {
         try{
             Schedule shd = c.getSchedule();
-            servicesS.updateSchedule(shd);
-            if (photoFile != null && !photoFile.isEmpty()) {               
+             scheduleService.update(shd.getId(), shd);
+             if (photoFile != null && !photoFile.isEmpty()) {               
                 String photoPath = localStorageService.saveCaregiverPhoto(photoFile);
+                 System.out.println("Foto nueva" + photoPath);
                 c.setPhotoUrl(photoPath);
             }
-            
-            c.setScheduleId(shd.getId());
-            System.out.println("id del horario por parametro " + c.getScheduleId());
-            serviceC.updateCaregiver(c);
+            caregiverService.update(c.getId(), c);
              return ResponseEntity.ok("Trabajador actualizado exitosamente");
         }catch(Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -97,7 +93,7 @@ public class CaregiverController {
     @DeleteMapping("/deleteCaregiver/{id}")
     public ResponseEntity<String> deleteCaregiver(@PathVariable int id) {
          try {
-            serviceC.deleteCaregiver(id);  
+            caregiverService.delete(id);
             return ResponseEntity.ok("Trabajador eliminado exitosamente");
         } catch (Exception e) {
             e.printStackTrace();
@@ -108,9 +104,8 @@ public class CaregiverController {
 
     @GetMapping("getcaregiverById/{id}")
     public Caregiver getById(@PathVariable int id) {
-        Caregiver c = serviceC.getCaregiverById(id);
-        Schedule shd = servicesS.getScheduleById(c.getScheduleId());
-        c.setSchedule(shd);       
+        Caregiver c = caregiverService.getById(id);
+              
         return c;
     }
 }

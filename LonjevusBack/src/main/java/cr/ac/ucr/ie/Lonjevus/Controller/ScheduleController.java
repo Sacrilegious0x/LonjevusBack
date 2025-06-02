@@ -6,7 +6,6 @@ package cr.ac.ucr.ie.Lonjevus.Controller;
 
 
 import cr.ac.ucr.ie.Lonjevus.domain.Schedule;
-import cr.ac.ucr.ie.Lonjevus.service.ScheduleService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,28 +22,28 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/schedule")
 public class ScheduleController {
-    private static ScheduleService service = new ScheduleService();
-    
-   @GetMapping("/getSchedule/{id}")
-    public Schedule getScheduleById(@PathVariable int id) {
-        return service.getScheduleById(id);
-    }
-    
-    @PostMapping("/saveSchedule")
-    public ResponseEntity<Void> saveSchedule(@RequestBody Schedule sch){
-        service.addSchedule(sch);
-        return ResponseEntity.ok().build();
-    }
-    
-     @DeleteMapping("/deleteSchedule/{id}")
-    public ResponseEntity<Void> deleteSchedule(@PathVariable int id){
-        service.deleteSchedule(id);
-        return ResponseEntity.ok().build();
-    }
-    
-    @PostMapping("/updateSchedule")
-    public ResponseEntity<Void> updateSchedule(@RequestBody Schedule sch){
-        service.updateSchedule(sch);
-        return ResponseEntity.ok().build();
-    }
+    //private static ScheduleService service = new ScheduleService();
+//    
+//   @GetMapping("/getSchedule/{id}")
+//    public Schedule getScheduleById(@PathVariable int id) {
+//        return service.getScheduleById(id);
+//    }
+//    
+//    @PostMapping("/saveSchedule")
+//    public ResponseEntity<Void> saveSchedule(@RequestBody Schedule sch){
+//        service.addSchedule(sch);
+//        return ResponseEntity.ok().build();
+//    }
+//    
+//     @DeleteMapping("/deleteSchedule/{id}")
+//    public ResponseEntity<Void> deleteSchedule(@PathVariable int id){
+//        service.deleteSchedule(id);
+//        return ResponseEntity.ok().build();
+//    }
+//    
+//    @PostMapping("/updateSchedule")
+//    public ResponseEntity<Void> updateSchedule(@RequestBody Schedule sch){
+//        service.updateSchedule(sch);
+//        return ResponseEntity.ok().build();
+//    }
 }

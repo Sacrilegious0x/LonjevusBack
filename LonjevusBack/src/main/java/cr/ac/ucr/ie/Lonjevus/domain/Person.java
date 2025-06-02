@@ -4,20 +4,42 @@
  */
 package cr.ac.ucr.ie.Lonjevus.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.OneToOne;
+
 /**
  *
  * @author User
  */
+@MappedSuperclass
 public class Person {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name = "identification")
     private String identification;
+    @Column(name = "name")
     private String name;
+    @Column(name = "salary")
     private double salary;
+    @Column(name = "email")
     private String email;
+    @Column(name = "password")
+    //@JsonIgnore
     private String password;
+    @Column(name = "photoUrl")
     private String photoUrl;
-    private int scheduleId;
+    @Column(name = "isActive" ,columnDefinition = "tinyint(1) default 1")
     private boolean isActive;
+    @OneToOne
+    @JoinColumn(name = "scheduleID")
     private Schedule schedule;
     
     public Person(){
@@ -80,14 +102,6 @@ public class Person {
         this.photoUrl = photoUrl;
     }
 
-    public int getScheduleId() {
-        return scheduleId;
-    }
-
-    public void setScheduleId(int scheduleId) {
-        this.scheduleId = scheduleId;
-    }
-
     public boolean isIsActive() {
         return isActive;
     }
@@ -104,5 +118,5 @@ public class Person {
         this.schedule = schedule;
     }
  
-    
+        
 }
