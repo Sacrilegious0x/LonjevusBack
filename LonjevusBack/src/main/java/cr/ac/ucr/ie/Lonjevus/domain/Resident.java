@@ -1,28 +1,58 @@
 package cr.ac.ucr.ie.Lonjevus.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import java.time.LocalDate;
+import java.util.LinkedList;
+import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  *
  * @author JOSHUACALETCESPEDESG
  */
+@Entity
+@Table(name="resident")
 public class Resident {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name = "identification")
     private String identification;
+    @Column(name = "name")
     private String name;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Column(name = "birthdate")
     private LocalDate birthdate;
-    private int age;
+    @Column(name = "age")
+    private Integer age;
+    @Column(name = "healthStatus")
     private String healthStatus;
-    private int numberRoom;
+    @Column(name = "numberRoom")
+    private Integer numberRoom;
+    @Column(name = "photo")
     private String photo;
-    private boolean isActive;
+    @Column(name = "isActive")
+    private Boolean isActive;
+    
+    @OneToMany(mappedBy = "resident", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonManagedReference
+    private List<ResidentContact> contacts = new LinkedList<>();
 
     public Resident() {
     }
 
-    public Resident(String identification, String name, int age, String healthStatus, int roomNumber, String photo, boolean isActive) {
+    public Resident(String identification, String name, Integer age, String healthStatus, Integer roomNumber, String photo, boolean isActive) {
         this.identification = identification;
         this.name = name;
         this.age = age;
@@ -57,11 +87,11 @@ public class Resident {
         this.name = name;
     }
 
-    public int getAge() {
+    public Integer getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 
@@ -73,11 +103,11 @@ public class Resident {
         this.healthStatus = healthStatus;
     }
 
-    public int getNumberRoom() {
+    public Integer getNumberRoom() {
         return numberRoom;
     }
 
-    public void setNumberRoom(int numberRoom) {
+    public void setNumberRoom(Integer numberRoom) {
         this.numberRoom = numberRoom;
     }
 
@@ -89,11 +119,11 @@ public class Resident {
         this.photo = photo;
     }
 
-    public boolean isIsActive() {
+    public Boolean isIsActive() {
         return isActive;
     }
 
-    public void setIsActive(boolean isActive) {
+    public void setIsActive(Boolean isActive) {
         this.isActive = isActive;
     }
 
@@ -104,6 +134,14 @@ public class Resident {
     public void setBirthdate(LocalDate birthdate) {
         this.birthdate = birthdate;
     }
-    
+
+    public List<ResidentContact> getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(List<ResidentContact> contacts) {
+        this.contacts = contacts;
+    }
+
     
 }

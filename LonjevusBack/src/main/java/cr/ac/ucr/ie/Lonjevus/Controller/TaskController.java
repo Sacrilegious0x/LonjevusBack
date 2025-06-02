@@ -5,9 +5,11 @@
 package cr.ac.ucr.ie.Lonjevus.Controller;
 
 import cr.ac.ucr.ie.Lonjevus.domain.Task;
-import cr.ac.ucr.ie.Lonjevus.service.TaskService;
+import cr.ac.ucr.ie.Lonjevus.service.ITaskService;
 import java.util.Collections;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,38 +28,36 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
 public class TaskController {
-   public static TaskService service = new TaskService();
+   @Autowired
+   private ITaskService service;
     
-    @GetMapping("/listTask") 
-    public Map getList(){
-        return Collections.singletonMap("data", service.getList());
-    }
     @PostMapping("/saveTask")
-    public Map saveTask(@RequestBody Task t) {
-        service.addTask(t);
-        return getList();
+    public ResponseEntity<String> saveTask(@RequestBody Task t) {
+        service.save(t);
+        return ResponseEntity.ok("Tarea guardada");
     }
     
     @PostMapping("/updateTask/{id}")
-    public Map updateTask(@RequestBody Task t){
-        service.updateTask(t);
-        return getList();
+    public ResponseEntity<String> updateTask(@PathVariable int id, @RequestBody Task t){
+        service.update(id, t);
+        return ResponseEntity.ok("Tarea actualizada");
     }
     
     @DeleteMapping("/deleteTask/{id}")
-    public Map deleteTask(@PathVariable int id){
-        service.deleteTask(id);
-        return getList();
+    public ResponseEntity<String> deleteTask(@PathVariable int id){
+        service.delete(id);
+        return ResponseEntity.ok("Tarea eliminada");
     }
     
     @GetMapping("/getById/{id}")
     public Task getById(@PathVariable int id){
         return service.getById(id);
+        
     } 
     
     @GetMapping("/listTaskByCaregiver/{id}") 
     public Map getList(@PathVariable int id){
-        return Collections.singletonMap("data", service.getCaregiverTask(id));
+        return Collections.singletonMap("data", service.findByCaregiverId(id));
     }
     
 }
