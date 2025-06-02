@@ -18,9 +18,10 @@ public class Purchase {
     private LocalDate date;
     private BigDecimal amount;
 
-    @ManyToOne
-    @JoinColumn(name = "idAdministrator")
-    private Admin admin;
+    //@ManyToOne
+    //@JoinColumn(name = "idAdministrator")
+    //private Admin admin;
+    private Integer idAdministrator;
 
     @ManyToOne
     @JoinColumn(name = "idProduct")
@@ -34,11 +35,12 @@ public class Purchase {
 
     public Purchase() {}
 
-    public Purchase(String id, LocalDate date, BigDecimal amount, Admin admin, Product product, boolean isActive) {
+    public Purchase(String id, LocalDate date, BigDecimal amount, /*Admin admin*/ Integer idAdministrator, Product product, boolean isActive) {
         this.id = id;
         this.date = date;
         this.amount = amount;
-        this.admin = admin;
+        //this.admin = admin;
+        this.idAdministrator = idAdministrator;
         this.product = product;
         this.isActive = isActive;
     }
@@ -67,14 +69,23 @@ public class Purchase {
         this.amount = amount;
     }
 
-    public Admin getAdmin() {
+    /*public Admin getAdmin() {
         return admin;
     }
 
     public void setAdmin(Admin admin) {
         this.admin = admin;
+    }*/
+
+    public Integer getIdAdministrator() {
+        return idAdministrator;
     }
 
+    public void setIdAdministrator(Integer idAdministrator) {
+        this.idAdministrator = idAdministrator;
+    }
+
+    
     public Product getProduct() {
         return product;
     }

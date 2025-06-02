@@ -37,23 +37,12 @@ public class Product {
     private LocalDate expirationDate;
 
     private String photoURL;
-<<<<<<< HEAD
-
-    @ManyToOne
-    @JoinColumn(name = "unitId")
-    private Unit unit;
-
-    @ManyToOne
-    @JoinColumn(name = "supplierId")
-=======
-    
     @ManyToOne
     @JoinColumn(name = "unitId", nullable = false)
     private Unit unit;
     
     @ManyToOne
     @JoinColumn(name = "supplierId", nullable = false)
->>>>>>> developer
     private Supplier supplier;
 
     public Product() {}

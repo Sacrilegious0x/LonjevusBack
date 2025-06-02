@@ -15,12 +15,14 @@ import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author Usuario
  */
-public class InventoryServiceImplement implements IInventoryService {
+@Service
+public class InventoryServiceJPA implements IInventoryService {
 
     @Autowired
     private IInventoryRepository repo;
@@ -41,19 +43,22 @@ public class InventoryServiceImplement implements IInventoryService {
         inventory.setQuantity((Integer) row[1]);
         inventory.setCategory((String) row[2]);
         inventory.setPhotoURL((String) row[3]);
-
+        inventory.setActivo((Boolean) row[4]);
+       
         Product product = new Product();
-        product.setId((Integer) row[4]);
-        product.setName((String) row[5]);
-        product.setExpirationDate(row[6] != null ? ((Date) row[6]).toLocalDate() : null);
+        product.setId((Integer) row[5]);
+        product.setName((String) row[6]);
+        product.setExpirationDate(row[7] != null ? ((Date) row[7]).toLocalDate() : null);
 
         Supplier supplier = new Supplier();
-        supplier.setId((Integer) row[7]);
-        supplier.setName((String) row[8]);
+        supplier.setId((Integer) row[8]);
+        supplier.setName((String) row[9]);
         product.setSupplier(supplier);
 
         Purchase purchase = new Purchase();
-        purchase.setId((String) row[9]);
+        purchase.setId((String) row[10]);
+        
+        
 
         inventory.setProduct(product);
         inventory.setPurchase(purchase);

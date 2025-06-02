@@ -34,7 +34,8 @@ public class PurchaseProduct implements Serializable {
     @Transient
     private LocalDate expirationDate;
 
-    public PurchaseProduct() {}
+    public PurchaseProduct() {
+    }
 
     public PurchaseProduct(PurchaseProductId id, Purchase purchase, Product product, Integer quantity) {
         this.id = id;

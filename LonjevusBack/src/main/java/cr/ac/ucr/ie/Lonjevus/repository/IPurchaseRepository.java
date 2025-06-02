@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
 import org.springframework.data.jpa.repository.*;
+import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,25 +19,17 @@ public interface IPurchaseRepository extends JpaRepository<Purchase, String> {
     @Query(value = "CALL get_purchase_with_details_by_id(:id)", nativeQuery = true)
     List<Object[]> getPurchaseDetailsById(@Param("id") String id);
 
-    // Insertar compra
-    @Modifying
-    @Transactional
-    @Query(value = "CALL insert_purchase(:date, :amount, :adminId)", nativeQuery = true)
-    void insertPurchase(
-        @Param("date") Date date,
-        @Param("amount") BigDecimal amount,
-        @Param("adminId") int adminId
-    );
+   
 
     // Insertar productos de la compra
     @Modifying
     @Transactional
     @Query(value = "CALL insert_purchase_product(:purchaseId, :productId, :quantity, :expirationDate)", nativeQuery = true)
     void insertPurchaseProduct(
-        @Param("purchaseId") String purchaseId,
-        @Param("productId") int productId,
-        @Param("quantity") int quantity,
-        @Param("expirationDate") Date expirationDate
+            @Param("purchaseId") String purchaseId,
+            @Param("productId") int productId,
+            @Param("quantity") int quantity,
+            @Param("expirationDate") Date expirationDate
     );
 
     // Actualizar compra
@@ -44,9 +37,9 @@ public interface IPurchaseRepository extends JpaRepository<Purchase, String> {
     @Transactional
     @Query(value = "CALL update_purchase(:id, :date, :amount)", nativeQuery = true)
     void updatePurchase(
-        @Param("id") String id,
-        @Param("date") Date date,
-        @Param("amount") BigDecimal amount
+            @Param("id") String id,
+            @Param("date") Date date,
+            @Param("amount") BigDecimal amount
     );
 
     // Eliminar productos anteriores

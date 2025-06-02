@@ -4,7 +4,7 @@
  */
 package cr.ac.ucr.ie.Lonjevus.service;
 
-import cr.ac.ucr.ie.Lonjevus.daoImplements.TaskDaoImplement;
+import cr.ac.ucr.ie.Lonjevus.jpa.TaskDaoImplement;
 import cr.ac.ucr.ie.Lonjevus.domain.Task;
 import java.util.LinkedList;
 

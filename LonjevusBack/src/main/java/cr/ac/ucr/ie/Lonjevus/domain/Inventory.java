@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package cr.ac.ucr.ie.Lonjevus.domain;
 
 import jakarta.persistence.Column;
@@ -12,13 +8,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-
-/**
- *
- * @author Usuario
- */
-
-
 
 @Entity
 @Table(name = "inventory") 
@@ -35,6 +24,9 @@ public class Inventory {
     @Column(name = "photo_url")
     private String photoURL;
 
+    @Column(name = "isActive")
+    private Boolean activo;
+
     @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "id") 
     private Product product;
@@ -45,11 +37,12 @@ public class Inventory {
 
     public Inventory() {}
 
-    public Inventory(Integer id, Integer quantity, String category, String photoURL, Product product, Purchase purchase) {
+    public Inventory(Integer id, Integer quantity, String category, String photoURL, Boolean activo, Product product, Purchase purchase) {
         this.id = id;
         this.quantity = quantity;
         this.category = category;
         this.photoURL = photoURL;
+        this.activo = activo;
         this.product = product;
         this.purchase = purchase;
     }
@@ -86,6 +79,14 @@ public class Inventory {
         this.photoURL = photoURL;
     }
 
+    public Boolean isActivo() {
+        return activo;
+    }
+
+    public void setActivo(Boolean activo) {
+        this.activo = activo;
+    }
+
     public Product getProduct() {
         return product;
     }
@@ -101,6 +102,4 @@ public class Inventory {
     public void setPurchase(Purchase purchase) {
         this.purchase = purchase;
     }
-   
-    
 }

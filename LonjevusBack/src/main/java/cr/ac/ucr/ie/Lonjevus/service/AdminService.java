@@ -4,7 +4,7 @@
  */
 package cr.ac.ucr.ie.Lonjevus.service;
 
-import cr.ac.ucr.ie.Lonjevus.daoImplements.AdminDaoImplement;
+import cr.ac.ucr.ie.Lonjevus.jpa.AdminDaoImplement;
 import cr.ac.ucr.ie.Lonjevus.domain.Admin;
 import java.util.LinkedList;
 

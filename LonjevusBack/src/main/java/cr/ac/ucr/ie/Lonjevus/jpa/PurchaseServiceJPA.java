@@ -4,37 +4,44 @@ import cr.ac.ucr.ie.Lonjevus.domain.Purchase;
 import cr.ac.ucr.ie.Lonjevus.domain.PurchaseProduct;
 import cr.ac.ucr.ie.Lonjevus.repository.IPurchaseRepository;
 import cr.ac.ucr.ie.Lonjevus.service.IPurchaseService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.ParameterMode;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.StoredProcedureQuery;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PurchaseServiceImplements implements IPurchaseService {
+public class PurchaseServiceJPA implements IPurchaseService {
 
     @Autowired
     private IPurchaseRepository repository;
 
-    @Override
-    public List<Purchase> getAll() {
-        List<Object[]> rows = repository.getAllPurchasesRaw();
-        List<Purchase> purchases = new ArrayList<>();
+   @Override
+public List<Purchase> getAll() {
+    List<Object[]> rows = repository.getAllPurchasesRaw();
+    Map<String, Purchase> purchaseMap = new HashMap<>();
 
-        for (Object[] row : rows) {
-            String id = (String) row[0];
-            Date date = (Date) row[1];
-            BigDecimal amount = (BigDecimal) row[2];
+    for (Object[] row : rows) {
+        String id = (String) row[0];
 
-            Purchase p = new Purchase();
-            p.setId(id);
-            p.setDate(date.toLocalDate());
-            p.setAmount(amount);
-            purchases.add(p);
+        // Si ya fue añadida, ignorar
+        if (!purchaseMap.containsKey(id)) {
+            // Usar findById para obtener con items
+            Purchase fullPurchase = findById(id);
+            purchaseMap.put(id, fullPurchase);
         }
-        return purchases;
     }
+
+    return new ArrayList<>(purchaseMap.values());
+}
+
 
     @Override
     public Purchase findById(String id) {
@@ -65,18 +72,39 @@ public class PurchaseServiceImplements implements IPurchaseService {
         return purchase;
     }
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     @Override
     public void save(Purchase purchase) {
-        repository.insertPurchase(Date.valueOf(purchase.getDate()), purchase.getAmount(), purchase.getAdmin().getId());
+        // Paso 1: Llamada al procedimiento y registrar parámetros
+        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("insert_purchase");
+
+        query.registerStoredProcedureParameter("p_date", Date.class, ParameterMode.IN);
+        query.registerStoredProcedureParameter("p_amount", BigDecimal.class, ParameterMode.IN);
+        query.registerStoredProcedureParameter("p_admin_id", Integer.class, ParameterMode.IN);
+        query.registerStoredProcedureParameter("p_new_id", String.class, ParameterMode.OUT);
+
+        query.setParameter("p_date", Date.valueOf(purchase.getDate()));
+        query.setParameter("p_amount", purchase.getAmount());
+        query.setParameter("p_admin_id", purchase.getIdAdministrator());
+
+        // Paso 2: Ejecutar y obtener el ID
+        query.execute();
+
+        String newId = (String) query.getOutputParameterValue("p_new_id");
+        System.out.println("ID de compra generado por el SP: " + newId);
+        purchase.setId(newId);
+
+        // Paso 3: Insertar productos relacionados
         for (PurchaseProduct item : purchase.getItems()) {
             repository.insertPurchaseProduct(
-                    item.getId().getIdPurchase(),
-                    item.getId().getIdProduct(),
+                    newId,
+                    item.getIdProduct(),
                     item.getQuantity(),
                     Date.valueOf(item.getExpirationDate())
             );
         }
-
     }
 
     @Override

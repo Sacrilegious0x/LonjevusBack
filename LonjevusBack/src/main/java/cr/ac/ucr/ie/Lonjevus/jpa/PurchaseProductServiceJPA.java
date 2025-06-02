@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class PurchaseProductServiceImplement implements IPurchaseProductService {
+public class PurchaseProductServiceJPA implements IPurchaseProductService {
 
     @Autowired
     private IPurchaseProductRepository repository;
