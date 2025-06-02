@@ -4,7 +4,7 @@
  */
 package cr.ac.ucr.ie.Lonjevus.service;
 
-import cr.ac.ucr.ie.Lonjevus.daoImplements.InventoryDAOImplements;
+import cr.ac.ucr.ie.Lonjevus.jpa.InventoryDAOImplements;
 import cr.ac.ucr.ie.Lonjevus.domain.Inventory;
 import java.time.LocalDate;
 import java.util.LinkedList;

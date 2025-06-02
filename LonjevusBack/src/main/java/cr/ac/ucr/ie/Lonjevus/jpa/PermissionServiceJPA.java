@@ -1,5 +1,5 @@
 
-package cr.ac.ucr.ie.Lonjevus.daoImplements;
+package cr.ac.ucr.ie.Lonjevus.jpa;
 
 
 import cr.ac.ucr.ie.Lonjevus.domain.Permission;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class PermissionServiceImplement implements IPermissionService {
+public class PermissionServiceJPA implements IPermissionService {
     
     @Autowired
     private IPermissionRepository permRepo;

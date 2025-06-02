@@ -4,7 +4,7 @@
  */
 package cr.ac.ucr.ie.Lonjevus.service;
 
-import cr.ac.ucr.ie.Lonjevus.daoImplements.CaregiverDaoImplement;
+import cr.ac.ucr.ie.Lonjevus.jpa.CaregiverDaoImplement;
 import cr.ac.ucr.ie.Lonjevus.domain.Caregiver;
 import java.util.LinkedList;
 

@@ -4,7 +4,7 @@
  */
 package cr.ac.ucr.ie.Lonjevus.service;
 
-import cr.ac.ucr.ie.Lonjevus.daoImplements.ResidentContactDAOImplement;
+import cr.ac.ucr.ie.Lonjevus.jpa.ResidentContactDAOImplement;
 import cr.ac.ucr.ie.Lonjevus.domain.ResidentContact;
 import java.util.LinkedList;
 

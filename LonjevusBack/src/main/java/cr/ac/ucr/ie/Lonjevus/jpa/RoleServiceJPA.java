@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package cr.ac.ucr.ie.Lonjevus.daoImplements;
+package cr.ac.ucr.ie.Lonjevus.jpa;
 
 import cr.ac.ucr.ie.Lonjevus.domain.Role;
 import cr.ac.ucr.ie.Lonjevus.repository.IRoleRepository;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
  * @author Usuario
  */
 @Service
-public class RoleServiceImplement implements IRoleService {
+public class RoleServiceJPA implements IRoleService {
     
     @Autowired
     private IRoleRepository repo;

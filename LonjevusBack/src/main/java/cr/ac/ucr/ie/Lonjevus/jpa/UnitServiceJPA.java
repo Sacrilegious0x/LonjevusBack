@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package cr.ac.ucr.ie.Lonjevus.daoImplements;
+package cr.ac.ucr.ie.Lonjevus.jpa;
 
 import cr.ac.ucr.ie.Lonjevus.domain.Unit;
 import cr.ac.ucr.ie.Lonjevus.repository.IProductRepository;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
  * @author Usuario
  */
 @Service
-public class UnitServiceImplement implements IUnitService {
+public class UnitServiceJPA implements IUnitService {
 
     @Autowired
     private IUnitRepository repo;

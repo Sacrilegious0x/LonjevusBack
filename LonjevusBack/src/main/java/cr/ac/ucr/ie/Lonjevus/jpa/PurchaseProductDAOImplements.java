@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package cr.ac.ucr.ie.Lonjevus.daoImplements;
+package cr.ac.ucr.ie.Lonjevus.jpa;
 
 import cr.ac.ucr.ie.Lonjevus.Connection.ConnectionDB;
 import cr.ac.ucr.ie.Lonjevus.dao.PurchaseProductDAO;

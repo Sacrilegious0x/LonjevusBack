@@ -1,4 +1,4 @@
-package cr.ac.ucr.ie.Lonjevus.daoImplements;
+package cr.ac.ucr.ie.Lonjevus.jpa;
 
 import cr.ac.ucr.ie.Lonjevus.Connection.ConnectionDB;
 import cr.ac.ucr.ie.Lonjevus.dao.PurchaseDAO;

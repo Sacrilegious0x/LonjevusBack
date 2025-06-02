@@ -4,7 +4,7 @@
  */
 package cr.ac.ucr.ie.Lonjevus.service;
 
-import cr.ac.ucr.ie.Lonjevus.daoImplements.ScheduleDaoImplement;
+import cr.ac.ucr.ie.Lonjevus.jpa.ScheduleDaoImplement;
 import cr.ac.ucr.ie.Lonjevus.domain.Schedule;
 
 /**
