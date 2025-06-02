@@ -1,33 +1,71 @@
 package cr.ac.ucr.ie.Lonjevus.domain;
 
+import jakarta.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class PurchaseProduct {
-    private String idPurchase;
-    private Integer idProduct;
+@Entity
+@Table(name = "purchase_product")
+public class PurchaseProduct implements Serializable {
+
+    @EmbeddedId
+    private PurchaseProductId id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("idPurchase")
+    @JoinColumn(name = "idPurchase")
+    private Purchase purchase;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("idProduct")
+    @JoinColumn(name = "idProduct")
+    private Product product;
+
+    @Column(name = "quantity")
     private Integer quantity;
 
+    @Transient
     private String productName;
+
+    @Transient
     private BigDecimal price;
-    private LocalDate expirationDate; 
 
-    public PurchaseProduct() {}
+    @Transient
+    private LocalDate expirationDate;
 
-    public String getIdPurchase() {
-        return idPurchase;
+    public PurchaseProduct() {
     }
 
-    public void setIdPurchase(String idPurchase) {
-        this.idPurchase = idPurchase;
+    public PurchaseProduct(PurchaseProductId id, Purchase purchase, Product product, Integer quantity) {
+        this.id = id;
+        this.purchase = purchase;
+        this.product = product;
+        this.quantity = quantity;
     }
 
-    public Integer getIdProduct() {
-        return idProduct;
+    public PurchaseProductId getId() {
+        return id;
     }
 
-    public void setIdProduct(Integer idProduct) {
-        this.idProduct = idProduct;
+    public void setId(PurchaseProductId id) {
+        this.id = id;
+    }
+
+    public Purchase getPurchase() {
+        return purchase;
+    }
+
+    public void setPurchase(Purchase purchase) {
+        this.purchase = purchase;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
     public Integer getQuantity() {
@@ -61,5 +99,27 @@ public class PurchaseProduct {
     public void setExpirationDate(LocalDate expirationDate) {
         this.expirationDate = expirationDate;
     }
-    
+
+    // Métodos de conveniencia para claves
+    public String getIdPurchase() {
+        return id != null ? id.getIdPurchase() : null;
+    }
+
+    public void setIdPurchase(String idPurchase) {
+        if (this.id == null) {
+            this.id = new PurchaseProductId();
+        }
+        this.id.setIdPurchase(idPurchase);
+    }
+
+    public Integer getIdProduct() {
+        return id != null ? id.getIdProduct() : null;
+    }
+
+    public void setIdProduct(Integer idProduct) {
+        if (this.id == null) {
+            this.id = new PurchaseProductId();
+        }
+        this.id.setIdProduct(idProduct);
+    }
 }

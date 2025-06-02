@@ -29,11 +29,14 @@ public class Product {
     private Integer id;
     
     private String name;
+
     private BigDecimal price;
+
     private String category;
+
     private LocalDate expirationDate;
+
     private String photoURL;
-    
     @ManyToOne
     @JoinColumn(name = "unitId", nullable = false)
     private Unit unit;
@@ -52,67 +55,67 @@ public class Product {
         this.expirationDate = expirationDate;
         this.photoURL = photoURL;
         this.unit = unit;
-       this.supplier = supplier;
+        this.supplier = supplier;
     }
 
     public Integer getId() {
         return id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public LocalDate getExpirationDate() {
-        return expirationDate;
-    }
-
-    public String getPhotoURL() {
-        return photoURL;
-    }
-
-    public Unit getUnit() {
-        return unit;
-    }
-
-   public Supplier getSupplier() {
-      return supplier;
-    }
-
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
+    public BigDecimal getPrice() {
+        return price;
+    }
+
     public void setPrice(BigDecimal price) {
         this.price = price;
+    }
+
+    public String getCategory() {
+        return category;
     }
 
     public void setCategory(String category) {
         this.category = category;
     }
 
+    public LocalDate getExpirationDate() {
+        return expirationDate;
+    }
+
     public void setExpirationDate(LocalDate expirationDate) {
         this.expirationDate = expirationDate;
+    }
+
+    public String getPhotoURL() {
+        return photoURL;
     }
 
     public void setPhotoURL(String photoURL) {
         this.photoURL = photoURL;
     }
 
+    public Unit getUnit() {
+        return unit;
+    }
+
     public void setUnit(Unit unit) {
         this.unit = unit;
+    }
+
+    public Supplier getSupplier() {
+        return supplier;
     }
 
     public void setSupplier(Supplier supplier) {

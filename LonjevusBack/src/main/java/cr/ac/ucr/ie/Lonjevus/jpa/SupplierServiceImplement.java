@@ -1,5 +1,5 @@
 
-package cr.ac.ucr.ie.Lonjevus.daoImplements;
+package cr.ac.ucr.ie.Lonjevus.jpa;
 
 import cr.ac.ucr.ie.Lonjevus.repository.ISupplierRepository;
 import cr.ac.ucr.ie.Lonjevus.domain.Supplier;

@@ -1,9 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/springframework/Controller.java to edit this template
- */
 package cr.ac.ucr.ie.Lonjevus.Controller;
-
 import cr.ac.ucr.ie.Lonjevus.domain.Product;
 import cr.ac.ucr.ie.Lonjevus.domain.Supplier;
 import cr.ac.ucr.ie.Lonjevus.domain.Unit;
@@ -128,5 +123,4 @@ public class ProductController {
         productService.save(product);
         return getList();
     }
-    
 }
