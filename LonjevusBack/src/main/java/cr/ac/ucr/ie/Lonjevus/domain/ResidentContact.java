@@ -32,7 +32,7 @@ public class ResidentContact {
     private String relationShip;
 
     @ManyToOne
-    @JoinColumn(name="id_resident")
+    @JoinColumn(name="idResident")
     @JsonBackReference
     private Resident resident;
     
