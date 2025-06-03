@@ -34,8 +34,8 @@ public class Resident {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "birthdate")
     private LocalDate birthdate;
-    @Column(name = "age")
-    private Integer age;
+    //@Column(name = "age")
+    //private Integer age;
     @Column(name = "healthStatus")
     private String healthStatus;
     @Column(name = "numberRoom")
@@ -48,14 +48,16 @@ public class Resident {
     @OneToMany(mappedBy = "resident", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<ResidentContact> contacts = new LinkedList<>();
-
+    
+    @OneToMany(mappedBy = "resident", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Visit> visits = new LinkedList<>();
     public Resident() {
     }
 
     public Resident(String identification, String name, Integer age, String healthStatus, Integer roomNumber, String photo, boolean isActive) {
         this.identification = identification;
         this.name = name;
-        this.age = age;
+        //this.age = age;
         this.healthStatus = healthStatus;
         this.numberRoom = roomNumber;
         this.photo = photo;
@@ -87,13 +89,13 @@ public class Resident {
         this.name = name;
     }
 
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
+//    public Integer getAge() {
+//        return age;
+//    }
+//
+//    public void setAge(Integer age) {
+//        this.age = age;
+//    }
 
     public String getHealthStatus() {
         return healthStatus;
@@ -143,5 +145,13 @@ public class Resident {
         this.contacts = contacts;
     }
 
+    public List<Visit> getVisits() {
+        return visits;
+    }
+
+    public void setVisits(List<Visit> visits) {
+        this.visits = visits;
+    }
+    
     
 }

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class PermissionServiceImplement implements IPermissionService {
+public class PermissionServiceJPA implements IPermissionService {
     
     @Autowired
     private IPermissionRepository permRepo;

@@ -98,7 +98,7 @@ public class CaregiverController {
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error al eliminar el administrador");
+                    .body("Error al eliminar el trabajador");
         }
     }
 

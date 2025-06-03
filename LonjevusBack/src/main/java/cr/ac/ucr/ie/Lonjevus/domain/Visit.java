@@ -14,6 +14,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.sql.Time;
 import java.time.LocalDate;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -22,6 +24,8 @@ import org.springframework.format.annotation.DateTimeFormat;
  */
 @Entity
 @Table (name="visit")
+@SQLDelete(sql = "UPDATE visit SET isActive = 0 WHERE id = ?")
+@Where(clause = "isActive = 1")
 public class Visit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -110,6 +114,14 @@ public class Visit {
 
     public void setIsActive(boolean isActive) {
         this.isActive = isActive;
+    }
+
+    public Time getVisitHour() {
+        return visitHour;
+    }
+
+    public void setVisitHour(Time visitHour) {
+        this.visitHour = visitHour;
     }
     
     
