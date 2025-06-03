@@ -4,6 +4,7 @@
  */
 package cr.ac.ucr.ie.Lonjevus.domain;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -37,6 +38,11 @@ public class Product {
     private LocalDate expirationDate;
 
     private String photoURL;
+
+    @Column(name = "isActive")
+    private boolean isActive;
+    
+
     @ManyToOne
     @JoinColumn(name = "unitId", nullable = false)
     private Unit unit;
@@ -47,7 +53,7 @@ public class Product {
 
     public Product() {}
 
-    public Product(Integer id, String name, BigDecimal price, String category, LocalDate expirationDate, String photoURL, Unit unit, Supplier supplier) {
+    public Product(Integer id, String name, BigDecimal price, String category, LocalDate expirationDate, String photoURL, Unit unit, Supplier supplier,boolean isActive) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -56,71 +62,88 @@ public class Product {
         this.photoURL = photoURL;
         this.unit = unit;
         this.supplier = supplier;
+
+        this.isActive=isActive;
+
     }
 
     public Integer getId() {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
     public String getCategory() {
         return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
     }
 
     public LocalDate getExpirationDate() {
         return expirationDate;
     }
 
-    public void setExpirationDate(LocalDate expirationDate) {
-        this.expirationDate = expirationDate;
-    }
-
     public String getPhotoURL() {
         return photoURL;
-    }
-
-    public void setPhotoURL(String photoURL) {
-        this.photoURL = photoURL;
     }
 
     public Unit getUnit() {
         return unit;
     }
 
-    public void setUnit(Unit unit) {
-        this.unit = unit;
+   public Supplier getSupplier() {
+      return supplier;
     }
 
-    public Supplier getSupplier() {
-        return supplier;
+    public boolean isIsActive() {
+        return isActive;
+    }
+   
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public void setExpirationDate(LocalDate expirationDate) {
+        this.expirationDate = expirationDate;
+    }
+
+
+    public void setPhotoURL(String photoURL) {
+        this.photoURL = photoURL;
+    }
+
+    public void setUnit(Unit unit) {
+        this.unit = unit;
     }
 
     public void setSupplier(Supplier supplier) {
         this.supplier = supplier;
     }
+
+    public void setIsActive(boolean isActive) {
+        this.isActive = isActive;
+    }
+    
+    
 
     
     
