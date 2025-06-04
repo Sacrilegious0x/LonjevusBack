@@ -9,9 +9,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
@@ -34,7 +37,7 @@ public class Resident {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "birthdate")
     private LocalDate birthdate;
-    @Column(name = "age")
+    @Transient
     private Integer age;
     @Column(name = "healthStatus")
     private String healthStatus;
@@ -48,6 +51,12 @@ public class Resident {
     @OneToMany(mappedBy = "resident", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<ResidentContact> contacts = new LinkedList<>();
+    
+    @ManyToMany
+    @JoinTable(name = "resident_activity",
+               joinColumns = @JoinColumn(name = "residentId"),
+               inverseJoinColumns = @JoinColumn(name = "activityId")) 
+    private List<Activity> activities = new LinkedList<>();
 
     public Resident() {
     }
