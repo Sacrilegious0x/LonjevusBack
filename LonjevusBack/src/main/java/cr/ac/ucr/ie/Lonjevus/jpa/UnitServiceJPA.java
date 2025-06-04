@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
  * @author Usuario
  */
 @Service
-public class UnitServiceImplement implements IUnitService {
+public class UnitServiceJPA implements IUnitService {
 
     @Autowired
     private IUnitRepository repo;

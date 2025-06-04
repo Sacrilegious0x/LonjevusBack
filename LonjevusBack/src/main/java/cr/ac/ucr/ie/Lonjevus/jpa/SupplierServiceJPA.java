@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
  * @author Usuario
  */
 @Service
-public class SupplierServiceImplement implements ISupplierService {
+public class SupplierServiceJPA implements ISupplierService {
     
     @Autowired
     private ISupplierRepository repo;
