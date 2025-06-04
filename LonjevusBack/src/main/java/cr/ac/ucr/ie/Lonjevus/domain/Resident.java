@@ -50,6 +50,7 @@ public class Resident {
     private List<ResidentContact> contacts = new LinkedList<>();
     
     @OneToMany(mappedBy = "resident", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Visit> visits = new LinkedList<>();
     public Resident() {
     }

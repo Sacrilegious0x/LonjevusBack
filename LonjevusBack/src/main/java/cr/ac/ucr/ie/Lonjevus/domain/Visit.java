@@ -4,6 +4,7 @@
  */
 package cr.ac.ucr.ie.Lonjevus.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -47,6 +48,7 @@ public class Visit {
      private boolean isActive;
     @ManyToOne
     @JoinColumn(name = "residentId")
+    @JsonBackReference
     private Resident resident;
 
     public Visit() {
