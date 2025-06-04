@@ -32,6 +32,8 @@ CREATE TABLE schedule (
     isActive BOOLEAN
 );
 
+//ejecucion
+
 CREATE TABLE person (
     id INT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(100),
@@ -160,8 +162,7 @@ CREATE TABLE purchase (
     idAdministrator INT,
     amount DECIMAL(10, 2),
     isActive TINYINT(1),
-    FOREIGN KEY (idAdministrator) REFERENCES administrator(id),
-    FOREIGN KEY (idProduct) REFERENCES product(id)
+    FOREIGN KEY (idAdministrator) REFERENCES administrator(id)
 );
 
 CREATE TABLE inventory (
@@ -584,11 +585,14 @@ BEGIN
 END$$
 DELIMITER ;
 
+
 DELIMITER $$
-CREATE DEFINER=root@localhost PROCEDURE insert_purchase(
+DROP PROCEDURE IF EXISTS insert_purchase;
+CREATE PROCEDURE insert_purchase(
     IN p_date DATE,
     IN p_amount DECIMAL(10,2),
-    IN p_admin_id INT
+    IN p_admin_id INT,
+    OUT p_new_id VARCHAR(20)  -- ← parámetro de salida
 )
 BEGIN
     DECLARE v_count INT;
@@ -597,20 +601,17 @@ BEGIN
 
     SET v_date_str = DATE_FORMAT(p_date, '%Y%m%d');
 
-    -- Corregir uso de columna date en vez de purchase_date
     SELECT COUNT(*) + 1 INTO v_count
     FROM purchase
     WHERE DATE(date) = p_date;
 
-    -- Generar ID como '0001-YYYYMMDD'
     SET v_id = CONCAT(LPAD(v_count, 4, '0'), '-', v_date_str);
 
-    -- Corregir nombres de columnas
     INSERT INTO purchase (id, date, amount, idAdministrator, isActive)
     VALUES (v_id, p_date, p_amount, p_admin_id, 1);
 
-    SELECT v_id AS new_purchase_id;
-END$$
+    SET p_new_id = v_id;  -- ← retorna el valor por OUT
+END;
 DELIMITER ;
 
 DELIMITER $$
@@ -699,122 +700,175 @@ BEGIN
 END$$
 DELIMITER ;
 
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS insert_purchase$$
+
+CREATE PROCEDURE insert_purchase(
+    IN p_date DATE,
+    IN p_amount DECIMAL(10,2),
+    IN p_admin_id INT,
+    OUT p_new_id VARCHAR(20)
+)
+BEGIN
+    DECLARE v_count INT;
+    DECLARE v_id VARCHAR(20);
+    DECLARE v_date_str VARCHAR(8);
+
+    SET v_date_str = DATE_FORMAT(p_date, '%Y%m%d');
+
+    SELECT COUNT(*) + 1 INTO v_count
+    FROM purchase
+    WHERE DATE(date) = p_date;
+
+    SET v_id = CONCAT(LPAD(v_count, 4, '0'), '-', v_date_str);
+
+    INSERT INTO purchase (id, date, amount, idAdministrator, isActive)
+    VALUES (v_id, p_date, p_amount, p_admin_id, 1);
+
+    SET p_new_id = v_id;
+END$$
+
+DELIMITER ;
 
 
-CALL get_all_inventory
+//Procedimeintos de la segunda entrega
+DELIMITER $$
+
+CREATE PROCEDURE delete_billing_logically(IN billingId INT)
+BEGIN
+    UPDATE billing
+    SET isActive = 0
+    WHERE id = billingId;
+END$$
+
+DELIMITER ;
+DELIMITER $$
+
+CREATE PROCEDURE insert_billing(
+    IN p_date DATE,
+    IN p_amount DECIMAL(10, 2),
+    IN p_period VARCHAR(50),
+    IN p_payment_method VARCHAR(50),
+    IN p_admin_id INT,
+    IN p_resident_id INT,
+    OUT p_new_consecutive VARCHAR(20)
+)
+BEGIN
+    DECLARE new_id INT;
+
+    -- Insertar la nueva factura
+    INSERT INTO billing (
+        date,
+        amount,
+        period,
+        paymentMethod,  -- corregido aquí
+        administratorId,
+        residentId,
+        isActive
+    ) VALUES (
+        p_date,
+        p_amount,
+        p_period,
+        p_payment_method,  -- corregido aquí
+        p_admin_id,
+        p_resident_id,
+        TRUE
+    );
+
+    -- Obtener el ID generado
+    SET new_id = LAST_INSERT_ID();
+
+    -- Generar el consecutivo
+    SET p_new_consecutive = CONCAT('BILL-', LPAD(new_id, 5, '0'));
+
+    -- Guardar el consecutivo en la fila
+    UPDATE billing
+    SET sequence = p_new_consecutive
+    WHERE id = new_id;
+END $$
+
+DELIMITER ;
 
 
 
 
 
+--PRUEBAS
+-- 1. room
+INSERT INTO room (id, statusRoom, roomType, bedCount, isActive)
+VALUES (1, 'Disponible', 'Individual', 1, TRUE);
 
+-- 2. resident
+INSERT INTO resident (identification, name, age, healthStatus, numberRoom, photo, isActive)
+VALUES ('12345678', 'Juan Pérez', 75, 'Estable', 1, 'juan.jpg', TRUE);
 
-//Inserts
-INSERT INTO schedule (day, entryTime1, exitTime1, entryTime2, exitTime2, isActive) VALUES
-('Lunes', '08:00', '12:00', '13:00', '17:00', TRUE),
-('Martes', '08:30', '12:30', '14:00', '18:00', TRUE),
-('Miércoles', '09:00', '13:00', '14:00', '18:00', TRUE);
+-- 3. schedule
+INSERT INTO schedule (day, entryTime1, exitTime1, entryTime2, exitTime2, isActive)
+VALUES ('Lunes', '08:00', '12:00', '14:00', '18:00', TRUE);
 
-INSERT INTO person (name, identification, salary, photoSchedule, email, password, scheduleID, isActive) VALUES
-('Carlos Pérez', 'PER1001', 1200.00, 'horario1.jpg', 'carlos@mail.com', 'pass1', 1, TRUE),
-('Lucía Fernández', 'PER1002', 1400.50, 'horario2.jpg', 'lucia@mail.com', 'pass2', 2, TRUE),
-('Juan Solís', 'PER1003', 1350.75, 'horario3.jpg', 'juan@mail.com', 'pass3', 3, TRUE);
+-- 4. person
+INSERT INTO person (name, identification, salary, photoSchedule, email, password, scheduleID, isActive)
+VALUES ('Laura Gómez', '87654321', 1500.00, 'laura.jpg', 'laura@example.com', 'password123', 1, TRUE);
 
-INSERT INTO administrator (id, officeContact) VALUES
-(1, 'Oficina 101'),
-(2, 'Oficina 102'),
-(3, 'Oficina 103');
- 
+-- 5. administrator
+INSERT INTO administrator (id, officeContact)
+VALUES (1, '555-0101');
 
-INSERT INTO room (id, statusRoom, roomType, bedCount, isActive) VALUES
-(1, 'Disponible', 'Individual', 1, TRUE),
-(2, 'No disponible', 'Compartida', 2, TRUE),
-(3, 'Disponible', 'Individual', 1, TRUE);
+-- 6. caregiver
+INSERT INTO caregiver (id, shift, residentId)
+VALUES (1, 'Mañana', 1);
 
-INSERT INTO resident (identification, name, age, healthStatus, numberRoom, photo, isActive) VALUES
-('ID101', 'Ana Soto', 75, 'Estable', 1, 'foto1.jpg', TRUE),
-('ID102', 'Luis Gómez', 82, 'Mejorando', 2, 'foto2.jpg', TRUE),
-('ID103', 'Elena Ruiz', 68, 'Crítico', 3, 'foto3.jpg', TRUE);
+-- 7. errand
+INSERT INTO errand (caregiverId, description)
+VALUES (1, 'Acompañar al residente al doctor');
 
-INSERT INTO caregiver (id, shift, residentId) VALUES
-(1, 'Mañana', 1),
-(2, 'Tarde', 2),
-(3, 'Noche', 3);
+-- 8. supplier
+INSERT INTO supplier (name, phoneNumber, email, address, photo, isActive)
+VALUES ('Proveedor Uno', '555-1234', 'proveedor@example.com', 'Calle Falsa 123', 'logo.png', TRUE);
 
-INSERT INTO errand (caregiverId, description) VALUES
-(1, 'Toma de presión'),
-(2, 'Asistencia al baño'),
-(3, 'Entrega de medicamentos');
+-- 9. unit
+INSERT INTO unit (unit_type, isActive)
+VALUES ('Caja', TRUE);
 
-INSERT INTO visit (name, visitDate, contact, relationship, photo, idresident, isActive) VALUES
-('Pedro Morales', '2023-01-05', '88881234', 'Hijo', 'visita1.jpg', 1, TRUE),
-('María Jiménez', '2023-02-10', '88885678', 'Nieta', 'visita2.jpg', 2, TRUE),
-('Laura Vargas', '2023-03-15', '88889999', 'Amiga', 'visita3.jpg', 3, TRUE);
+-- 10. product
+INSERT INTO product (name, price, category, expirationDate, photoURL, unitId, supplierId, isActive)
+VALUES ('Leche', 2.50, 'Lácteos', CURDATE(), 'leche.jpg', 1, 1, TRUE);
 
-INSERT INTO activity (name, description, type, date, startTime, endTime, location, status, responsibleId, isActive) VALUES
-('Taller de pintura', 'Actividad artística', 'Recreativa', '2023-04-01', '10:00', '12:00', 'Sala común', 'Activa', 1, TRUE),
-('Clases de yoga', 'Relajación y ejercicio', 'Física', '2023-04-02', '09:00', '10:30', 'Patio', 'Activa', 2, TRUE),
-('Cine foro', 'Película y discusión', 'Cultural', '2023-04-03', '15:00', '17:00', 'Sala TV', 'Activa', 3, TRUE);
+-- 11. purchase
+INSERT INTO purchase (id, date, idAdministrator, amount, isActive)
+VALUES ('0001-' + DATE_FORMAT(CURDATE(), '%Y%m%d'), CURDATE(), 1, 25.00, 1);
 
-INSERT INTO resident_activity (resident_id, activity_id) VALUES
-(1, 1),
-(2, 2),
-(3, 3);
-
-INSERT INTO caregiver_resident (caregiver_id, resident_id) VALUES
-(1, 1),
-(2, 2),
-(3, 3);
-
-INSERT INTO supplier (name, phoneNumber, email, address, photo, isActive) VALUES
-('Proveedor A', '80000001', 'a@correo.com', 'San José', 'proveedorA.jpg', TRUE),
-('Proveedor B', '80000002', 'b@correo.com', 'Heredia', 'proveedorB.jpg', TRUE),
-('Proveedor C', '80000003', 'c@correo.com', 'Cartago', 'proveedorC.jpg', TRUE);
-
-INSERT INTO unit (unit_type, isActive) VALUES
-('ml', TRUE),
-('g', TRUE),
-('unidades', TRUE);
-
-INSERT INTO product (name, price, expirationDate, category, photoURL, unitId, supplierId, isActive) VALUES
-('Paracetamol', 200.00, '2024-12-31', 'Medicamento', 'paracetamol.jpg', 1, 1, TRUE),
-('Vitamina C', 150.00, '2025-01-15', 'Suplemento', 'vitaminac.jpg', 2, 2, TRUE),
-('Algodón', 50.00, '2026-06-10', 'Insumo', 'algodon.jpg', 3, 3, TRUE);
-
-INSERT INTO purchase (id, date, amount, idAdministrator, idProduct, isActive) VALUES
-('0003-20230501','2023-05-01', 200.00, 1, 1, TRUE),
-('0004-20230502','2023-05-02', 150.00, 2, 2, TRUE),
-('0005-20230503', '2023-05-03', 50.00, 3, 3, TRUE);
-
-INSERT INTO inventory (quantity, category, photo, productId, purchaseId, isActive) VALUES
-(100, 'Medicamento', 'inv1.jpg', 1, '0001-20230501', TRUE),
-(50, 'Suplemento', 'inv2.jpg', 2, '0002-20230502', TRUE),
-(75, 'Insumo', 'inv3.jpg', 3, '0003-20230503', TRUE);
-
-SELECT * FROM inventory WHERE isActive = 1;
-CALL delete_purchase_by_id(3)
-CALL delete_inventory_logically_by_id(3)
-CALL get_all_inventory()
-CALL get_all_purchases()
-
-SHOW COLUMNS FROM purchase_product;
-
-SHOW COLUMNS FROM purchase;
-SHOW COLUMNS FROM inventory;
-SHOW COLUMNS FROM purchase_product;
-
-INSERT INTO purchase_product (idPurchase, idProduct, quantity) VALUES ('0001-20230501', 2, 10);
-
-SELECT * FROM purchase_product
-
-SELECT * FROM purchase WHERE isActive = 1;
-SELECT * FROM purchase_product;
-SELECT * FROM product;
-
+-- 1. Insertar en purchase_product
 INSERT INTO purchase_product (idPurchase, idProduct, quantity, expirationDate)
-VALUES 
-  ('0002-20230502', 1, 5, '2025-12-31'),
-  ('0003-20230501', 3, 8, '2026-06-10'),
-  ('0004-20230502', 2, 2, '2025-01-15'),
-  ('0005-20230503', 3, 1, '2026-06-10');
-  
+VALUES ('20250605', 1, 10, '2025-06-04');
+
+-- 2. Insertar en inventory
+INSERT INTO inventory (quantity, category, photo, productId, purchaseId, isActive)
+VALUES (10, 'Alimentos', 'leche.jpg', 1, '20250605', 1);
+
+-- 14. visit
+INSERT INTO visit (name, visitDate, contact, relationship, photo, idresident, isActive)
+VALUES ('Ana López', CURDATE(), '555-6789', 'Hija', 'ana.jpg', 1, 1);
+
+-- 15. activity
+INSERT INTO activity (name, description, type, date, startTime, endTime, location, status, responsibleId, isActive)
+VALUES ('Yoga', 'Ejercicios suaves', 'Recreación', CURDATE(), '10:00', '11:00', 'Sala común', 'Programado', 1, 1);
+
+-- 16. resident_activity
+INSERT INTO resident_activity (resident_id, activity_id)
+VALUES (1, 1);
+
+-- 17. caregiver_resident
+INSERT INTO caregiver_resident (caregiver_id, resident_id)
+VALUES (1, 1);
+
+SELECT * FROM PURCHASE
+SELECT * FROM INVENTORY
+SELECT * FROM purchase_product
+SHOW COLUMNS FROM billing;
+
+
+SELECT * FROM BILLING
+
+
