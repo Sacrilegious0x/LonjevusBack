@@ -5,6 +5,7 @@
 package cr.ac.ucr.ie.Lonjevus.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -44,11 +45,13 @@ public class Billing {
     //Mi relacion 1 a muchos con admin
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "administratorId")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Admin administrator;
 
     //Mi relacion 1 a muchos con residente
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "residentId")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Resident resident;
 
     public Integer getId() {

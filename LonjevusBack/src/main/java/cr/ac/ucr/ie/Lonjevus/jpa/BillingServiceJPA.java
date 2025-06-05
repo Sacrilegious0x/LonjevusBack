@@ -1,7 +1,11 @@
 package cr.ac.ucr.ie.Lonjevus.jpa;
 
+import cr.ac.ucr.ie.Lonjevus.domain.Admin;
 import cr.ac.ucr.ie.Lonjevus.domain.Billing;
+import cr.ac.ucr.ie.Lonjevus.domain.Resident;
+import cr.ac.ucr.ie.Lonjevus.repository.IAdminRepository;
 import cr.ac.ucr.ie.Lonjevus.repository.IBillingRepository;
+import cr.ac.ucr.ie.Lonjevus.repository.IResidentRepository;
 import cr.ac.ucr.ie.Lonjevus.service.IBillingService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.ParameterMode;
@@ -21,6 +25,12 @@ public class BillingServiceJPA implements IBillingService {
     @Autowired
     private IBillingRepository repository;
 
+    @Autowired
+    private IAdminRepository adminRepository;
+
+    @Autowired
+    private IResidentRepository residentRepository;
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -31,7 +41,7 @@ public class BillingServiceJPA implements IBillingService {
 
     // Buscar por ID
     public Billing findById(Integer id) {
-        return repository.findById(String.valueOf(id))
+        return repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Factura no encontrada"));
     }
 
@@ -62,16 +72,33 @@ public class BillingServiceJPA implements IBillingService {
     }
 
     // Actualizar factura
+    @Override
     @Transactional
     public void update(Integer id, Billing updatedBilling) {
-        repository.updatePurchase(
-                String.valueOf(id),
-                Date.valueOf(updatedBilling.getDate()),
-                updatedBilling.getAmount()
-        );
+        Billing existingBilling = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Factura no encontrada"));
+
+        existingBilling.setAmount(updatedBilling.getAmount());
+        existingBilling.setDate(updatedBilling.getDate());
+        existingBilling.setPeriod(updatedBilling.getPeriod());
+        existingBilling.setPaymentMethod(updatedBilling.getPaymentMethod());
+        existingBilling.setIsActive(updatedBilling.getIsActive());
+
+        // Obtener admin y residente existentes por ID
+        Admin existingAdmin = adminRepository.findById(updatedBilling.getAdministrator().getId())
+                .orElseThrow(() -> new RuntimeException("Admin no encontrado"));
+
+        Resident existingResident = residentRepository.findById(updatedBilling.getResident().getId())
+                .orElseThrow(() -> new RuntimeException("Residente no encontrado"));
+
+        existingBilling.setAdministrator(existingAdmin);
+        existingBilling.setResident(existingResident);
+
+        repository.save(existingBilling);
     }
 
     // Eliminado lógico
+    @Override
     @Transactional
     public void delete(Integer id) {
         repository.deleteBillingLogically(id);
