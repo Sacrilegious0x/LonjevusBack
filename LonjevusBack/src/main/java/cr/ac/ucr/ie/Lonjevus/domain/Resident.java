@@ -1,5 +1,6 @@
 package cr.ac.ucr.ie.Lonjevus.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -50,7 +51,8 @@ public class Resident {
     private List<ResidentContact> contacts = new LinkedList<>();
     
     @OneToMany(mappedBy = "resident", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
+    //@JsonManagedReference
+    @JsonIgnore 
     private List<Visit> visits = new LinkedList<>();
     public Resident() {
     }

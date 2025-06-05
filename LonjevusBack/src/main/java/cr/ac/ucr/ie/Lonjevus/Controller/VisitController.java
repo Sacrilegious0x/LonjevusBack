@@ -39,7 +39,7 @@ public class VisitController {
     @Autowired
     private IResidentService residentService;
     
-    @GetMapping("/listVisit")
+    @GetMapping("/listVisitors")
     public Map getAll(){
         List<Visit> visitors = visitService.getAll();
          return Collections.singletonMap("data",visitors);
