@@ -55,7 +55,9 @@ public class ProductController {
             @RequestParam("expirationDate") String expirationDate, // ISO format: yyyy-MM-dd
             @RequestParam("unitId") int unitId,
             @RequestParam("supplierId") int supplierId,
-            @RequestParam(value = "photo", required = false) MultipartFile photo
+            @RequestParam(value = "photo", required = false) MultipartFile photo,
+            @RequestParam("isActive") boolean isActive 
+            
     ) {
         Unit unit = unitService.getById(unitId);
         Supplier supplier = supplierService.getById(supplierId);
@@ -67,6 +69,7 @@ public class ProductController {
         product.setExpirationDate(LocalDate.parse(expirationDate));
         product.setUnit(unit);
         product.setSupplier(supplier);
+        product.setIsActive(isActive);
 
         if (photo != null) {
             String photoPath = localStorageService.save(photo);
@@ -97,8 +100,13 @@ public class ProductController {
             @RequestParam("expirationDate") String expirationDate,
             @RequestParam("unitId") int unitId,
             @RequestParam("supplierId") int supplierId,
+            @RequestParam("isActive") boolean isActive,
+            
             @RequestParam(value = "photo", required = false) MultipartFile photo
     ) {
+        
+        System.out.println("El active llega como: " + isActive);
+        
         Unit unit = unitService.getById(unitId);
         Supplier supplier = supplierService.getById(supplierId);
 
@@ -112,6 +120,7 @@ public class ProductController {
         product.setExpirationDate(LocalDate.parse(expirationDate));
         product.setUnit(unit);
         product.setSupplier(supplier);
+        product.setIsActive(isActive);
 
         if (photo != null) {
             String photoPath = localStorageService.save(photo);
@@ -123,4 +132,11 @@ public class ProductController {
         productService.save(product);
         return getList();
     }
+
+    
+    @RequestMapping("/units/list")
+    public Map<String, Object> getUnitList() {
+        return Collections.singletonMap("units", unitService.getAllUnits());
+    }
+
 }

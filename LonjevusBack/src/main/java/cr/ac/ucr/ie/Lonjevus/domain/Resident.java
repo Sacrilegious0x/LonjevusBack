@@ -140,6 +140,7 @@ public class Resident {
         this.birthdate = birthdate;
     }
 
+    
     public List<ResidentContact> getContacts() {
         return contacts;
     }

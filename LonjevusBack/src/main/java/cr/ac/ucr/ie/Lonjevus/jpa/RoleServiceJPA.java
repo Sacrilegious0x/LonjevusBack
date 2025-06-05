@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
  * @author Usuario
  */
 @Service
-public class RoleServiceImplement implements IRoleService {
+public class RoleServiceJPA implements IRoleService {
     
     @Autowired
     private IRoleRepository repo;
