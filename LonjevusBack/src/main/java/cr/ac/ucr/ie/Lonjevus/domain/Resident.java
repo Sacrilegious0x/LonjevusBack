@@ -18,6 +18,7 @@ import jakarta.persistence.Transient;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
+import org.hibernate.annotations.Formula;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -25,8 +26,9 @@ import org.springframework.format.annotation.DateTimeFormat;
  * @author JOSHUACALETCESPEDESG
  */
 @Entity
-@Table(name="resident")
+@Table(name = "resident")
 public class Resident {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -37,7 +39,7 @@ public class Resident {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "birthdate")
     private LocalDate birthdate;
-    @Transient
+    @Formula("TIMESTAMPDIFF(YEAR, birthdate, CURDATE())")
     private Integer age;
     @Column(name = "healthStatus")
     private String healthStatus;
@@ -47,15 +49,12 @@ public class Resident {
     private String photo;
     @Column(name = "isActive")
     private Boolean isActive;
-    
+
     @OneToMany(mappedBy = "resident", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference
     private List<ResidentContact> contacts = new LinkedList<>();
-    
-    @ManyToMany
-    @JoinTable(name = "resident_activity",
-               joinColumns = @JoinColumn(name = "residentId"),
-               inverseJoinColumns = @JoinColumn(name = "activityId")) 
+
+    @ManyToMany(mappedBy = "residents")
     private List<Activity> activities = new LinkedList<>();
 
     public Resident() {
@@ -79,7 +78,6 @@ public class Resident {
         this.id = id;
     }
 
-    
     public String getIdentification() {
         return identification;
     }
@@ -152,5 +150,4 @@ public class Resident {
         this.contacts = contacts;
     }
 
-    
 }

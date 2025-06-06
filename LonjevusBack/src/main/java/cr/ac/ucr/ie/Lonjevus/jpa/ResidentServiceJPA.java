@@ -35,7 +35,11 @@ public class ResidentServiceJPA implements IResidentService{
 
     @Override
     public void delete(int id) {
-        residentRepository.deleteById(id);
+        Resident resident = residentRepository.findById(id).orElse(null);
+        
+        resident.setIsActive(null);
+        
+        residentRepository.save(resident);
     }
 
     @Override

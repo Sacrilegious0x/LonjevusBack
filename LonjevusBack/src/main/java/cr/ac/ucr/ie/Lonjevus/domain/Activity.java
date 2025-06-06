@@ -4,14 +4,17 @@
  */
 package cr.ac.ucr.ie.Lonjevus.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.util.LinkedList;
 import java.util.List;
@@ -44,10 +47,21 @@ public class Activity {
     @Column(name = "location")
     private String location;
     @Column(name = "status")
-    private Boolean status;
+    private String status;
+    @Column(name = "isActive")
+    private Boolean isActive;
 
-    @ManyToMany(mappedBy = "activities")
-    private List<Resident> residents;
+    @ManyToOne
+    @JoinColumn(name = "idResponsible")
+    private Caregiver caregiver;
+
+    @ManyToMany
+    @JoinTable(
+            name = "resident_activity",
+            joinColumns = @JoinColumn(name = "activity_id"),
+            inverseJoinColumns = @JoinColumn(name = "resident_id")
+    )
+    private List<Resident> residents = new LinkedList<>();
 
     public Activity() {
     }
@@ -116,11 +130,11 @@ public class Activity {
         this.location = location;
     }
 
-    public Boolean getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Boolean status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -130,6 +144,22 @@ public class Activity {
 
     public void setResidents(List<Resident> residents) {
         this.residents = residents;
+    }
+
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public Caregiver getCaregiver() {
+        return caregiver;
+    }
+
+    public void setCaregiver(Caregiver caregiver) {
+        this.caregiver = caregiver;
     }
 
 }

@@ -5,7 +5,9 @@
 package cr.ac.ucr.ie.Lonjevus.jpa;
 
 import cr.ac.ucr.ie.Lonjevus.domain.Activity;
+import cr.ac.ucr.ie.Lonjevus.domain.Resident;
 import cr.ac.ucr.ie.Lonjevus.repository.IActivityRepository;
+import cr.ac.ucr.ie.Lonjevus.repository.IResidentRepository;
 import cr.ac.ucr.ie.Lonjevus.service.IActivityService;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,9 +21,12 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ActivityServiceJPA implements IActivityService {
-    
+
     @Autowired
     private IActivityRepository activityRepository;
+
+    @Autowired
+    private IResidentRepository residentRepository;
 
     @Override
     public void save(Activity a) {
@@ -30,37 +35,62 @@ public class ActivityServiceJPA implements IActivityService {
 
     @Override
     public List<Activity> getAll() {
-        return new LinkedList<>(activityRepository.findAll());
+        LinkedList<Activity> list = new LinkedList<>();
+
+        for (Activity a : activityRepository.findAll()) {
+            if (a.getIsActive() == true) {
+                list.add(a);
+            }
+        }
+
+        return list;
     }
 
     @Override
     public void delete(int id) {
-        activityRepository.deleteById(id);
+        Activity activity = activityRepository.findById(id).orElse(null);
+
+        activity.setIsActive(false);
+        activityRepository.save(activity);
     }
 
     @Override
     public void update(int id, Activity a) {
         Optional<Activity> optActivity = activityRepository.findById(id);
-        if(optActivity.isPresent()){
+        if (optActivity.isPresent()) {
             Activity activity = optActivity.get();
-            
+
             activity.setName(a.getName());
             activity.setDescription(a.getDescription());
             activity.setType(a.getType());
-            activity.setDate(a.getDate());   
+            activity.setDate(a.getDate());
             activity.setStartTime(a.getStartTime());
             activity.setEndTime(a.getEndTime());
             activity.setLocation(a.getLocation());
             activity.setStatus(a.getStatus());
-            
+
+            if (a.getCaregiver() != null) {
+                activity.setCaregiver(a.getCaregiver());
+            }
+
             activityRepository.save(activity);
         }
     }
 
     @Override
     public Activity getById(int id) {
-       return activityRepository.findById(id).orElse(null);
+        return activityRepository.findById(id).orElse(null);
     }
-    
-    
+
+    @Override
+    public void addResidentToActivity(int idResident, int idActivity) {
+
+        Resident resident = residentRepository.findById(idResident).orElse(null);
+
+        Activity activity = activityRepository.findById(idActivity).orElse(null);
+
+        activity.getResidents().add(resident);
+        activityRepository.save(activity);
+    }
+
 }
