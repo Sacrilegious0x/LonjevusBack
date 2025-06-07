@@ -51,7 +51,6 @@ public class Resident {
     private Boolean isActive;
 
     @OneToMany(mappedBy = "resident", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonManagedReference
     private List<ResidentContact> contacts = new LinkedList<>();
 
     @ManyToMany(mappedBy = "residents")
