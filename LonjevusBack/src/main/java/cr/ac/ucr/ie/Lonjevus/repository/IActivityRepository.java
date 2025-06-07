@@ -5,6 +5,8 @@
 package cr.ac.ucr.ie.Lonjevus.repository;
 
 import cr.ac.ucr.ie.Lonjevus.domain.Activity;
+import java.time.LocalDate;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -12,5 +14,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author JOSHUACALETCESPEDESG
  */
 public interface IActivityRepository extends JpaRepository<Activity, Integer>{
-    
+    List<Activity> findByDate(LocalDate date);
 }

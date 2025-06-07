@@ -16,6 +16,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -39,7 +40,7 @@ public class Activity {
     private String type;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "date")
-    private String date;
+    private LocalDate date;
     @Column(name = "startTime")
     private String startTime;
     @Column(name = "endTime")
@@ -98,11 +99,11 @@ public class Activity {
         this.type = type;
     }
 
-    public String getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

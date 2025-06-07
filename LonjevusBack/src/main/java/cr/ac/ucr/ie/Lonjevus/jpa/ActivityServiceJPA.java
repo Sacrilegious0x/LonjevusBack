@@ -9,6 +9,7 @@ import cr.ac.ucr.ie.Lonjevus.domain.Resident;
 import cr.ac.ucr.ie.Lonjevus.repository.IActivityRepository;
 import cr.ac.ucr.ie.Lonjevus.repository.IResidentRepository;
 import cr.ac.ucr.ie.Lonjevus.service.IActivityService;
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -108,5 +109,23 @@ public class ActivityServiceJPA implements IActivityService {
         activity.getResidents().remove(resident);
         activityRepository.save(activity);
     }
-}
 
+    @Override
+    public List<Activity> getByDate(LocalDate date) {
+        System.out.println(">>> Fecha recibida: " + date);  // DEBUG
+
+        List<Activity> actividades = activityRepository.findByDate(date);
+        LinkedList<Activity> activas = new LinkedList<>();
+
+        for (Activity a : actividades) {
+            if (Boolean.TRUE.equals(a.getIsActive())) {
+                if (a.getCaregiver() != null) {
+                    a.getCaregiver().getId();
+                }
+                activas.add(a);
+            }
+        }
+
+        return activas;
+    }
+}

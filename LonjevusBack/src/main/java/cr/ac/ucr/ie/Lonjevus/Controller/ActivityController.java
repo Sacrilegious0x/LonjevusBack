@@ -6,6 +6,7 @@ package cr.ac.ucr.ie.Lonjevus.Controller;
 
 import cr.ac.ucr.ie.Lonjevus.domain.Activity;
 import cr.ac.ucr.ie.Lonjevus.service.IActivityService;
+import java.time.LocalDate;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -67,4 +68,8 @@ public class ActivityController {
         return ("Residente eliminado a la actividad");
     }
     
+    @GetMapping("/getActivitiesByDate")
+    public List<Activity> getActivitiesByDate(@RequestParam LocalDate date){
+        return service.getByDate(date);
+    }
 }

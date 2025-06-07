@@ -45,7 +45,7 @@ public class ResidentServiceJPA implements IResidentService{
     public void delete(int id) {
         Resident resident = residentRepository.findById(id).orElse(null);
         
-        resident.setIsActive(null);
+        resident.setIsActive(false);
         
         residentRepository.save(resident);
     }

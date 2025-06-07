@@ -5,6 +5,7 @@
 package cr.ac.ucr.ie.Lonjevus.service;
 
 import cr.ac.ucr.ie.Lonjevus.domain.Activity;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -19,4 +20,5 @@ public interface IActivityService {
     Activity getById(int id);
     void addResidentToActivity(int idResident, int idActivity);
     void deleteResidentFromActivity(int idResident, int idActivity);
+    List<Activity> getByDate(LocalDate date);
 }
