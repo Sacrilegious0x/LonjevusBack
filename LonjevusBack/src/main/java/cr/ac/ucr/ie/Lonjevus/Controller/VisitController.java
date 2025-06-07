@@ -62,21 +62,9 @@ public class VisitController {
     }
     
     @PostMapping("/updateVisit/{id}")
-    public ResponseEntity<String> updateVisit(@PathVariable int id,@RequestParam String name, @RequestParam String visitDate,
-                                           @RequestParam String visitHour, @RequestParam int phoneNumber, 
-                                           @RequestParam String email, @RequestParam String relationship,
-                                           @RequestParam int residentId ){
+    public ResponseEntity<String> updateVisit(@PathVariable int id,@RequestBody Visit v){
             try{                               
-            Resident resident = residentService.getById(residentId);
-            Visit v = new Visit();
-            v.setId(id);
-            v.setName(name);
-            v.setVisitDate(LocalDate.parse(visitDate));
-            v.setVisitHour(Time.valueOf(visitHour));
-            v.setPhoneNumber(phoneNumber);
-            v.setEmail(email);
-            v.setRelationship(relationship);
-            v.setIsActive(true);
+            Resident resident = residentService.getById(v.getResident().getId());
             v.setResident(resident);
             visitService.update(id, v);
         return ResponseEntity.ok("Visita actualizada exitosamente");

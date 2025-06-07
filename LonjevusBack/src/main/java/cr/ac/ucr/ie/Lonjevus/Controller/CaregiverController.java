@@ -93,6 +93,7 @@ public class CaregiverController {
     @DeleteMapping("/deleteCaregiver/{id}")
     public ResponseEntity<String> deleteCaregiver(@PathVariable int id) {
          try {
+             System.out.println("ID QUE LLEGA A ELIMINAR" + id);
             caregiverService.delete(id);
             return ResponseEntity.ok("Trabajador eliminado exitosamente");
         } catch (Exception e) {

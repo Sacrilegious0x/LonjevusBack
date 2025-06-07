@@ -5,6 +5,7 @@
 package cr.ac.ucr.ie.Lonjevus.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -38,6 +39,7 @@ public class Visit {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate visitDate;
     @Column(name = "visitHour")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
     private Time visitHour;
     @Column(name = "phoneNumber")
     private int phoneNumber;

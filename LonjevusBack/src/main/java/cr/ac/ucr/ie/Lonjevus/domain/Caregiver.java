@@ -16,7 +16,7 @@ import org.hibernate.annotations.Where;
  */
 @Entity
 @Table(name = "caregiver")
-@SQLDelete(sql = "UPDATE administrator SET isActive = 0 WHERE id = ?")
+@SQLDelete(sql = "UPDATE caregiver SET isActive = 0 WHERE id = ?")
 @Where(clause = "isActive = 1")
 public class Caregiver extends Person {
     
