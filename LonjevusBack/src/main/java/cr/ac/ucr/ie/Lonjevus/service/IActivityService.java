@@ -18,4 +18,5 @@ public interface IActivityService {
     void update(int id, Activity a);
     Activity getById(int id);
     void addResidentToActivity(int idResident, int idActivity);
+    void deleteResidentFromActivity(int idResident, int idActivity);
 }

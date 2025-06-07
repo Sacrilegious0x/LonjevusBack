@@ -59,4 +59,12 @@ public class ActivityController {
         service.addResidentToActivity(residentId, activityId);
         return ("Residente agregado a la actividad");
     }
+    
+    @DeleteMapping("/deleteResidentFromActivity")
+    public String deleteResidentFromActivity(@RequestParam int activityId, @RequestParam int residentId) {
+
+        service.deleteResidentFromActivity(residentId, activityId);
+        return ("Residente eliminado a la actividad");
+    }
+    
 }

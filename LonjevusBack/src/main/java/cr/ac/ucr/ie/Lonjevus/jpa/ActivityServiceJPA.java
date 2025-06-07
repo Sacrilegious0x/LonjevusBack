@@ -43,6 +43,12 @@ public class ActivityServiceJPA implements IActivityService {
             }
         }
 
+        for (Activity a : list) {
+            if (a.getCaregiver() != null) {
+                a.getCaregiver().getId();
+            }
+        }
+
         return list;
     }
 
@@ -93,4 +99,14 @@ public class ActivityServiceJPA implements IActivityService {
         activityRepository.save(activity);
     }
 
+    @Override
+    public void deleteResidentFromActivity(int idResident, int idActivity) {
+        Resident resident = residentRepository.findById(idResident).orElse(null);
+
+        Activity activity = activityRepository.findById(idActivity).orElse(null);
+
+        activity.getResidents().remove(resident);
+        activityRepository.save(activity);
+    }
 }
+

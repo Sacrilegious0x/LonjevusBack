@@ -30,7 +30,15 @@ public class ResidentServiceJPA implements IResidentService{
 
     @Override
     public List<Resident> getList() {
-        return new LinkedList<>(residentRepository.findAll());
+        LinkedList<Resident> list = new LinkedList<>();
+        
+        for(Resident r: residentRepository.findAll()){
+            if(r.isIsActive()){
+                list.add(r);
+            }
+        }
+        
+        return list;
     }
 
     @Override

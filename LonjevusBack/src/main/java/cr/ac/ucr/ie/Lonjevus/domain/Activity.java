@@ -55,7 +55,7 @@ public class Activity {
     @JoinColumn(name = "idResponsible")
     private Caregiver caregiver;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "resident_activity",
             joinColumns = @JoinColumn(name = "activity_id"),
