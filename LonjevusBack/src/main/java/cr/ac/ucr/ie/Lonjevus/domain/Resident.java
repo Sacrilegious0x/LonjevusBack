@@ -34,8 +34,8 @@ public class Resident {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "birthdate")
     private LocalDate birthdate;
-    @Column(name = "age")
-    private Integer age;
+    //@Column(name = "age")
+    //private Integer age;
     @Column(name = "healthStatus")
     private String healthStatus;
     @Column(name = "numberRoom")
@@ -52,10 +52,10 @@ public class Resident {
     public Resident() {
     }
 
-    public Resident(String identification, String name, Integer age, String healthStatus, Integer roomNumber, String photo, boolean isActive) {
+    public Resident(String identification, String name, /*Integer age,*/ String healthStatus, Integer roomNumber, String photo, boolean isActive) {
         this.identification = identification;
         this.name = name;
-        this.age = age;
+        //this.age = age;
         this.healthStatus = healthStatus;
         this.numberRoom = roomNumber;
         this.photo = photo;
@@ -86,6 +86,8 @@ public class Resident {
     public void setName(String name) {
         this.name = name;
     }
+    
+    /*
 
     public Integer getAge() {
         return age;
@@ -94,7 +96,7 @@ public class Resident {
     public void setAge(Integer age) {
         this.age = age;
     }
-
+*/
     public String getHealthStatus() {
         return healthStatus;
     }

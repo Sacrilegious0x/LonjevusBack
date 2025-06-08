@@ -21,28 +21,11 @@ import org.springframework.transaction.annotation.Transactional;
  */
 public interface IBillingRepository extends JpaRepository<Billing, Integer> {
 
-    //Obtener todas las facturas que esten activas
     List<Billing> findAllByIsActiveTrue();
 
-    //Editar una factura
-    @Modifying
-    @Transactional
-    @Query(value = "CALL update_purchase(:id, :date, :amount)", nativeQuery = true)
-    void updatePurchase(
-            @Param("id") String id,
-            @Param("date") java.sql.Date date,
-            @Param("amount") BigDecimal amount
-    );
+    List<Billing> findAllByIsActiveFalse();
 
-    //Eliminar una factura, que al eliminar se ponga como factura cancelada, 
-    //Su activo pasa a 0, para poder recuperar las facturas canceladas
-    @Procedure(procedureName = "delete_billing_logically")
-    void deleteBillingLogically(@Param("billingId") Integer billingId);
-
-    //Buscar por fecha de generacion
     List<Billing> findByDate(LocalDate date);
 
-    // Buscar por período
     List<Billing> findByPeriodContainingIgnoreCase(String period);
-
 }

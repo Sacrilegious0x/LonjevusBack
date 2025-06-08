@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface IBillingService {
     List<Billing> getAllActive();
+    List<Billing> getAllInactive();
     Billing findById(Integer id);
     void save(Billing billing);
     void update(Integer id, Billing billing);

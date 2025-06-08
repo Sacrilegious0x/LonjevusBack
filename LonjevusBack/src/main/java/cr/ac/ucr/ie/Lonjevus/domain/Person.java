@@ -20,9 +20,9 @@ import jakarta.persistence.OneToOne;
  *
  * @author User
  */
-@Entity
-@Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Person {
+@MappedSuperclass
+public class Person {
+
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,5 +1,6 @@
 package cr.ac.ucr.ie.Lonjevus.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -15,33 +16,38 @@ public class PurchaseProduct implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("idPurchase")
     @JoinColumn(name = "idPurchase")
+    @JsonBackReference("purchase-items")
     private Purchase purchase;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("idProduct")
     @JoinColumn(name = "idProduct")
+    @JsonBackReference
     private Product product;
 
     @Column(name = "quantity")
     private Integer quantity;
 
     @Transient
-    private String productName;
-
-    @Transient
     private BigDecimal price;
 
-    @Transient
+    @Column(name = "expirationDate")
     private LocalDate expirationDate;
+
+    @Transient
+    private String productName;
 
     public PurchaseProduct() {
     }
 
-    public PurchaseProduct(PurchaseProductId id, Purchase purchase, Product product, Integer quantity) {
-        this.id = id;
+    public PurchaseProduct(Purchase purchase, Product product, Integer quantity, BigDecimal price, LocalDate expirationDate, String productName) {
         this.purchase = purchase;
         this.product = product;
         this.quantity = quantity;
+        this.price = price;
+        this.expirationDate = expirationDate;
+        this.productName = productName;
+        this.id = new PurchaseProductId(purchase.getId(), product.getId());
     }
 
     public PurchaseProductId getId() {
@@ -58,6 +64,10 @@ public class PurchaseProduct implements Serializable {
 
     public void setPurchase(Purchase purchase) {
         this.purchase = purchase;
+        if (this.id == null) {
+            this.id = new PurchaseProductId();
+        }
+        this.id.setIdPurchase(purchase.getId());
     }
 
     public Product getProduct() {
@@ -66,6 +76,10 @@ public class PurchaseProduct implements Serializable {
 
     public void setProduct(Product product) {
         this.product = product;
+        if (this.id == null) {
+            this.id = new PurchaseProductId();
+        }
+        this.id.setIdProduct(product.getId());
     }
 
     public Integer getQuantity() {
@@ -76,17 +90,14 @@ public class PurchaseProduct implements Serializable {
         this.quantity = quantity;
     }
 
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
+    @Transient
     public BigDecimal getPrice() {
+        if (this.product != null) {
+            return this.product.getPrice();
+        }
         return price;
     }
+    
 
     public void setPrice(BigDecimal price) {
         this.price = price;
@@ -100,20 +111,19 @@ public class PurchaseProduct implements Serializable {
         this.expirationDate = expirationDate;
     }
 
-    // Métodos de conveniencia para claves
-    public String getIdPurchase() {
-        return id != null ? id.getIdPurchase() : null;
+    public String getProductName() {
+        if (this.productName == null && product != null) {
+            return product.getName();
+        }
+        return productName;
     }
 
-    public void setIdPurchase(String idPurchase) {
-        if (this.id == null) {
-            this.id = new PurchaseProductId();
-        }
-        this.id.setIdPurchase(idPurchase);
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public Integer getIdProduct() {
-        return id != null ? id.getIdProduct() : null;
+        return (id != null) ? id.getIdProduct() : null;
     }
 
     public void setIdProduct(Integer idProduct) {
@@ -122,4 +132,5 @@ public class PurchaseProduct implements Serializable {
         }
         this.id.setIdProduct(idProduct);
     }
+
 }

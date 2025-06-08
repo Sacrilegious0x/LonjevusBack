@@ -29,6 +29,11 @@ public class PurchaseController {
         return purchaseService.getAll();
     }
 
+    @GetMapping("/inactive")
+    public List<Purchase> getInactivePurchases() {
+        return purchaseService.getAllInactive();
+    }
+
     @PostMapping("/add")
     public ResponseEntity<?> addPurchase(@RequestBody Purchase purchase) {
         try {
@@ -61,8 +66,9 @@ public class PurchaseController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Void> deletePurchase(@PathVariable String id) {
+    public ResponseEntity<String> deletePurchase(@PathVariable String id) {
         purchaseService.delete(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok("Compra eliminada correctamente.");
     }
+
 }
