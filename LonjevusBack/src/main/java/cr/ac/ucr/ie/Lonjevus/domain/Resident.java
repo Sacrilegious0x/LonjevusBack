@@ -10,12 +10,16 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
+import org.hibernate.annotations.Formula;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -23,8 +27,9 @@ import org.springframework.format.annotation.DateTimeFormat;
  * @author JOSHUACALETCESPEDESG
  */
 @Entity
-@Table(name="resident")
+@Table(name = "resident")
 public class Resident {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -35,8 +40,13 @@ public class Resident {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "birthdate")
     private LocalDate birthdate;
+<<<<<<< HEAD
     //@Column(name = "age")
     //private Integer age;
+=======
+    @Formula("TIMESTAMPDIFF(YEAR, birthdate, CURDATE())")
+    private Integer age;
+>>>>>>> developer
     @Column(name = "healthStatus")
     private String healthStatus;
     @Column(name = "numberRoom")
@@ -45,15 +55,21 @@ public class Resident {
     private String photo;
     @Column(name = "isActive")
     private Boolean isActive;
-    
+
     @OneToMany(mappedBy = "resident", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonManagedReference
     private List<ResidentContact> contacts = new LinkedList<>();
+<<<<<<< HEAD
     
     @OneToMany(mappedBy = "resident", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     //@JsonManagedReference
     @JsonIgnore 
     private List<Visit> visits = new LinkedList<>();
+=======
+
+    @ManyToMany(mappedBy = "residents")
+    private List<Activity> activities = new LinkedList<>();
+
+>>>>>>> developer
     public Resident() {
     }
 
@@ -75,7 +91,6 @@ public class Resident {
         this.id = id;
     }
 
-    
     public String getIdentification() {
         return identification;
     }
@@ -149,6 +164,7 @@ public class Resident {
         this.contacts = contacts;
     }
 
+<<<<<<< HEAD
     public List<Visit> getVisits() {
         return visits;
     }
@@ -158,4 +174,6 @@ public class Resident {
     }
     
     
+=======
+>>>>>>> developer
 }

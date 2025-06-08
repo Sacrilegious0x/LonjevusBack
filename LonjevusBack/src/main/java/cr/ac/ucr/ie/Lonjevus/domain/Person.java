@@ -21,8 +21,12 @@ import jakarta.persistence.OneToOne;
  * @author User
  */
 @MappedSuperclass
+<<<<<<< HEAD
 public class Person {
 
+=======
+public abstract class Person {
+>>>>>>> developer
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

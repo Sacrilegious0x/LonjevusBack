@@ -24,7 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController
-//@Controller
+
 public class ResidentController {
     
     @Autowired
