@@ -1,21 +1,19 @@
 package cr.ac.ucr.ie.Lonjevus.jpa;
 
+import cr.ac.ucr.ie.Lonjevus.domain.Product;
 import cr.ac.ucr.ie.Lonjevus.domain.Purchase;
 import cr.ac.ucr.ie.Lonjevus.domain.PurchaseProduct;
+import cr.ac.ucr.ie.Lonjevus.domain.PurchaseProductId;
+import cr.ac.ucr.ie.Lonjevus.repository.IProductRepository;
 import cr.ac.ucr.ie.Lonjevus.repository.IPurchaseRepository;
 import cr.ac.ucr.ie.Lonjevus.service.IPurchaseService;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.ParameterMode;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.StoredProcedureQuery;
-import java.math.BigDecimal;
-import java.sql.Date;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.UUID;
 
 @Service
 public class PurchaseServiceJPA implements IPurchaseService {
@@ -23,107 +21,123 @@ public class PurchaseServiceJPA implements IPurchaseService {
     @Autowired
     private IPurchaseRepository repository;
 
-   @Override
-public List<Purchase> getAll() {
-    List<Object[]> rows = repository.getAllPurchasesRaw();
-    Map<String, Purchase> purchaseMap = new HashMap<>();
+    @Autowired
+    private IProductRepository productRepository;
 
-    for (Object[] row : rows) {
-        String id = (String) row[0];
-
-        // Si ya fue añadida, ignorar
-        if (!purchaseMap.containsKey(id)) {
-            // Usar findById para obtener con items
-            Purchase fullPurchase = findById(id);
-            purchaseMap.put(id, fullPurchase);
-        }
+    @Override
+    public List<Purchase> getAll() {
+        List<Purchase> purchases = repository.findByIsActiveTrue();
+        setProductPrices(purchases);
+        return purchases;
     }
 
-    return new ArrayList<>(purchaseMap.values());
-}
-
+    @Override
+    public List<Purchase> getAllInactive() {
+        List<Purchase> purchases = repository.findByIsActiveFalse();
+        setProductPrices(purchases);
+        return purchases;
+    }
 
     @Override
     public Purchase findById(String id) {
-        List<Object[]> rows = repository.getPurchaseDetailsById(id);
-        if (rows.isEmpty()) {
-            throw new RuntimeException("Compra no encontrada");
+        Purchase purchase = repository.findById(id)
+                .filter(Purchase::isIsActive)
+                .orElseThrow(() -> new RuntimeException("Compra no encontrada o inactiva"));
+
+        // Forzar carga del admin si es LAZY (opcional si es EAGER)
+        if (purchase.getAdmin() != null) {
+            purchase.getAdmin().getName(); // Esto garantiza que admin se serialice
         }
 
-        Purchase purchase = new Purchase();
-        List<PurchaseProduct> items = new ArrayList<>();
+        for (PurchaseProduct item : purchase.getItems()) {
+            Integer productId = item.getIdProduct();
 
-        for (Object[] row : rows) {
-            if (purchase.getId() == null) {
-                purchase.setId((String) row[0]);
-                purchase.setDate(((Date) row[1]).toLocalDate());
-                purchase.setAmount((BigDecimal) row[2]);
-            }
-
-            PurchaseProduct item = new PurchaseProduct();
-            item.setIdProduct((Integer) row[3]);
-            item.setProductName((String) row[4]);
-            item.setPrice((BigDecimal) row[5]);
-            item.setQuantity((Integer) row[6]);
-            items.add(item);
+            productRepository.findById(productId).ifPresentOrElse(
+                    product -> {
+                        item.setProduct(product);
+                        item.setPrice(product.getPrice());
+                        item.setProductName(product.getName());
+                    },
+                    () -> {
+                        item.setProduct(null);
+                        item.setPrice(null);
+                        item.setProductName("Producto eliminado (#" + productId + ")");
+                    }
+            );
         }
 
-        purchase.setItems(items);
         return purchase;
     }
 
-    @PersistenceContext
-    private EntityManager entityManager;
-
     @Override
+    @Transactional
     public void save(Purchase purchase) {
-        // Paso 1: Llamada al procedimiento y registrar parámetros
-        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("insert_purchase");
-
-        query.registerStoredProcedureParameter("p_date", Date.class, ParameterMode.IN);
-        query.registerStoredProcedureParameter("p_amount", BigDecimal.class, ParameterMode.IN);
-        query.registerStoredProcedureParameter("p_admin_id", Integer.class, ParameterMode.IN);
-        query.registerStoredProcedureParameter("p_new_id", String.class, ParameterMode.OUT);
-
-        query.setParameter("p_date", Date.valueOf(purchase.getDate()));
-        query.setParameter("p_amount", purchase.getAmount());
-        query.setParameter("p_admin_id", purchase.getIdAdministrator());
-
-        // Paso 2: Ejecutar y obtener el ID
-        query.execute();
-
-        String newId = (String) query.getOutputParameterValue("p_new_id");
-        System.out.println("ID de compra generado por el SP: " + newId);
+        String datePart = purchase.getDate().format(java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd"));
+        long count = repository.count() + 1;
+        String newId = String.format("%04d-%s", count, datePart);
         purchase.setId(newId);
 
-        // Paso 3: Insertar productos relacionados
+        purchase.setIsActive(true);
+
         for (PurchaseProduct item : purchase.getItems()) {
-            repository.insertPurchaseProduct(
-                    newId,
-                    item.getIdProduct(),
-                    item.getQuantity(),
-                    Date.valueOf(item.getExpirationDate())
-            );
+            item.setPurchase(purchase);
+            Integer productId = item.getIdProduct();
+            if (productId == null) {
+                throw new RuntimeException("Falta idProduct en un item");
+            }
+
+            item.setId(new PurchaseProductId(newId, productId));
+            Product product = productRepository.findById(productId)
+                    .orElseThrow(() -> new RuntimeException("Producto no encontrado con ID: " + productId));
+            item.setProduct(product);
         }
+
+        repository.save(purchase);
     }
 
     @Override
+    @Transactional
     public void update(String id, Purchase updatedPurchase) {
-        repository.updatePurchase(id, Date.valueOf(updatedPurchase.getDate()), updatedPurchase.getAmount());
-        repository.deletePurchaseProducts(id);
+        Purchase existing = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Compra no encontrada"));
+
+        existing.setDate(updatedPurchase.getDate());
+        existing.setAmount(updatedPurchase.getAmount());
+        existing.getItems().clear();
 
         for (PurchaseProduct item : updatedPurchase.getItems()) {
-            repository.insertPurchaseProduct(
-                    id,
-                    item.getIdProduct(),
-                    item.getQuantity(),
-                    Date.valueOf(item.getExpirationDate())
-            );
+            item.setPurchase(existing);
+            Integer productId = item.getIdProduct();
+            if (productId == null) {
+                throw new RuntimeException("Falta idProduct en un item");
+            }
+
+            item.setId(new PurchaseProductId(id, productId));
+            Product product = productRepository.findById(productId)
+                    .orElseThrow(() -> new RuntimeException("Producto no encontrado con ID: " + productId));
+            item.setProduct(product);
+            existing.getItems().add(item);
         }
+
+        repository.save(existing);
     }
 
     @Override
+    @Transactional
     public void delete(String id) {
-        repository.deletePurchaseById(id);
+        Purchase purchase = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Compra no encontrada"));
+        purchase.setIsActive(false);
+        repository.save(purchase);
+    }
+
+    private void setProductPrices(List<Purchase> purchases) {
+        for (Purchase purchase : purchases) {
+            for (PurchaseProduct item : purchase.getItems()) {
+                if (item.getProduct() != null) {
+                    item.setPrice(item.getProduct().getPrice());
+                }
+            }
+        }
     }
 }

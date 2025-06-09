@@ -6,13 +6,14 @@ import cr.ac.ucr.ie.Lonjevus.domain.Purchase;
 import cr.ac.ucr.ie.Lonjevus.service.IInventoryService;
 import cr.ac.ucr.ie.Lonjevus.service.LocalStorageService;
 
-import java.time.LocalDate;
-import java.util.Collections;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.time.LocalDate;
+import java.util.Collections;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/inventory")
@@ -54,11 +55,12 @@ public class InventoryController {
         purchase.setId(purchaseId);
         inventory.setPurchase(purchase);
 
+        inventory.setIsActive(true); 
         service.save(inventory);
         return getList();
     }
 
-    @PostMapping(path = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PutMapping(path = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Map<String, Object> updateInventory(
             @RequestParam("id") int id,
             @RequestParam("quantity") int quantity,
@@ -93,7 +95,7 @@ public class InventoryController {
 
     @DeleteMapping("/delete")
     public Map<String, Object> deleteInventory(@RequestParam int id) {
-        service.delete(id);
+        service.delete(id); 
         return getList();
     }
 
