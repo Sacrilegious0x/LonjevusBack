@@ -28,4 +28,16 @@ public interface IBillingRepository extends JpaRepository<Billing, Integer> {
     List<Billing> findByDate(LocalDate date);
 
     List<Billing> findByPeriodContainingIgnoreCase(String period);
+
+    List<Billing> findByResidentId(Integer residentId);
+
+    List<Billing> findByResidentIdAndDate(Integer residentId, LocalDate date);
+   
+    List<Billing> findByResidentIdAndIsActiveTrue(Integer residentId);
+    
+    List<Billing> findByIsActiveTrueAndResidentIsActiveFalse();
+
+    List<Billing> findByResidentIsActiveFalse();
+
+
 }

@@ -7,12 +7,6 @@ import cr.ac.ucr.ie.Lonjevus.repository.IAdminRepository;
 import cr.ac.ucr.ie.Lonjevus.repository.IBillingRepository;
 import cr.ac.ucr.ie.Lonjevus.repository.IResidentRepository;
 import cr.ac.ucr.ie.Lonjevus.service.IBillingService;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.ParameterMode;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.StoredProcedureQuery;
-import java.math.BigDecimal;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,4 +105,25 @@ public class BillingServiceJPA implements IBillingService {
     public List<Billing> findByPeriod(String period) {
         return repository.findByPeriodContainingIgnoreCase(period);
     }
+
+    @Override
+    public List<Billing> findByResident(Integer residentId) {
+        return repository.findByResidentIdAndIsActiveTrue(residentId);
+    }
+
+    @Override
+    public List<Billing> findByResidentAndDate(Integer residentId, LocalDate date) {
+        return repository.findByResidentIdAndDate(residentId, date);
+    }
+
+    @Override
+    public List<Billing> findActiveByInactiveResident() {
+        return repository.findByIsActiveTrueAndResidentIsActiveFalse();
+    }
+
+    @Override
+    public List<Billing> findByInactiveResidents() {
+        return repository.findByResidentIsActiveFalse();
+    }
+
 }

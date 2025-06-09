@@ -85,4 +85,23 @@ public class BillingController {
     public ResponseEntity<List<Billing>> getByPeriod(@PathVariable String period) {
         return ResponseEntity.ok(billingService.findByPeriod(period));
     }
+
+     @GetMapping("/resident/inactive")
+    public ResponseEntity<List<Billing>> getBillingsByInactiveResidents() {
+        return ResponseEntity.ok(billingService.findByInactiveResidents());
+    }
+
+    
+    @GetMapping("/resident/{residentId}")
+    public ResponseEntity<List<Billing>> getByResident(@PathVariable Integer residentId) {
+        return ResponseEntity.ok(billingService.findByResident(residentId));
+    }
+
+    @GetMapping("/resident/{id}/date/{date}")
+    public ResponseEntity<List<Billing>> getByResidentAndDate(@PathVariable Integer id, @PathVariable String date) {
+        LocalDate localDate = LocalDate.parse(date);
+        return ResponseEntity.ok(billingService.findByResidentAndDate(id, localDate));
+    }
+
+   
 }

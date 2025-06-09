@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface IBillingService {
+
     List<Billing> getAllActive();
     List<Billing> getAllInactive();
     Billing findById(Integer id);
@@ -13,4 +14,8 @@ public interface IBillingService {
     void delete(Integer id);
     List<Billing> findByDate(LocalDate date);
     List<Billing> findByPeriod(String period);
+    List<Billing> findByResident(Integer residentId);
+    List<Billing> findByResidentAndDate(Integer residentId, LocalDate date);
+    List<Billing> findActiveByInactiveResident();
+    List<Billing> findByInactiveResidents();
 }
