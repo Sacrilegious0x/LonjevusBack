@@ -13,7 +13,7 @@ import java.util.List;
  */
 public interface IRoleService {
     
-    void save(Role role);
+    Role save(Role role);
     List<Role> getAllRoles();
     void delete(int roleId);
     Role getById(int roleId);

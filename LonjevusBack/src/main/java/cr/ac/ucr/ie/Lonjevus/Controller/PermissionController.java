@@ -30,7 +30,7 @@ public class PermissionController {
     private IPermissionService permissionService;
 
     // Obtener todos los permisos
-    @RequestMapping("/listss")
+    @RequestMapping("/lists")
     public Map getAllPermissions() {
         return Collections.singletonMap("permissions", permissionService.getAllPermissions());
     }

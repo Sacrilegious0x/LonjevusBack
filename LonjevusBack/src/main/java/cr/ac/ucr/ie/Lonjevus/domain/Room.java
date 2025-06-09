@@ -13,7 +13,7 @@ import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name = "room") 
-@SQLDelete(sql = "UPDATE supplier SET isActive = 0 WHERE id = ?")
+@SQLDelete(sql = "UPDATE room SET isActive = 0 WHERE id = ?")
 @Where(clause = "isActive = 1")
 public class Room {
 

@@ -10,6 +10,7 @@ import cr.ac.ucr.ie.Lonjevus.service.IRoleService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -22,8 +23,9 @@ public class RoleServiceJPA implements IRoleService {
     private IRoleRepository repo;
 
     @Override
-    public void save(Role role) {
-        repo.save(role);
+    @Transactional
+    public Role save(Role role) {
+       return repo.save(role);
     }
 
     @Override
