@@ -86,7 +86,12 @@ public class ActivityServiceJPA implements IActivityService {
 
     @Override
     public Activity getById(int id) {
-        return activityRepository.findById(id).orElse(null);
+        Activity activity = activityRepository.findById(id).orElse(null);
+        
+        if(activity.getIsActive())
+            return activityRepository.findById(id).orElse(null);
+        else
+            return null;
     }
 
     @Override
@@ -112,20 +117,24 @@ public class ActivityServiceJPA implements IActivityService {
 
     @Override
     public List<Activity> getByDate(LocalDate date) {
-        System.out.println(">>> Fecha recibida: " + date);  // DEBUG
+        List<Activity> activities = activityRepository.findByDate(date);
+        LinkedList<Activity> actives = new LinkedList<>();
 
-        List<Activity> actividades = activityRepository.findByDate(date);
-        LinkedList<Activity> activas = new LinkedList<>();
-
-        for (Activity a : actividades) {
+        for (Activity a : activities) {
             if (Boolean.TRUE.equals(a.getIsActive())) {
                 if (a.getCaregiver() != null) {
                     a.getCaregiver().getId();
                 }
-                activas.add(a);
+                actives.add(a);
             }
         }
 
-        return activas;
+        return actives;
+    }
+
+    @Override
+    public List<Resident> getResidentsFromActivity(Integer id) {
+        return activityRepository.findResidentsByActivityId(id);
+        
     }
 }

@@ -5,6 +5,7 @@
 package cr.ac.ucr.ie.Lonjevus.Controller;
 
 import cr.ac.ucr.ie.Lonjevus.domain.Activity;
+import cr.ac.ucr.ie.Lonjevus.domain.Resident;
 import cr.ac.ucr.ie.Lonjevus.service.IActivityService;
 import java.time.LocalDate;
 import java.util.List;
@@ -47,10 +48,15 @@ public class ActivityController {
         service.delete(id);
         return "actividad eliminada";
     }
+    
+    @GetMapping("/findActivity")
+    public Activity getActivityByDate(@RequestParam int id){
+        return service.getById(id);
+    }
 
     @PostMapping("/updateActivity")
-    public String updateActivity(@RequestParam int id, @RequestBody Activity activity) {
-        service.update(id, activity);
+    public String updateActivity(@RequestBody Activity activity) {
+        service.update(activity.getId(), activity);
         return ("Actividad actualizada .");
     }
 
@@ -71,5 +77,10 @@ public class ActivityController {
     @GetMapping("/getActivitiesByDate")
     public List<Activity> getActivitiesByDate(@RequestParam LocalDate date){
         return service.getByDate(date);
+    }
+    
+    @GetMapping("/getResidentsFromActivity")
+    public List<Resident> getResidentsFromActivity (@RequestParam int id){
+        return service.getResidentsFromActivity(id);
     }
 }
