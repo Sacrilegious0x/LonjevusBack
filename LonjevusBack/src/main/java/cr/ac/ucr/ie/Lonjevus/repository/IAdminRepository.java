@@ -5,6 +5,7 @@
 package cr.ac.ucr.ie.Lonjevus.repository;
 
 import cr.ac.ucr.ie.Lonjevus.domain.Admin;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -12,5 +13,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author User
  */
 public interface IAdminRepository extends JpaRepository<Admin, Integer>{
-    
+    Optional<Admin> findByEmail(String email);
 }

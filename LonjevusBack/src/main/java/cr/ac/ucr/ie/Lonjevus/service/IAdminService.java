@@ -6,6 +6,7 @@ package cr.ac.ucr.ie.Lonjevus.service;
 
 import cr.ac.ucr.ie.Lonjevus.domain.Admin;
 import java.util.LinkedList;
+import java.util.Optional;
 
 /**
  *
@@ -17,4 +18,5 @@ public interface IAdminService {
     void delete(int adminId);
     void update(int adminId, Admin a);
     Admin getById(int adminId);
+    Optional<Admin> findByEmail(String email);
 }

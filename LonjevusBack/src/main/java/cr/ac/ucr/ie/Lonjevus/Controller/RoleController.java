@@ -9,6 +9,7 @@ import cr.ac.ucr.ie.Lonjevus.service.IRoleService;
 import java.util.Collections;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,12 +24,12 @@ public class RoleController {
     
     @Autowired
     private IRoleService roleService;
-    
+    @PreAuthorize("hasAuthority('PERMISSION_ROLES_VIEW')")
     @RequestMapping("/list")
     public Map getAllPermissions() {
         return Collections.singletonMap("roles", roleService.getAllRoles());
     }
-    
+    @PreAuthorize("hasAuthority('PERMISSION_ROLES_CREATE')")
     @PostMapping("/save")
     public Map<String,Object> createRole(@RequestBody Role role ){
         roleService.save(role);

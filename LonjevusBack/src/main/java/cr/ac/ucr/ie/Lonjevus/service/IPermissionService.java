@@ -14,7 +14,7 @@ import java.util.List;
  */
 public interface IPermissionService {
     
-     void save(Permission permission);
+    void save(Permission permission);
     List<Permission> getAllPermissions();
     void delete(PermissionId id);
     Permission getById(PermissionId id);

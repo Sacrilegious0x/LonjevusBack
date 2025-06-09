@@ -40,13 +40,8 @@ public class Resident {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "birthdate")
     private LocalDate birthdate;
-<<<<<<< HEAD
-    //@Column(name = "age")
-    //private Integer age;
-=======
     @Formula("TIMESTAMPDIFF(YEAR, birthdate, CURDATE())")
     private Integer age;
->>>>>>> developer
     @Column(name = "healthStatus")
     private String healthStatus;
     @Column(name = "numberRoom")
@@ -58,18 +53,18 @@ public class Resident {
 
     @OneToMany(mappedBy = "resident", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ResidentContact> contacts = new LinkedList<>();
-<<<<<<< HEAD
+
     
     @OneToMany(mappedBy = "resident", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     //@JsonManagedReference
     @JsonIgnore 
     private List<Visit> visits = new LinkedList<>();
-=======
+
 
     @ManyToMany(mappedBy = "residents")
     private List<Activity> activities = new LinkedList<>();
 
->>>>>>> developer
+
     public Resident() {
     }
 
@@ -164,7 +159,7 @@ public class Resident {
         this.contacts = contacts;
     }
 
-<<<<<<< HEAD
+
     public List<Visit> getVisits() {
         return visits;
     }
@@ -174,6 +169,5 @@ public class Resident {
     }
     
     
-=======
->>>>>>> developer
+
 }

@@ -6,6 +6,7 @@ package cr.ac.ucr.ie.Lonjevus.service;
 
 import cr.ac.ucr.ie.Lonjevus.domain.Caregiver;
 import java.util.LinkedList;
+import java.util.Optional;
 
 /**
  *
@@ -17,4 +18,5 @@ public interface ICaregiverService {
     void delete(int caregiverId);
     void update(int caregiverId, Caregiver c);
     Caregiver getById(int caregiverId);
+    Optional<Caregiver> findByEmail(String email);
 }

@@ -16,6 +16,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,6 +40,7 @@ public class VisitController {
     @Autowired
     private IResidentService residentService;
     
+    @PreAuthorize("hasAuthority('PERMISSION_VISITAS_VIEW')")
     @GetMapping("/listVisitors")
     public Map getAll(){
         List<Visit> visitors = visitService.getAll();
@@ -60,7 +62,7 @@ public class VisitController {
                     .body("Error al agendar la visita");
         }
     }
-    
+    @PreAuthorize("hasAuthority('PERMISSION_VISITAS_UPDATE')")
     @PostMapping("/updateVisit/{id}")
     public ResponseEntity<String> updateVisit(@PathVariable int id,@RequestBody Visit v){
             try{                               
@@ -76,7 +78,7 @@ public class VisitController {
         }
         
     }
-    
+    @PreAuthorize("hasAuthority('PERMISSION_VISITAS_DELETE')")
     @DeleteMapping("/deleteVisit/{id}")
     public ResponseEntity<String> deleteVisit(@PathVariable int id){
         try {
@@ -88,7 +90,7 @@ public class VisitController {
                     .body("Error al eliminar la visita");
         }
     }
-    
+    @PreAuthorize("hasAuthority('PERMISSION_VISITAS_VIEW')")
     @GetMapping("/getVisitById/{id}")
     public Visit getVisitById(@PathVariable int id){
         Visit v = visitService.getById(id);

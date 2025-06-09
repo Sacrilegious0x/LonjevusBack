@@ -10,6 +10,7 @@ import cr.ac.ucr.ie.Lonjevus.service.ICaregiverService;
 import java.util.LinkedList;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -21,9 +22,14 @@ public class CaregiverServiceJPA implements ICaregiverService {
 
     @Autowired
     private ICaregiverRepository caregiverRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     
     @Override
     public void save(Caregiver c) {
+        String password = c.getPassword();
+        String passwordEncript = passwordEncoder.encode(password.trim());
+        c.setPassword(passwordEncript);
         caregiverRepository.save(c);
     }
     
@@ -57,6 +63,11 @@ public class CaregiverServiceJPA implements ICaregiverService {
     @Override
     public Caregiver getById(int caregiverId) {
         return caregiverRepository.findById(caregiverId).orElse(null);
+    }
+
+    @Override
+    public Optional<Caregiver> findByEmail(String email) {
+        return caregiverRepository.findByEmail(email);
     }
     
 }

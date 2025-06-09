@@ -1,0 +1,64 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/springframework/Controller.java to edit this template
+ */
+package cr.ac.ucr.ie.Lonjevus.Controller;
+
+import cr.ac.ucr.ie.Lonjevus.Security.JwtUtils;
+import cr.ac.ucr.ie.Lonjevus.domain.AuthenticationRequest;
+import cr.ac.ucr.ie.Lonjevus.domain.AuthenticationResponse;
+import cr.ac.ucr.ie.Lonjevus.jpa.UserDetailsJPA;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+/**
+ *
+ * @author User
+ */
+@RestController
+@RequestMapping("/api/auth")
+public class AuthenticationController {
+    
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtils jwtUtil;
+    private final UserDetailsJPA userDetailsService;
+
+    public AuthenticationController(AuthenticationManager authenticationManager, JwtUtils jwtUtil, UserDetailsJPA userDetailsService) {
+        this.authenticationManager = authenticationManager;
+        this.jwtUtil = jwtUtil;
+        this.userDetailsService = userDetailsService;
+    }
+    
+    @PostMapping("/login")
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(authenticationRequest.getEmail(), authenticationRequest.getPassword().trim())
+        );
+
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getEmail());
+        final String jwt = jwtUtil.generateToken(userDetails);
+        Map<String, Object> response = new HashMap<>();
+        response.put("jwt", jwt);
+        response.put("email", userDetails.getUsername());
+        List<String> authorities = userDetails.getAuthorities().stream()
+                                      .map(GrantedAuthority::getAuthority)
+                                      .collect(Collectors.toList());
+        response.put("authorities", authorities);
+        return ResponseEntity.ok(response);
+    }
+}
+    
+

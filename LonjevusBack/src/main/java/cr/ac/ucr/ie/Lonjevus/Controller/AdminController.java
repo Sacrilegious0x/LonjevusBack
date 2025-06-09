@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,7 +41,8 @@ public class AdminController {
     private IScheduleService scheduleService;
     @Autowired
     private LocalStorageService localStorageService;
-
+    
+    @PreAuthorize("hasAuthority('PERMISSION_ADMINISTRADORES_CREATE')")
     @PostMapping(value = "/addAdmin", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> addAdmin(@RequestPart("adminData") Admin a,
             @RequestPart(value = "photo") MultipartFile photoFile) {
@@ -60,7 +62,7 @@ public class AdminController {
         }
        
     }
-
+    @PreAuthorize("hasAuthority('PERMISSION_ADMINISTRADORES_VIEW')")
     @GetMapping("/getAdmin/{id}")
     public ResponseEntity<?> getAdmin(@PathVariable int id) {
         try {
@@ -75,7 +77,7 @@ public class AdminController {
                     .body("Error al obtener administrador: " + e.getMessage());
         }
     }
-
+    @PreAuthorize("hasAuthority('PERMISSION_ADMINISTRADORES_UPDATE')")
     @PostMapping(value = "/updateAdmin/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> updateAdmin(@PathVariable int id, @RequestPart("adminData") Admin a,
             @RequestPart(value = "photo", required = false) MultipartFile photoFile) {
@@ -94,7 +96,7 @@ public class AdminController {
                     .body("Error al crear administrador");
         }
     }
-
+    @PreAuthorize("hasAuthority('PERMISSION_ADMINISTRADORES_DELETE')")
     @DeleteMapping("/deleteAdmin/{id}")
     public ResponseEntity<String> deleteAdmin(@PathVariable int id) {
         try {

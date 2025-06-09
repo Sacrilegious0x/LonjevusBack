@@ -8,6 +8,7 @@ import cr.ac.ucr.ie.Lonjevus.service.LocalStorageService;
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,11 +36,12 @@ public class ResidentController {
 
     private static LocalStorageService localS = new LocalStorageService();
     
+    @PreAuthorize("hasAuthority('PERMISSION_RESIDENTES_VIEW')")
     @GetMapping("/residents")
     public List<Resident> getResidents() {
         return service.getList();
     }
-
+    @PreAuthorize("hasAuthority('PERMISSION_RESIDENTES_CREATE')")
     @PostMapping("/addResident")
     @ResponseBody
     public String addResident(@RequestParam String identification, @RequestParam String name,
@@ -65,19 +67,19 @@ public class ResidentController {
         service.save(resident);
         return "Residente listado";
     }
-
+    @PreAuthorize("hasAuthority('PERMISSION_RESIDENTES_DELETE')")
     @DeleteMapping("/deleteResident")
     @ResponseBody
     public String deleteResident(@RequestParam int id) {
         service.delete(id);
         return "Residente eliminado";
     }
-
+    @PreAuthorize("hasAuthority('PERMISSION_RESIDENTES_VIEW')")
     @GetMapping("/findResident")
     public Resident seachById(@RequestParam int id) {
         return service.getById(id);
     }
-
+    @PreAuthorize("hasAuthority('PERMISSION_RESIDENTES_UPDATE')")
     @PostMapping("/updateResident")
     public String updateResident(@RequestParam int id, @RequestParam String identification, @RequestParam String name,
             @RequestParam String birthdate, @RequestParam String healthStatus,
@@ -101,24 +103,25 @@ public class ResidentController {
         service.update(id, resident);
         return "Residente Actualizado";
     }
-
+    
+    @PreAuthorize("hasAuthority('PERMISSION_CONTACTOS_VIEW')")
     @GetMapping("/getContacts")
     public List<ResidentContact> getContacts(@RequestParam int id) {
         return contactService.getList(id);
     }
-
+    @PreAuthorize("hasAuthority('PERMISSION_CONTACTOS_CREATE')")
     @PostMapping("/addContact")
     public String addContact(@RequestBody ResidentContact r) {
         contactService.save(r);
         return "Contacto agregado";
     }
-
+    @PreAuthorize("hasAuthority('PERMISSION_CONTACTOS_DELETE')")
     @DeleteMapping("/deleteContact")
     public String deleteContact(@RequestParam int id) {
         contactService.delete(id);
         return "Contacto eliminado";
     }
-
+    @PreAuthorize("hasAuthority('PERMISSION_CONTACTOS_UPDATE')")
     @PostMapping("/updateContact")
     public String updateContact(@RequestBody ResidentContact r) {
         contactService.update(r.getId(), r);

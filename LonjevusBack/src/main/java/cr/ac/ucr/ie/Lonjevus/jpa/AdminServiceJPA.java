@@ -10,6 +10,7 @@ import cr.ac.ucr.ie.Lonjevus.service.IAdminService;
 import java.util.LinkedList;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -21,9 +22,13 @@ public class AdminServiceJPA implements IAdminService{
     
     @Autowired
     private IAdminRepository adminRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public void save(Admin a) {
+        String passwordEncript = passwordEncoder.encode(a.getPassword());
+        a.setPassword(passwordEncript);
         adminRepository.save(a);
     }
 
@@ -57,6 +62,11 @@ public class AdminServiceJPA implements IAdminService{
     @Override
     public Admin getById(int adminId) {
        return adminRepository.findById(adminId).orElse(null);
+    }
+
+    @Override
+    public Optional<Admin> findByEmail(String email) {
+        return adminRepository.findByEmail(email);
     }
     
 }

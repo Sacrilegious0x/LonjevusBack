@@ -5,8 +5,10 @@
 package cr.ac.ucr.ie.Lonjevus.Controller;
 
 import cr.ac.ucr.ie.Lonjevus.domain.Caregiver;
+import cr.ac.ucr.ie.Lonjevus.domain.Role;
 import cr.ac.ucr.ie.Lonjevus.domain.Schedule;
 import cr.ac.ucr.ie.Lonjevus.service.ICaregiverService;
+import cr.ac.ucr.ie.Lonjevus.service.IRoleService;
 import cr.ac.ucr.ie.Lonjevus.service.IScheduleService;
 import cr.ac.ucr.ie.Lonjevus.service.LocalStorageService;
 import java.util.Collections;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,13 +44,16 @@ public class CaregiverController {
     private IScheduleService scheduleService;
     @Autowired
     private LocalStorageService localStorageService;
-
+    @Autowired
+    private IRoleService roleService;
+    
+    @PreAuthorize("hasAuthority('PERMISSION_CUIDADORES_VIEW')")
     @GetMapping("/listCaregiver")
     public Map getAll() {
         List<Caregiver> caregivers = caregiverService.getAll(); 
         return Collections.singletonMap("data", caregivers);
     }
-
+    @PreAuthorize("hasAuthority('PERMISSION_CUIDADORES_CREATE')")
     @PostMapping(value = "/addCaregiver", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> addCaregiver(@RequestPart("caregiverData") Caregiver caregiver,
             @RequestPart(value = "photo", required = false) MultipartFile photoFile) {
@@ -60,7 +66,11 @@ public class CaregiverController {
                 String photoPath = localStorageService.saveCaregiverPhoto(photoFile);               
                 caregiver.setPhotoUrl(photoPath);
             }
-
+            if(caregiver.getRol()==null){
+                Role rol = roleService.getById(2);
+                caregiver.setRol(rol);
+            }
+           
             caregiverService.save(caregiver);
             return ResponseEntity.ok("Cuidador creado exitosamente");
         } catch (Exception e) {
@@ -68,7 +78,7 @@ public class CaregiverController {
                     .body("Error al crear trabajador");
         }
     }
-
+    @PreAuthorize("hasAuthority('PERMISSION_CUIDADORES_UPDATE')")
     @PostMapping(value = "/updateCaregiver/{id}",  consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> updateCaregiver(@RequestPart("caregiverData") Caregiver c,
             @RequestPart(value = "photo", required = false) MultipartFile photoFile) {
@@ -89,7 +99,7 @@ public class CaregiverController {
         
          
     }
-
+    @PreAuthorize("hasAuthority('PERMISSION_CUIDADORES_DELETE')")
     @DeleteMapping("/deleteCaregiver/{id}")
     public ResponseEntity<String> deleteCaregiver(@PathVariable int id) {
          try {
@@ -102,7 +112,7 @@ public class CaregiverController {
                     .body("Error al eliminar el trabajador");
         }
     }
-
+    @PreAuthorize("hasAuthority('PERMISSION_CUIDADORES_VIEW')")
     @GetMapping("getcaregiverById/{id}")
     public Caregiver getById(@PathVariable int id) {
         Caregiver c = caregiverService.getById(id);

@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.OneToOne;
 
@@ -21,13 +22,8 @@ import jakarta.persistence.OneToOne;
  * @author User
  */
 @MappedSuperclass
-<<<<<<< HEAD
 public class Person {
 
-=======
-public abstract class Person {
->>>>>>> developer
-    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -49,6 +45,10 @@ public abstract class Person {
     @OneToOne
     @JoinColumn(name = "scheduleID")
     private Schedule schedule;
+    
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role rol;
     
     public Person(){
         
@@ -125,6 +125,13 @@ public abstract class Person {
     public void setSchedule(Schedule schedule) {
         this.schedule = schedule;
     }
- 
+
+    public Role getRol() {
+        return rol;
+    }
+
+    public void setRol(Role rol) {
+        this.rol = rol;
+    }
         
 }

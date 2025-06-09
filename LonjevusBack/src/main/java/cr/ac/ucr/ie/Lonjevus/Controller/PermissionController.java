@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,12 +31,14 @@ public class PermissionController {
     private IPermissionService permissionService;
 
     // Obtener todos los permisos
+    @PreAuthorize("hasAuthority('PERMISSION_PERMISOS_VIEW')")
     @RequestMapping("/listss")
     public Map getAllPermissions() {
         return Collections.singletonMap("permissions", permissionService.getAllPermissions());
     }
 
     // Obtener permiso por ID
+    @PreAuthorize("hasAuthority('PERMISSION_PERMISOS_VIEW')")
     @GetMapping("/list/{roleId}")
     public List<Permission> getPermissionsByRole(@PathVariable int roleId) {
         
@@ -45,15 +48,16 @@ public class PermissionController {
 
 
     // Crear o actualizar un permiso
+    @PreAuthorize("hasAuthority('PERMISSION_PERMISOS_CREATE') or hasAuthority('PERMISSION_PERMISOS_UPDATE')")
     @PostMapping("/save/{roleId}")
-    public ResponseEntity<Void> createOrUpdatePermission(@PathVariable int roleId,
+    public ResponseEntity<List<Permission>> createOrUpdatePermission(@PathVariable int roleId,
             @RequestBody List<Permission> perms) {
        
         perms.forEach(perm -> perm.setRoleId(roleId));
         
         perms.forEach(perm -> permissionService.save(perm));
-        
-        return ResponseEntity.ok().build();
+        List<Permission> updatedPermissions = permissionService.findByRoleId(roleId);
+        return ResponseEntity.ok(updatedPermissions);
     }
 
 
