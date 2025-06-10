@@ -1,16 +1,13 @@
 package cr.ac.ucr.ie.Lonjevus.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
-@Table(name = "inventory") 
+@Table(name = "inventory")
+@SQLDelete(sql = "UPDATE inventory SET isActive = false WHERE id = ?")
+@Where(clause = "isActive = true")
 public class Inventory {
 
     @Id
@@ -21,32 +18,35 @@ public class Inventory {
 
     private String category;
 
-    @Column(name = "photo_url")
+    @Column(name = "photo")
     private String photoURL;
 
     @Column(name = "isActive")
-    private Boolean activo;
+    private Boolean isActive;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "id") 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "productId", referencedColumnName = "id")
     private Product product;
 
-    @ManyToOne
-    @JoinColumn(name = "purchase_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "purchaseId", referencedColumnName = "id")
     private Purchase purchase;
 
+    // --- Constructores ---
     public Inventory() {}
 
-    public Inventory(Integer id, Integer quantity, String category, String photoURL, Boolean activo, Product product, Purchase purchase) {
+    public Inventory(Integer id, Integer quantity, String category, String photoURL, Boolean isActive,
+                     Product product, Purchase purchase) {
         this.id = id;
         this.quantity = quantity;
         this.category = category;
         this.photoURL = photoURL;
-        this.activo = activo;
+        this.isActive = isActive;
         this.product = product;
         this.purchase = purchase;
     }
 
+    // --- Getters y Setters ---
     public Integer getId() {
         return id;
     }
@@ -79,12 +79,12 @@ public class Inventory {
         this.photoURL = photoURL;
     }
 
-    public Boolean isActivo() {
-        return activo;
+    public Boolean getIsActive() {
+        return isActive;
     }
 
-    public void setActivo(Boolean activo) {
-        this.activo = activo;
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
     }
 
     public Product getProduct() {

@@ -30,19 +30,13 @@ public class Product {
     private Integer id;
     
     private String name;
-
     private BigDecimal price;
-
     private String category;
-
     private LocalDate expirationDate;
-
     private String photoURL;
-
     @Column(name = "isActive")
     private boolean isActive;
     
-
     @ManyToOne
     @JoinColumn(name = "unitId", nullable = false)
     private Unit unit;
@@ -62,9 +56,7 @@ public class Product {
         this.photoURL = photoURL;
         this.unit = unit;
         this.supplier = supplier;
-
         this.isActive=isActive;
-
     }
 
     public Integer getId() {
@@ -103,7 +95,6 @@ public class Product {
         return isActive;
     }
    
-
     public void setId(Integer id) {
         this.id = id;
     }
@@ -112,11 +103,9 @@ public class Product {
         this.name = name;
     }
 
-
     public void setPrice(BigDecimal price) {
         this.price = price;
     }
-
 
     public void setCategory(String category) {
         this.category = category;
@@ -125,7 +114,6 @@ public class Product {
     public void setExpirationDate(LocalDate expirationDate) {
         this.expirationDate = expirationDate;
     }
-
 
     public void setPhotoURL(String photoURL) {
         this.photoURL = photoURL;
