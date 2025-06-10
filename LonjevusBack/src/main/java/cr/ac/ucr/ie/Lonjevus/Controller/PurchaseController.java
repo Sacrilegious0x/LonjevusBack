@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -23,12 +24,12 @@ public class PurchaseController {
     public PurchaseController(IPurchaseService purchaseService) {
         this.purchaseService = purchaseService;
     }
-
+    @PreAuthorize("hasAuthority('PERMISSION_COMPRAS_VIEW')")
     @GetMapping("/all")
     public List<Purchase> getAllPurchases() {
         return purchaseService.getAll();
     }
-
+    @PreAuthorize("hasAuthority('PERMISSION_COMPRAS_CREATE')")
     @PostMapping("/add")
     public ResponseEntity<?> addPurchase(@RequestBody Purchase purchase) {
         try {
@@ -39,7 +40,7 @@ public class PurchaseController {
             return ResponseEntity.status(500).body("{\"message\": \"Error al registrar la compra\"}");
         }
     }
-
+    @PreAuthorize("hasAuthority('PERMISSION_COMPRAS_VIEW')")
     @GetMapping("/{id}")
     public ResponseEntity<?> getPurchaseById(@PathVariable String id) {
         try {
@@ -49,7 +50,7 @@ public class PurchaseController {
             return ResponseEntity.status(404).body("Compra no encontrada");
         }
     }
-
+    @PreAuthorize("hasAuthority('PERMISSION_COMPRAS_UPDATE')")
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updatePurchase(@PathVariable String id, @RequestBody Purchase purchase) {
         try {
@@ -59,7 +60,7 @@ public class PurchaseController {
             return ResponseEntity.status(500).body("Error al actualizar");
         }
     }
-
+    @PreAuthorize("hasAuthority('PERMISSION_COMPRAS_DELETE')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> deletePurchase(@PathVariable String id) {
         purchaseService.delete(id);

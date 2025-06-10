@@ -47,6 +47,8 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll() // El login es público
                 .requestMatchers(HttpMethod.POST, "/visit/addVisit").permitAll()
+                .requestMatchers(HttpMethod.GET, "/public-list").permitAll()
+                .requestMatchers("/photos/**").permitAll()
                 .anyRequest().authenticated() // El resto es privado
             )
             .authenticationProvider(authenticationProvider())

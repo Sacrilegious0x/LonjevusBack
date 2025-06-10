@@ -2,10 +2,12 @@ package cr.ac.ucr.ie.Lonjevus.Controller;
 
 import cr.ac.ucr.ie.Lonjevus.domain.Resident;
 import cr.ac.ucr.ie.Lonjevus.domain.ResidentContact;
+import cr.ac.ucr.ie.Lonjevus.domain.ResidentPublicDTO;
 import cr.ac.ucr.ie.Lonjevus.service.IResidentContactService;
 import cr.ac.ucr.ie.Lonjevus.service.IResidentService;
 import cr.ac.ucr.ie.Lonjevus.service.LocalStorageService;
 import java.time.LocalDate;
+import java.util.LinkedList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -126,5 +128,19 @@ public class ResidentController {
     public String updateContact(@RequestBody ResidentContact r) {
         contactService.update(r.getId(), r);
         return "Contacto actualizado";
+    }
+    
+    @GetMapping("/public-list")
+    public List<ResidentPublicDTO> getPublicListOfResidents() {
+        List<Resident> residents = service.getList();
+        List<ResidentPublicDTO> list = new LinkedList<>();
+        for(Resident r: residents){
+            ResidentPublicDTO rp = new ResidentPublicDTO();
+            rp.setId(r.getId());
+            rp.setName(r.getName());
+            rp.setNumberRoom(r.getNumberRoom());
+            list.add(rp);
+        }          
+        return list;
     }
 }

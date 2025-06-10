@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,12 +25,13 @@ public class InventoryController {
 
     @Autowired
     private LocalStorageService localStorageService;
-
+    
+    @PreAuthorize("hasAuthority('PERMISSION_INVENTARIO_VIEW')")
     @GetMapping("/all")
     public Map<String, Object> getList() {
         return Collections.singletonMap("inventory", service.getAll());
     }
-
+    @PreAuthorize("hasAuthority('PERMISSION_INVENTARIO_CREATE')")
     @PostMapping(path = "/save", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Map<String, Object> saveInventory(
             @RequestParam("quantity") int quantity,
@@ -57,7 +59,7 @@ public class InventoryController {
         service.save(inventory);
         return getList();
     }
-
+    @PreAuthorize("hasAuthority('PERMISSION_INVENTARIO_UPDATE')")
     @PostMapping(path = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Map<String, Object> updateInventory(
             @RequestParam("id") int id,
@@ -90,18 +92,19 @@ public class InventoryController {
         service.save(inventory);
         return getList();
     }
-
+    @PreAuthorize("hasAuthority('PERMISSION_INVENTARIO_DELETE')")
     @DeleteMapping("/delete")
     public Map<String, Object> deleteInventory(@RequestParam int id) {
         service.delete(id);
         return getList();
     }
-
+    
+    @PreAuthorize("hasAuthority('PERMISSION_INVENTARIO_VIEW')")
     @GetMapping("/getById")
     public Inventory getInventoryById(@RequestParam int id) {
         return service.getById(id);
     }
-
+    @PreAuthorize("hasAuthority('PERMISSION_INVENTARIO_VIEW')")
     @GetMapping("/expiration")
     public Map<String, Object> getByExpirationDate(@RequestParam("date") String date) {
         LocalDate expirationDate = LocalDate.parse(date);

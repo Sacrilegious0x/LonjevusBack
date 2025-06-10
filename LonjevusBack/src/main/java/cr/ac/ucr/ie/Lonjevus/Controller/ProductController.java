@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,12 +42,12 @@ public class ProductController {
 
     @Autowired
     private ISupplierService supplierService;
-
+    @PreAuthorize("hasAuthority('PERMISSION_PRODUCTOS_VIEW')")
     @RequestMapping("/list")
     public Map<String, Object> getList() {
         return Collections.singletonMap("products", productService.getAllProducts());
     }
-
+    @PreAuthorize("hasAuthority('PERMISSION_PRODUCTOS_CREATE')")
     @PostMapping(path = "/save", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Map<String, Object> saveProduct(
             @RequestParam("name") String name,
@@ -79,18 +80,18 @@ public class ProductController {
         productService.save(product);
         return getList();
     }
-
+    @PreAuthorize("hasAuthority('PERMISSION_PRODUCTOS_DELETE')")
     @DeleteMapping("/delete")
     public Map<String, Object> deleteProduct(@RequestParam int id) {
         productService.delete(id);
         return getList();
     }
-
+    @PreAuthorize("hasAuthority('PERMISSION_PRODUCTOS_VIEW')")
     @GetMapping("/getById")
     public Product getProductById(@RequestParam int id) {
         return productService.getById(id);
     }
-
+    @PreAuthorize("hasAuthority('PERMISSION_PRODUCTOS_UPDATE')")
     @PostMapping(path = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Map<String, Object> updateProduct(
             @RequestParam("id") int id,
@@ -133,7 +134,7 @@ public class ProductController {
         return getList();
     }
 
-    
+    @PreAuthorize("hasAuthority('PERMISSION_PRODUCTOS_VIEW')")
     @RequestMapping("/units/list")
     public Map<String, Object> getUnitList() {
         return Collections.singletonMap("units", unitService.getAllUnits());

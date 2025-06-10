@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping("/api/billing")
@@ -18,6 +19,7 @@ public class BillingController {
     private IBillingService billingService;
 
     // Guardar nueva factura
+    @PreAuthorize("hasAuthority('PERMISSION_FACTURAS_CREATE')")
     @PostMapping
     public ResponseEntity<?> save(@RequestBody Billing billing) {
         try {
@@ -29,12 +31,14 @@ public class BillingController {
     }
 
     // Obtener todas las facturas activas
+    @PreAuthorize("hasAuthority('PERMISSION_FACTURAS_VIEW')")
     @GetMapping("/active")
     public ResponseEntity<List<Billing>> getAllActive() {
         return ResponseEntity.ok(billingService.getAllActive());
     }
 
     // Obtener factura por ID
+    @PreAuthorize("hasAuthority('PERMISSION_FACTURAS_VIEW')")
     @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable Integer id) {
         try {
@@ -46,6 +50,7 @@ public class BillingController {
     }
 
     // Actualizar factura existente
+    @PreAuthorize("hasAuthority('PERMISSION_FACTURAS_UPDATE')")
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody Billing billing) {
         try {
@@ -57,6 +62,7 @@ public class BillingController {
     }
 
     // Eliminar (lógico) factura
+    @PreAuthorize("hasAuthority('PERMISSION_FACTURAS_DELETE')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Integer id) {
         try {
@@ -68,6 +74,7 @@ public class BillingController {
     }
 
     // Buscar por fecha
+    @PreAuthorize("hasAuthority('PERMISSION_FACTURAS_VIEW')")
     @GetMapping("/date/{date}")
     public ResponseEntity<List<Billing>> getByDate(@PathVariable String date) {
         LocalDate localDate = LocalDate.parse(date);
@@ -75,6 +82,7 @@ public class BillingController {
     }
 
     // Buscar por período
+    @PreAuthorize("hasAuthority('PERMISSION_FACTURAS_VIEW')")
     @GetMapping("/period/{period}")
     public ResponseEntity<List<Billing>> getByPeriod(@PathVariable String period) {
         return ResponseEntity.ok(billingService.findByPeriod(period));

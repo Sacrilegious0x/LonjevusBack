@@ -9,6 +9,7 @@ import cr.ac.ucr.ie.Lonjevus.service.IActivityService;
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,12 +29,13 @@ public class ActivityController {
 
     @Autowired
     private IActivityService service;
-
+    
+    @PreAuthorize("hasAuthority('PERMISSION_ACTIVIDADES_VIEW')")
     @GetMapping("/activities")
     public List<Activity> getActivities() {
         return service.getAll();
     }
-
+    @PreAuthorize("hasAuthority('PERMISSION_ACTIVIDADES_CREATE')")
     @PostMapping("/addActivity")
     @ResponseBody
     public String addActivity(@RequestBody Activity a) {
@@ -41,33 +43,33 @@ public class ActivityController {
         service.save(a);
         return "Actividad agregada";
     }
-
+    @PreAuthorize("hasAuthority('PERMISSION_ACTIVIDADES_DELETE')")
     @DeleteMapping("/deleteActivity")
     public String deleteActivity(@RequestParam Integer id) {
         service.delete(id);
         return "actividad eliminada";
     }
-
+    @PreAuthorize("hasAuthority('PERMISSION_ACTIVIDADES_UPDATE')")
     @PostMapping("/updateActivity")
     public String updateActivity(@RequestParam int id, @RequestBody Activity activity) {
         service.update(id, activity);
         return ("Actividad actualizada .");
     }
-
+    @PreAuthorize("hasAuthority('PERMISSION_ACTIVIDADES_RESIDENTES_CREATE')") //TABLA RESIDENT_ACTIVITY
     @PostMapping("/addResidentToActivity")
     public String addResidentToActivity(@RequestParam int activityId, @RequestParam int residentId) {
 
         service.addResidentToActivity(residentId, activityId);
         return ("Residente agregado a la actividad");
     }
-    
+    @PreAuthorize("hasAuthority('PERMISSION_ACTIVIDADES_RESIDENTES_DELETE')")
     @DeleteMapping("/deleteResidentFromActivity")
     public String deleteResidentFromActivity(@RequestParam int activityId, @RequestParam int residentId) {
 
         service.deleteResidentFromActivity(residentId, activityId);
         return ("Residente eliminado a la actividad");
     }
-    
+    @PreAuthorize("hasAuthority('PERMISSION_ACTIVIDADES_RESIDENTES_VIEW')")
     @GetMapping("/getActivitiesByDate")
     public List<Activity> getActivitiesByDate(@RequestParam LocalDate date){
         return service.getByDate(date);
