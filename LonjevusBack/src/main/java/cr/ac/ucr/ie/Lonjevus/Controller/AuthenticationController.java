@@ -5,13 +5,19 @@
 package cr.ac.ucr.ie.Lonjevus.Controller;
 
 import cr.ac.ucr.ie.Lonjevus.Security.JwtUtils;
+import cr.ac.ucr.ie.Lonjevus.domain.Admin;
 import cr.ac.ucr.ie.Lonjevus.domain.AuthenticationRequest;
 import cr.ac.ucr.ie.Lonjevus.domain.AuthenticationResponse;
+import cr.ac.ucr.ie.Lonjevus.domain.Caregiver;
 import cr.ac.ucr.ie.Lonjevus.jpa.UserDetailsJPA;
+import cr.ac.ucr.ie.Lonjevus.repository.ICaregiverRepository;
+import cr.ac.ucr.ie.Lonjevus.service.IAdminService;
+import cr.ac.ucr.ie.Lonjevus.service.ICaregiverService;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,7 +37,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthenticationController {
-    
+    @Autowired
+    private ICaregiverService caregiverService;
+    @Autowired
+    private IAdminService adminService;
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtil;
     private final UserDetailsJPA userDetailsService;
@@ -50,13 +59,41 @@ public class AuthenticationController {
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getEmail());
         final String jwt = jwtUtil.generateToken(userDetails);
+        Map<String, Object> user = new HashMap<>();
+        String email = userDetails.getUsername();
+        Admin admin = adminService.findByEmail(email).orElse(null);
+        if(admin!=null){
+            user.put("id", admin.getId());
+            user.put("identification", admin.getIdentification());
+            user.put("name", admin.getName());
+            user.put("salary", admin.getSalary());
+            user.put("email", email);
+            user.put("schedule", admin.getSchedule());
+            user.put("officeContact", admin.getOfficeContact());
+            user.put("photoUrl", admin.getPhotoUrl());     
+        }else{
+            Caregiver caregiver = caregiverService.findByEmail(email).orElse(null);
+            user.put("id", caregiver.getId());
+            user.put("identification", caregiver.getIdentification());
+            user.put("name", caregiver.getName());  
+            user.put("salary", caregiver.getSalary());
+            user.put("photoUrl", caregiver.getPhotoUrl());
+            user.put("email", email);
+            user.put("schedule", caregiver.getSchedule());
+            user.put("shift", caregiver.getShift());   
+        }
+        
+        
+        
         Map<String, Object> response = new HashMap<>();
+        
         response.put("jwt", jwt);
         response.put("email", userDetails.getUsername());
         List<String> authorities = userDetails.getAuthorities().stream()
                                       .map(GrantedAuthority::getAuthority)
                                       .collect(Collectors.toList());
         response.put("authorities", authorities);
+        response.put("user", user);
         return ResponseEntity.ok(response);
     }
 }

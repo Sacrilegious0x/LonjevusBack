@@ -53,8 +53,9 @@ public class CaregiverServiceJPA implements ICaregiverService {
             caregiver.setSalary(c.getSalary());
             caregiver.setEmail(c.getEmail());
             caregiver.setShift(c.getShift());   
-            //System.out.println("URL DE LA FOTO EN ACTUALIZAR " + c.getPhotoUrl());
-            caregiver.setPhotoUrl(c.getPhotoUrl());
+            if (c.getPhotoUrl() != null && !c.getPhotoUrl().isEmpty()) {
+                caregiver.setPhotoUrl(c.getPhotoUrl());
+            }
             caregiver.setSchedule(c.getSchedule());
             caregiverRepository.save(caregiver);
         }
