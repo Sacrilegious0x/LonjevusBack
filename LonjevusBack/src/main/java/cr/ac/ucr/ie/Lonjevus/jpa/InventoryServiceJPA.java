@@ -26,11 +26,12 @@ public class InventoryServiceJPA implements IInventoryService {
 
         for (Inventory inv : inventoryList) {
             if (inv.getPurchase() != null && inv.getProduct() != null) {
-                // Buscar el productId en los items de la compra
+                
                 inv.getPurchase().getItems().stream()
                         .filter(item -> item.getIdProduct().equals(inv.getProduct().getId()))
                         .findFirst()
                         .ifPresent(item -> {
+                            inv.setExpirationDate(item.getExpirationDate());
                             if (item.getPrice() == null && item.getProduct() != null) {
                                 item.setPrice(item.getProduct().getPrice());
                             }

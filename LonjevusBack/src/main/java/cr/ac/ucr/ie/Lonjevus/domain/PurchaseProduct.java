@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 @Entity
 @Table(name = "purchase_product")
@@ -19,10 +21,11 @@ public class PurchaseProduct implements Serializable {
     @JsonBackReference("purchase-items")
     private Purchase purchase;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("idProduct")
     @JoinColumn(name = "idProduct")
     @JsonBackReference
+    @NotFound(action = NotFoundAction.IGNORE)
     private Product product;
 
     @Column(name = "quantity")
@@ -79,7 +82,9 @@ public class PurchaseProduct implements Serializable {
         if (this.id == null) {
             this.id = new PurchaseProductId();
         }
+        if (product != null && product.getId() != null) {
         this.id.setIdProduct(product.getId());
+    }
     }
 
     public Integer getQuantity() {

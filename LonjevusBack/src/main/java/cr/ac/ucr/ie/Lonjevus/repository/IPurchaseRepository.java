@@ -8,7 +8,6 @@ import java.util.List;
 public interface IPurchaseRepository extends JpaRepository<Purchase, String> {
 
     List<Purchase> findByIsActiveTrue();
-
     List<Purchase> findByIsActiveFalse();
 
 }
