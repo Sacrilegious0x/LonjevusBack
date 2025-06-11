@@ -46,7 +46,6 @@ public class BillingServiceJPA implements IBillingService {
     public void save(Billing billing) {
         billing.setIsActive(true);
 
-        // Generar consecutivo manualmente (ejemplo simple, ajustalo según tu lógica)
         long count = repository.count() + 1;
         String datePart = billing.getDate().toString().replaceAll("-", "");
         String consecutive = String.format("%04d-%s", count, datePart);

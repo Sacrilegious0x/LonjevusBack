@@ -16,22 +16,22 @@ public class RoomServiceJPA implements IRoomService  {
     
     @Override
     public void save(Room room) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        repo.save(room);
     }
 
     @Override
     public List<Room> getAllRooms() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+       return repo.findAll();
     }
 
     @Override
     public void delete(int roomId) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        repo.deleteById(roomId);
     }
 
     @Override
     public Room getById(int roomId) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return repo.findById(roomId).get();
     }
     
 }
