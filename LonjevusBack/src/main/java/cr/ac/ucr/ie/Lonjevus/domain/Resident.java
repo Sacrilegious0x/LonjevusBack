@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import org.hibernate.annotations.Formula;
+import org.hibernate.annotations.Where;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -27,6 +28,7 @@ import org.springframework.format.annotation.DateTimeFormat;
  */
 @Entity
 @Table(name = "resident")
+@Where(clause = "isActive = 1")
 public class Resident {
 
     @Id
