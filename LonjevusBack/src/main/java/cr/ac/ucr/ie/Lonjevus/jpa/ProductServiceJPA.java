@@ -38,6 +38,6 @@ public class ProductServiceJPA implements IProductService {
 
     @Override
     public Product getById(int productId) {
-        return repo.findById(productId).orElse(null); // Mejor manejo si no existe
+        return repo.findById(productId).orElse(null); 
     }
 }

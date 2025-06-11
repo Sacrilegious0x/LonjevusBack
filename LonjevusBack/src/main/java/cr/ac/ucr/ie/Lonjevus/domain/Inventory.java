@@ -1,6 +1,7 @@
 package cr.ac.ucr.ie.Lonjevus.domain;
 
 import jakarta.persistence.*;
+import java.time.LocalDate;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
@@ -32,11 +33,14 @@ public class Inventory {
     @JoinColumn(name = "purchaseId", referencedColumnName = "id")
     private Purchase purchase;
 
-    // --- Constructores ---
-    public Inventory() {}
+    @Transient
+    private LocalDate expirationDate;
+
+    public Inventory() {
+    }
 
     public Inventory(Integer id, Integer quantity, String category, String photoURL, Boolean isActive,
-                     Product product, Purchase purchase) {
+            Product product, Purchase purchase) {
         this.id = id;
         this.quantity = quantity;
         this.category = category;
@@ -46,7 +50,6 @@ public class Inventory {
         this.purchase = purchase;
     }
 
-    // --- Getters y Setters ---
     public Integer getId() {
         return id;
     }
@@ -101,5 +104,13 @@ public class Inventory {
 
     public void setPurchase(Purchase purchase) {
         this.purchase = purchase;
+    }
+
+    public LocalDate getExpirationDate() {
+        return expirationDate;
+    }
+
+    public void setExpirationDate(LocalDate expirationDate) {
+        this.expirationDate = expirationDate;
     }
 }
