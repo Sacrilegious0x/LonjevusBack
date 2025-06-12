@@ -30,7 +30,7 @@ public class ProductServiceJPA implements IProductService {
     public List<Product> getAllProducts() {
         return repo.findAll();
     }
-
+    
     @Override
     public void delete(int productId) {
         repo.deleteById(productId);
@@ -39,5 +39,10 @@ public class ProductServiceJPA implements IProductService {
     @Override
     public Product getById(int productId) {
         return repo.findById(productId).orElse(null); 
+    }
+
+    @Override
+    public void deleteBySupplierId(int supplierId) {
+        repo.deleteAllBySupplierId(supplierId);
     }
 }

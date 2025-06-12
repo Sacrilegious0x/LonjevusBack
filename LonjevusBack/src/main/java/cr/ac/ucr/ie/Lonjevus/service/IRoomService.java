@@ -10,5 +10,6 @@ public interface IRoomService {
     List<Room> getAllRooms();
     void delete(int roomId);
     Room getById(int roomId);
+    boolean checkAndUpdateStatus(int roomId);
     
 }

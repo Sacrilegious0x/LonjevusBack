@@ -12,5 +12,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author JOSHUACALETCESPEDESG
  */
 public interface IResidentRepository extends JpaRepository<Resident, Integer>{
-    
+    long countByNumberRoom(Integer numberRoom);
 }

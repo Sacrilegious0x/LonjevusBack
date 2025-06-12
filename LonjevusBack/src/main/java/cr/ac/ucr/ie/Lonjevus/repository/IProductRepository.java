@@ -6,11 +6,20 @@ package cr.ac.ucr.ie.Lonjevus.repository;
 
 import cr.ac.ucr.ie.Lonjevus.domain.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author Usuario
  */
 public interface IProductRepository extends JpaRepository<Product,Integer> {
+    
+    @Transactional
+    @Modifying
+    @Query("UPDATE Product p SET p.isActive = false WHERE p.supplier.id = :id")      
+    void deleteAllBySupplierId(@Param("id") int id);
     
 }

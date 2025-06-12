@@ -4,9 +4,11 @@ package cr.ac.ucr.ie.Lonjevus.Controller;
 import cr.ac.ucr.ie.Lonjevus.domain.Room;
 import cr.ac.ucr.ie.Lonjevus.service.IRoomService;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +25,9 @@ public class RoomController {
 
     @Autowired
     private IRoomService service;
+    
+    //@Autowired
+    //private IResidentRepository residentRepo;
 
 
     @GetMapping("/list")
@@ -54,5 +59,15 @@ public class RoomController {
     public Map<String, Object> updateRoom(@RequestBody Room room) {
         service.save(room);
         return getList();
+    }
+    
+    @PostMapping("/checkStatusRoom")
+    public ResponseEntity<Map<String, Object>> checkStatusRoom(@RequestParam("id") int roomId) {
+        boolean changed = service.checkAndUpdateStatus(roomId);
+        
+        Map<String, Object> body = new HashMap<>();
+        body.put("changed", changed);
+        body.put("rooms", service.getAllRooms());
+        return ResponseEntity.ok(body);
     }
 }
