@@ -5,6 +5,7 @@
 package cr.ac.ucr.ie.Lonjevus.repository;
 
 import cr.ac.ucr.ie.Lonjevus.domain.Product;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -16,10 +17,15 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Usuario
  */
 public interface IProductRepository extends JpaRepository<Product,Integer> {
+
     
     @Transactional
     @Modifying
     @Query("UPDATE Product p SET p.isActive = false WHERE p.supplier.id = :id")      
     void deleteAllBySupplierId(@Param("id") int id);
     
+
+    List<Product> findByIsActiveTrue();
+
+
 }
