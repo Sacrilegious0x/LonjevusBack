@@ -25,7 +25,7 @@ public class SupplierServiceJPA implements ISupplierService {
 
     @Override
     public List<Supplier> getAllSuppliers() {
-       return repo.findAll();
+       return repo.findByIsActive(true);
     }
 
     @Override

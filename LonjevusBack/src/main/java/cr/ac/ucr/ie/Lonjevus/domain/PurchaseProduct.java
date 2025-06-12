@@ -15,15 +15,15 @@ public class PurchaseProduct implements Serializable {
     @EmbeddedId
     private PurchaseProductId id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("idPurchase")
     @JoinColumn(name = "idPurchase")
     @JsonBackReference("purchase-items")
     private Purchase purchase;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("idProduct")
-    @JoinColumn(name = "idProduct")
+    @JoinColumn(name = "idProduct", insertable = false, updatable = false) 
     @JsonBackReference
     @NotFound(action = NotFoundAction.IGNORE)
     private Product product;

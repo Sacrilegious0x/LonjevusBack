@@ -1,8 +1,12 @@
 package cr.ac.ucr.ie.Lonjevus.jpa;
 
 import cr.ac.ucr.ie.Lonjevus.domain.Inventory;
+import cr.ac.ucr.ie.Lonjevus.domain.Product;
+import cr.ac.ucr.ie.Lonjevus.domain.Purchase;
 import cr.ac.ucr.ie.Lonjevus.repository.IInventoryRepository;
+import cr.ac.ucr.ie.Lonjevus.repository.IProductRepository;
 import cr.ac.ucr.ie.Lonjevus.service.IInventoryService;
+import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +18,8 @@ public class InventoryServiceJPA implements IInventoryService {
 
     @Autowired
     private IInventoryRepository repository;
-
+    @Autowired
+private IProductRepository productRepository;
     @Override
     public void save(Inventory inventory) {
         repository.save(inventory);
@@ -22,23 +27,24 @@ public class InventoryServiceJPA implements IInventoryService {
 
     @Override
     public List<Inventory> getAll() {
-        List<Inventory> inventoryList = repository.findAll();
+     List<Inventory> inventoryList = repository.findAll();
 
         for (Inventory inv : inventoryList) {
-            if (inv.getPurchase() != null && inv.getProduct() != null) {
-                
-                inv.getPurchase().getItems().stream()
+            // Verificamos si la carga automática trajo el producto
+            if (inv.getProduct() != null) {
+                // Si lo trajo, obtenemos el ID para buscarlo sin filtros
+                Product p = productRepository.findProductByIdRegardlessOfStatus(inv.getProduct().getId());
+                inv.setProduct(p); // Reemplazamos con la versión sin filtrar
+
+                // Tu lógica para la fecha de expiración
+                if (inv.getPurchase() != null) {
+                    inv.getPurchase().getItems().stream()
                         .filter(item -> item.getIdProduct().equals(inv.getProduct().getId()))
                         .findFirst()
-                        .ifPresent(item -> {
-                            inv.setExpirationDate(item.getExpirationDate());
-                            if (item.getPrice() == null && item.getProduct() != null) {
-                                item.setPrice(item.getProduct().getPrice());
-                            }
-                        });
+                        .ifPresent(item -> inv.setExpirationDate(item.getExpirationDate()));
+                }
             }
         }
-
         return inventoryList;
     }
 

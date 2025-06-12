@@ -14,12 +14,19 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
         
 import org.hibernate.annotations.SQLDelete;
 
 @Entity
 @Table(name="product")
 @SQLDelete(sql = "UPDATE product SET isActive = 0 WHERE id = ?")
+// --- AÑADE ESTAS ANOTACIONES ---
+@FilterDef(name = "activeProductFilter", parameters = @ParamDef(name = "isActive", type = Boolean.class))
+@Filter(name = "activeProductFilter", condition = "is_active = :isActive")
+// --- FIN DE ANOTACIONES A AÑADIR ---
 public class Product {
     
     

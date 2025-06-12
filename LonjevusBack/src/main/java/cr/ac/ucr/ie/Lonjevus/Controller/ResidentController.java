@@ -3,8 +3,10 @@ package cr.ac.ucr.ie.Lonjevus.Controller;
 import cr.ac.ucr.ie.Lonjevus.domain.Resident;
 import cr.ac.ucr.ie.Lonjevus.domain.ResidentContact;
 import cr.ac.ucr.ie.Lonjevus.domain.ResidentPublicDTO;
+import cr.ac.ucr.ie.Lonjevus.domain.Room;
 import cr.ac.ucr.ie.Lonjevus.service.IResidentContactService;
 import cr.ac.ucr.ie.Lonjevus.service.IResidentService;
+import cr.ac.ucr.ie.Lonjevus.service.IRoomService;
 import cr.ac.ucr.ie.Lonjevus.service.LocalStorageService;
 import java.time.LocalDate;
 import java.util.LinkedList;
@@ -35,7 +37,9 @@ public class ResidentController {
 
     @Autowired
     private IResidentContactService contactService;
-
+    
+    @Autowired
+    private IRoomService roomService;
     private static LocalStorageService localS = new LocalStorageService();
     
     @PreAuthorize("hasAuthority('PERMISSION_RESIDENTES_VIEW')")
@@ -140,9 +144,14 @@ public class ResidentController {
         List<ResidentPublicDTO> list = new LinkedList<>();
         for(Resident r: residents){
             ResidentPublicDTO rp = new ResidentPublicDTO();
+            Room room = roomService.getById(r.getNumberRoom());
+            if(room!=null){
+                rp.setNumberRoom(room.getRoomNumber()+"");
+            }else{
+                rp.setNumberRoom("N/D");
+            }
             rp.setId(r.getId());
             rp.setName(r.getName());
-            rp.setNumberRoom(r.getNumberRoom());
             list.add(rp);
         }          
         return list;

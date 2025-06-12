@@ -1,5 +1,6 @@
 package cr.ac.ucr.ie.Lonjevus.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import org.hibernate.annotations.SQLDelete;
@@ -26,8 +27,13 @@ public class Inventory {
     private Boolean isActive;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "productId", referencedColumnName = "id")
+    //@JoinColumn(name = "productId", referencedColumnName = "id")
+    @JsonManagedReference
+    @JoinColumn(name = "productId", referencedColumnName = "id", insertable = false, updatable = false)
     private Product product;
+    
+    @Column(name = "productId")
+    private Integer productId;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "purchaseId", referencedColumnName = "id")
@@ -57,7 +63,13 @@ public class Inventory {
     public void setId(Integer id) {
         this.id = id;
     }
+    public Integer getProductId() {
+        return productId;
+    }
 
+    public void setProductId(Integer productId) {
+        this.productId = productId;
+    }
     public Integer getQuantity() {
         return quantity;
     }

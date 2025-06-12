@@ -29,7 +29,7 @@ import org.springframework.format.annotation.DateTimeFormat;
  */
 @Entity
 @Table(name = "resident")
-@Where(clause = "isActive = 1")
+//@Where(clause = "isActive = 1")
 public class Resident {
 
     @Id
@@ -104,13 +104,13 @@ public class Resident {
         this.name = name;
     }
 
-//    public Integer getAge() {
-//        return age;
-//    }
-//
-//    public void setAge(Integer age) {
-//        this.age = age;
-//    }
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
 
     public String getHealthStatus() {
         return healthStatus;

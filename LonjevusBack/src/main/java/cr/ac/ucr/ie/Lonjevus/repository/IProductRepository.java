@@ -23,6 +23,8 @@ public interface IProductRepository extends JpaRepository<Product,Integer> {
     @Modifying
     @Query("UPDATE Product p SET p.isActive = false WHERE p.supplier.id = :id")      
     void deleteAllBySupplierId(@Param("id") int id);
+    @Query("SELECT p FROM Product p WHERE p.id = :id")
+    Product findProductByIdRegardlessOfStatus(@Param("id") int id);
     
 
     List<Product> findByIsActiveTrue();

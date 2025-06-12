@@ -37,15 +37,15 @@ public class RoomServiceJPA implements IRoomService  {
 
     @Override
     public Room getById(int roomId) {
-        return repo.findById(roomId).get();
+        return repo.findById(roomId).orElse(null);
     }
     
     @Override
     @Transactional
     public boolean checkAndUpdateStatus(int roomId) {
-        //long ocuppied = residentRepo.countByNumberRoom(roomId);
+        long ocuppied = residentRepo.countByNumberRoom(roomId);
         
-        long ocuppied = 6;
+        //long ocuppied = 6;
 
         Room room = repo.findById(roomId)
             .orElseThrow(() -> new EntityNotFoundException("Room no encontrada: " + roomId));
@@ -56,7 +56,11 @@ public class RoomServiceJPA implements IRoomService  {
             repo.save(room);
             return true;  
         }
+        room.setStatusRoom("Disponible");
+        repo.save(room);
         return false;     
     }
+    
+    
     
 }

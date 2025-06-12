@@ -61,14 +61,14 @@ public class ActivityController {
         service.update(activity.getId(), activity);
         return ("Actividad actualizada .");
     }
-    @PreAuthorize("hasAuthority('PERMISSION_ACTIVIDADES_RESIDENTES_CREATE')") //TABLA RESIDENT_ACTIVITY
+    @PreAuthorize("hasAuthority('PERMISSION_ACTIVIDADES_CREATE')") //TABLA RESIDENT_ACTIVITY
     @PostMapping("/addResidentToActivity")
     public String addResidentToActivity(@RequestParam int activityId, @RequestParam int residentId) {
 
         service.addResidentToActivity(residentId, activityId);
         return ("Residente agregado a la actividad");
     }
-    @PreAuthorize("hasAuthority('PERMISSION_ACTIVIDADES_RESIDENTES_DELETE')")
+    @PreAuthorize("hasAuthority('PERMISSION_ACTIVIDADES_DELETE')")
     @DeleteMapping("/deleteResidentFromActivity")
     public String deleteResidentFromActivity(@RequestParam int activityId, @RequestParam int residentId) {
 

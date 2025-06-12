@@ -11,7 +11,7 @@ package cr.ac.ucr.ie.Lonjevus.domain;
 public class ResidentPublicDTO {
     private int id;
     private String name;
-    private int numberRoom;
+    private String numberRoom;
 
     public ResidentPublicDTO() {
     }
@@ -32,11 +32,11 @@ public class ResidentPublicDTO {
         this.name = name;
     }
 
-    public int getNumberRoom() {
+    public String getNumberRoom() {
         return numberRoom;
     }
 
-    public void setNumberRoom(int numberRoom) {
+    public void setNumberRoom(String numberRoom) {
         this.numberRoom = numberRoom;
     }
     

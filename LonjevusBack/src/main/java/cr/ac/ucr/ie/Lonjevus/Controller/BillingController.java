@@ -2,6 +2,7 @@ package cr.ac.ucr.ie.Lonjevus.controller;
 
 import cr.ac.ucr.ie.Lonjevus.domain.Billing;
 import cr.ac.ucr.ie.Lonjevus.service.IBillingService;
+import cr.ac.ucr.ie.Lonjevus.service.IResidentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,9 @@ public class BillingController {
 
     @Autowired
     private IBillingService billingService;
+    
+    @Autowired
+    private IResidentService residentService;
 
     // Guardar nueva factura
     @PreAuthorize("hasAuthority('PERMISSION_FACTURAS_CREATE')")

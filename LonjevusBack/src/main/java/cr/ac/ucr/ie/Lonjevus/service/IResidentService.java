@@ -16,5 +16,8 @@ public interface IResidentService {
     List<Resident> getList();
     void delete(int id);
     void update(int id, Resident resident);
-    Resident getById(int id); 
+    Resident getById(int id);
+    long countByNumberRoom(Integer numberRoom);
+    List<Resident> findByIsActive(boolean isActive);
+    
 }

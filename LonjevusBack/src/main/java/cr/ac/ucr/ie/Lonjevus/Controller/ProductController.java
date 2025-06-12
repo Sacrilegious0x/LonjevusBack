@@ -139,7 +139,7 @@ public class ProductController {
     public Map<String, Object> getUnitList() {
         return Collections.singletonMap("units", unitService.getAllUnits());
     }
-    
+    @PreAuthorize("hasAuthority('PERMISSION_PRODUCTOS_DELETE')")
     @DeleteMapping("/deleteBySupplier")
     public Map<String, Object> deleteProductBySupplierId(@RequestParam int id) {
         productService.deleteBySupplierId(id);

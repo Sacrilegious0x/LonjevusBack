@@ -9,6 +9,7 @@ import cr.ac.ucr.ie.Lonjevus.repository.IInventoryRepository;
 import cr.ac.ucr.ie.Lonjevus.repository.IProductRepository;
 import cr.ac.ucr.ie.Lonjevus.repository.IPurchaseRepository;
 import cr.ac.ucr.ie.Lonjevus.service.IPurchaseService;
+import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -102,6 +103,8 @@ public class PurchaseServiceJPA implements IPurchaseService {
 
             for (int i = 0; i < item.getQuantity(); i++) {
                 Inventory inv = new Inventory();
+                inv.setProductId(product.getId());
+                inv.setExpirationDate(product.getExpirationDate());
                 inv.setProduct(product);
                 inv.setQuantity(1);
                 inv.setIsActive(true);

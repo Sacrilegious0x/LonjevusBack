@@ -48,8 +48,10 @@ public class RoleController {
     
     
     public void saveAllPermission(int roleId){
-      String [] modules = {"Inventario","Proveedor","Producto","Residente"
-      ,"Cuidador","Habitación","Horario","Tarea"};
+      String[] modules = {"Actividades","Administradores",  "Compras","Contactos","Cuidadores",
+    "Facturas","Habitaciones","Horarios","Inventario","Permisos","Productos","Proveedores","Residentes","Roles","Tareas",
+    "Unidad","Visitas"
+    };
       
         for (String module : modules) {          
             permService.save(new Permission(roleId,module,false,false,false,false));
