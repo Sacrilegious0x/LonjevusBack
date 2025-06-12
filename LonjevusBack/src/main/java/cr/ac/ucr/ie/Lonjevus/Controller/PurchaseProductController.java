@@ -8,6 +8,7 @@ import cr.ac.ucr.ie.Lonjevus.domain.PurchaseProduct;
 import cr.ac.ucr.ie.Lonjevus.repository.IPurchaseProductRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -26,7 +27,7 @@ public class PurchaseProductController {
 
     @Autowired
     private IPurchaseProductRepository repository;
-
+    @PreAuthorize("hasAuthority('PERMISSION_COMPRAS_VIEW')") //pendiente tabla/modulo
     @GetMapping("/all")
     public List<PurchaseProduct> getAllPurchaseProducts() {
         return repository.findAll();

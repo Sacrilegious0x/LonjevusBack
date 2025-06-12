@@ -61,13 +61,9 @@ public class InventoryController {
         service.save(inventory);
         return getList();
     }
-<<<<<<< HEAD
     @PreAuthorize("hasAuthority('PERMISSION_INVENTARIO_UPDATE')")
-    @PostMapping(path = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-=======
-
+    //@PostMapping(path = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PutMapping(path = "/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
->>>>>>> developer
     public Map<String, Object> updateInventory(
             @RequestParam("id") int id,
             @RequestParam("quantity") int quantity,

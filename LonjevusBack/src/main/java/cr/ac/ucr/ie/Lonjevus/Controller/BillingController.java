@@ -55,12 +55,8 @@ public class BillingController {
         }
     }
 
-<<<<<<< HEAD
     // Actualizar factura existente
     @PreAuthorize("hasAuthority('PERMISSION_FACTURAS_UPDATE')")
-=======
-    // Actualizar factura
->>>>>>> developer
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody Billing billing) {
         try {
@@ -71,12 +67,8 @@ public class BillingController {
         }
     }
 
-<<<<<<< HEAD
     // Eliminar (lógico) factura
     @PreAuthorize("hasAuthority('PERMISSION_FACTURAS_DELETE')")
-=======
-    // Eliminar lógico
->>>>>>> developer
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Integer id) {
         try {

@@ -27,14 +27,11 @@ public class RoleController {
     
     @Autowired
     private IRoleService roleService;
-<<<<<<< HEAD
-    @PreAuthorize("hasAuthority('PERMISSION_ROLES_VIEW')")
-=======
+    
     
     @Autowired
     private IPermissionService permService;
-    
->>>>>>> developer
+    @PreAuthorize("hasAuthority('PERMISSION_ROLES_VIEW')")
     @RequestMapping("/list")
     public Map getAllPermissions() {
         return Collections.singletonMap("roles", roleService.getAllRoles());
@@ -47,13 +44,12 @@ public class RoleController {
         return getAllPermissions();
     }
     
+    
     public void saveAllPermission(int roleId){
-        
       String [] modules = {"Inventario","Proveedor","Producto","Residente"
       ,"Cuidador","Habitación","Horario","Tarea"};
       
-        for (String module : modules) {
-            
+        for (String module : modules) {          
             permService.save(new Permission(roleId,module,false,false,false,false));
             
         }

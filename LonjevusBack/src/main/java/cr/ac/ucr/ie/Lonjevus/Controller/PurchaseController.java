@@ -29,16 +29,12 @@ public class PurchaseController {
     public List<Purchase> getAllPurchases() {
         return purchaseService.getAll();
     }
-<<<<<<< HEAD
-    @PreAuthorize("hasAuthority('PERMISSION_COMPRAS_CREATE')")
-=======
-
+    @PreAuthorize("hasAuthority('PERMISSION_COMPRAS_VIEW')")
     @GetMapping("/inactive")
     public List<Purchase> getInactivePurchases() {
         return purchaseService.getAllInactive();
     }
-
->>>>>>> developer
+    @PreAuthorize("hasAuthority('PERMISSION_COMPRAS_CREATE')")
     @PostMapping("/add")
     public ResponseEntity<?> addPurchase(@RequestBody Purchase purchase) {
         try {

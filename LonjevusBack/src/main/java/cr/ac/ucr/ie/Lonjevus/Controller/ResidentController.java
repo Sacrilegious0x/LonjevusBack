@@ -37,12 +37,8 @@ public class ResidentController {
     private IResidentContactService contactService;
 
     private static LocalStorageService localS = new LocalStorageService();
-<<<<<<< HEAD
     
     @PreAuthorize("hasAuthority('PERMISSION_RESIDENTES_VIEW')")
-=======
-
->>>>>>> developer
     @GetMapping("/residents")
     public List<Resident> getResidents() {
         return service.getList();

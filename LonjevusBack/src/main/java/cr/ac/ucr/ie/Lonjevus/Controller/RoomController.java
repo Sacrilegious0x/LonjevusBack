@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,32 +25,32 @@ public class RoomController {
     @Autowired
     private IRoomService service;
 
-
+    @PreAuthorize("hasAuthority('PERMISSION_HABITACIONES_VIEW')")
     @GetMapping("/list")
     public Map<String, Object> getList() {
         return Collections.singletonMap("rooms", service.getAllRooms());
     }
 
-
+    @PreAuthorize("hasAuthority('PERMISSION_HABITACIONES_CREATE')")
     @PostMapping(path = "/save")
     public Map<String, Object> saveRoom(@RequestBody Room room) {
         service.save(room);
         return getList();
     }
-
+    @PreAuthorize("hasAuthority('PERMISSION_HABITACIONES_DELETE')")
     @DeleteMapping("/delete")
     public Map<String, Object> deleteRoom(@RequestParam int id) {
         service.delete(id);
         return getList();
     }
 
-
+    @PreAuthorize("hasAuthority('PERMISSION_HABITACIONES_VIEW')")
     @GetMapping("/getById")
     public Room getRoomById(@RequestParam int id) {
         return service.getById(id);
     }
 
-
+   @PreAuthorize("hasAuthority('PERMISSION_HABITACIONES_UPDATE')")
     @PostMapping(path = "/update")
     public Map<String, Object> updateRoom(@RequestBody Room room) {
         service.save(room);

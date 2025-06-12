@@ -50,16 +50,12 @@ public class ActivityController {
         service.delete(id);
         return "actividad eliminada";
     }
-<<<<<<< HEAD
     @PreAuthorize("hasAuthority('PERMISSION_ACTIVIDADES_UPDATE')")
-=======
-    
     @GetMapping("/findActivity")
     public Activity getActivityByDate(@RequestParam int id){
         return service.getById(id);
     }
 
->>>>>>> developer
     @PostMapping("/updateActivity")
     public String updateActivity(@RequestBody Activity activity) {
         service.update(activity.getId(), activity);
@@ -79,12 +75,13 @@ public class ActivityController {
         service.deleteResidentFromActivity(residentId, activityId);
         return ("Residente eliminado a la actividad");
     }
-    @PreAuthorize("hasAuthority('PERMISSION_ACTIVIDADES_RESIDENTES_VIEW')")
+    @PreAuthorize("hasAuthority('PERMISSION_ACTIVIDADES_VIEW')")
     @GetMapping("/getActivitiesByDate")
     public List<Activity> getActivitiesByDate(@RequestParam LocalDate date){
         return service.getByDate(date);
     }
     
+    @PreAuthorize("hasAuthority('PERMISSION_ACTIVIDADES_VIEW')")
     @GetMapping("/getResidentsFromActivity")
     public List<Resident> getResidentsFromActivity (@RequestParam int id){
         return service.getResidentsFromActivity(id);
