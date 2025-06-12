@@ -28,7 +28,7 @@ public class ProductServiceJPA implements IProductService {
 
     @Override
     public List<Product> getAllProducts() {
-        return repo.findAll();
+        return repo.findByIsActiveTrue();
     }
 
     @Override
@@ -38,6 +38,6 @@ public class ProductServiceJPA implements IProductService {
 
     @Override
     public Product getById(int productId) {
-        return repo.findById(productId).orElse(null); 
+        return repo.findById(productId).orElse(null);
     }
 }
