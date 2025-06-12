@@ -31,8 +31,12 @@ public class PermissionController {
     private IPermissionService permissionService;
 
     // Obtener todos los permisos
+<<<<<<< HEAD
     @PreAuthorize("hasAuthority('PERMISSION_PERMISOS_VIEW')")
     @RequestMapping("/listss")
+=======
+    @RequestMapping("/lists")
+>>>>>>> developer
     public Map getAllPermissions() {
         return Collections.singletonMap("permissions", permissionService.getAllPermissions());
     }

@@ -7,12 +7,6 @@ import cr.ac.ucr.ie.Lonjevus.repository.IAdminRepository;
 import cr.ac.ucr.ie.Lonjevus.repository.IBillingRepository;
 import cr.ac.ucr.ie.Lonjevus.repository.IResidentRepository;
 import cr.ac.ucr.ie.Lonjevus.service.IBillingService;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.ParameterMode;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.StoredProcedureQuery;
-import java.math.BigDecimal;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,86 +25,104 @@ public class BillingServiceJPA implements IBillingService {
     @Autowired
     private IResidentRepository residentRepository;
 
-    @PersistenceContext
-    private EntityManager entityManager;
-
-    // Obtener todas las facturas activas
+    @Override
     public List<Billing> getAllActive() {
         return repository.findAllByIsActiveTrue();
     }
 
-    // Buscar por ID
+    @Override
+    public List<Billing> getAllInactive() {
+        return repository.findAllByIsActiveFalse();
+    }
+
+    @Override
     public Billing findById(Integer id) {
         return repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Factura no encontrada"));
     }
 
-    // Guardar nueva factura
+    @Override
     @Transactional
     public void save(Billing billing) {
-        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("insert_billing");
+        billing.setIsActive(true);
 
-        query.registerStoredProcedureParameter("p_date", Date.class, ParameterMode.IN);
-        query.registerStoredProcedureParameter("p_amount", BigDecimal.class, ParameterMode.IN);
-        query.registerStoredProcedureParameter("p_period", String.class, ParameterMode.IN);
-        query.registerStoredProcedureParameter("p_payment_method", String.class, ParameterMode.IN);
-        query.registerStoredProcedureParameter("p_admin_id", Integer.class, ParameterMode.IN);
-        query.registerStoredProcedureParameter("p_resident_id", Integer.class, ParameterMode.IN);
-        query.registerStoredProcedureParameter("p_new_consecutive", String.class, ParameterMode.OUT);
+        long count = repository.count() + 1;
+        String datePart = billing.getDate().toString().replaceAll("-", "");
+        String consecutive = String.format("%04d-%s", count, datePart);
+        billing.setConsecutive(consecutive);
 
-        query.setParameter("p_date", Date.valueOf(billing.getDate()));
-        query.setParameter("p_amount", billing.getAmount());
-        query.setParameter("p_period", billing.getPeriod());
-        query.setParameter("p_payment_method", billing.getPaymentMethod());
-        query.setParameter("p_admin_id", billing.getAdministrator() != null ? billing.getAdministrator().getId() : null);
-        query.setParameter("p_resident_id", billing.getResident().getId());
+        Admin admin = adminRepository.findById(billing.getAdministrator().getId())
+                .orElseThrow(() -> new RuntimeException("Admin no encontrado"));
+        Resident resident = residentRepository.findById(billing.getResident().getId())
+                .orElseThrow(() -> new RuntimeException("Residente no encontrado"));
 
-        query.execute();
+        billing.setAdministrator(admin);
+        billing.setResident(resident);
 
-        String newConsecutive = (String) query.getOutputParameterValue("p_new_consecutive");
-        billing.setConsecutive(newConsecutive);
+        repository.save(billing);
     }
 
-    // Actualizar factura
     @Override
     @Transactional
     public void update(Integer id, Billing updatedBilling) {
-        Billing existingBilling = repository.findById(id)
+        Billing existing = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Factura no encontrada"));
 
-        existingBilling.setAmount(updatedBilling.getAmount());
-        existingBilling.setDate(updatedBilling.getDate());
-        existingBilling.setPeriod(updatedBilling.getPeriod());
-        existingBilling.setPaymentMethod(updatedBilling.getPaymentMethod());
-        existingBilling.setIsActive(updatedBilling.getIsActive());
+        existing.setAmount(updatedBilling.getAmount());
+        existing.setDate(updatedBilling.getDate());
+        existing.setPeriod(updatedBilling.getPeriod());
+        existing.setPaymentMethod(updatedBilling.getPaymentMethod());
+        existing.setIsActive(updatedBilling.getIsActive());
 
-        // Obtener admin y residente existentes por ID
-        Admin existingAdmin = adminRepository.findById(updatedBilling.getAdministrator().getId())
+        Admin admin = adminRepository.findById(updatedBilling.getAdministrator().getId())
                 .orElseThrow(() -> new RuntimeException("Admin no encontrado"));
-
-        Resident existingResident = residentRepository.findById(updatedBilling.getResident().getId())
+        Resident resident = residentRepository.findById(updatedBilling.getResident().getId())
                 .orElseThrow(() -> new RuntimeException("Residente no encontrado"));
 
-        existingBilling.setAdministrator(existingAdmin);
-        existingBilling.setResident(existingResident);
+        existing.setAdministrator(admin);
+        existing.setResident(resident);
 
-        repository.save(existingBilling);
+        repository.save(existing);
     }
 
-    // Eliminado lógico
     @Override
     @Transactional
     public void delete(Integer id) {
-        repository.deleteBillingLogically(id);
+        Billing billing = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Factura no encontrada"));
+
+        billing.setIsActive(false);
+        repository.save(billing);
     }
 
-    // Buscar por fecha
+    @Override
     public List<Billing> findByDate(LocalDate date) {
         return repository.findByDate(date);
     }
 
-    // Buscar por período
+    @Override
     public List<Billing> findByPeriod(String period) {
         return repository.findByPeriodContainingIgnoreCase(period);
     }
+
+    @Override
+    public List<Billing> findByResident(Integer residentId) {
+        return repository.findByResidentIdAndIsActiveTrue(residentId);
+    }
+
+    @Override
+    public List<Billing> findByResidentAndDate(Integer residentId, LocalDate date) {
+        return repository.findByResidentIdAndDate(residentId, date);
+    }
+
+    @Override
+    public List<Billing> findActiveByInactiveResident() {
+        return repository.findByIsActiveTrueAndResidentIsActiveFalse();
+    }
+
+    @Override
+    public List<Billing> findByInactiveResidents() {
+        return repository.findByResidentIsActiveFalse();
+    }
+
 }

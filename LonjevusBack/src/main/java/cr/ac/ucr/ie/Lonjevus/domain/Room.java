@@ -7,10 +7,14 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 
 @Entity
 @Table(name = "room") 
+@SQLDelete(sql = "UPDATE room SET isActive = 0 WHERE id = ?")
+@Where(clause = "isActive = 1")
 public class Room {
 
     @Id
@@ -40,6 +44,8 @@ public class Room {
         this.isActive = isActive;
         this.roomNumber = roomNumber;
     }
+    
+    public Room(){}
     
     
     // Getters y setters

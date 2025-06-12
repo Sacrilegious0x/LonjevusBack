@@ -12,7 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping("/api/billing")
-@CrossOrigin(origins = "*") 
+@CrossOrigin(origins = "*")
 public class BillingController {
 
     @Autowired
@@ -37,6 +37,12 @@ public class BillingController {
         return ResponseEntity.ok(billingService.getAllActive());
     }
 
+    // Obtener todas las facturas inactivas
+    @GetMapping("/inactive")
+    public ResponseEntity<List<Billing>> getAllInactive() {
+        return ResponseEntity.ok(billingService.getAllInactive());
+    }
+
     // Obtener factura por ID
     @PreAuthorize("hasAuthority('PERMISSION_FACTURAS_VIEW')")
     @GetMapping("/{id}")
@@ -49,8 +55,12 @@ public class BillingController {
         }
     }
 
+<<<<<<< HEAD
     // Actualizar factura existente
     @PreAuthorize("hasAuthority('PERMISSION_FACTURAS_UPDATE')")
+=======
+    // Actualizar factura
+>>>>>>> developer
     @PutMapping("/{id}")
     public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody Billing billing) {
         try {
@@ -61,8 +71,12 @@ public class BillingController {
         }
     }
 
+<<<<<<< HEAD
     // Eliminar (lógico) factura
     @PreAuthorize("hasAuthority('PERMISSION_FACTURAS_DELETE')")
+=======
+    // Eliminar lógico
+>>>>>>> developer
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable Integer id) {
         try {
@@ -87,4 +101,23 @@ public class BillingController {
     public ResponseEntity<List<Billing>> getByPeriod(@PathVariable String period) {
         return ResponseEntity.ok(billingService.findByPeriod(period));
     }
+
+     @GetMapping("/resident/inactive")
+    public ResponseEntity<List<Billing>> getBillingsByInactiveResidents() {
+        return ResponseEntity.ok(billingService.findByInactiveResidents());
+    }
+
+    
+    @GetMapping("/resident/{residentId}")
+    public ResponseEntity<List<Billing>> getByResident(@PathVariable Integer residentId) {
+        return ResponseEntity.ok(billingService.findByResident(residentId));
+    }
+
+    @GetMapping("/resident/{id}/date/{date}")
+    public ResponseEntity<List<Billing>> getByResidentAndDate(@PathVariable Integer id, @PathVariable String date) {
+        LocalDate localDate = LocalDate.parse(date);
+        return ResponseEntity.ok(billingService.findByResidentAndDate(id, localDate));
+    }
+
+   
 }
