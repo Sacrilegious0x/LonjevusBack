@@ -29,10 +29,8 @@ public class Permission {
     private boolean canDelete;
     
 
-    // Constructor vacío
     public Permission() {}
 
-    // Constructor completo
     public Permission(int roleId, String module, boolean canView, boolean canCreate, boolean canUpdate, boolean canDelete) {
         this.roleId = roleId;
         this.module = module;
@@ -42,7 +40,6 @@ public class Permission {
         this.canDelete = canDelete;
     }
 
-    // Getters y setters
     public int getRoleId() { return roleId; }
     public void setRoleId(int roleId) { this.roleId = roleId; }
 

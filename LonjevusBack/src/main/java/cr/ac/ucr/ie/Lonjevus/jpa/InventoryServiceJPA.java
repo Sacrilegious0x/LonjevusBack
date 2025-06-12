@@ -30,13 +30,11 @@ private IProductRepository productRepository;
      List<Inventory> inventoryList = repository.findAll();
 
         for (Inventory inv : inventoryList) {
-            // Verificamos si la carga automática trajo el producto
             if (inv.getProduct() != null) {
-                // Si lo trajo, obtenemos el ID para buscarlo sin filtros
                 Product p = productRepository.findProductByIdRegardlessOfStatus(inv.getProduct().getId());
-                inv.setProduct(p); // Reemplazamos con la versión sin filtrar
+                inv.setProduct(p); 
 
-                // Tu lógica para la fecha de expiración
+                // Lógica para la fecha de expiración
                 if (inv.getPurchase() != null) {
                     inv.getPurchase().getItems().stream()
                         .filter(item -> item.getIdProduct().equals(inv.getProduct().getId()))

@@ -53,13 +53,12 @@ public class JwtUtils {
     
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        // Aquí podríamos agregar roles en el futuro
         return createToken(claims, userDetails.getUsername());
     }
     
      private String createToken(Map<String, Object> claims, String subject) {
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 5 * 60 * 60)) // 10 horas de validez
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 5 * 60 * 60)) // 5 horas de validez
                 .signWith(key)
                 .compact();
     }

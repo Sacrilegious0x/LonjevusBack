@@ -60,7 +60,7 @@ public class RoleController {
         
         
     }
-    
+    @PreAuthorize("hasAuthority('PERMISSION_ROLES_DELETE')")
     @DeleteMapping("/delete")
     public void deleteRole(@RequestParam int id){
         roleService.delete(id);

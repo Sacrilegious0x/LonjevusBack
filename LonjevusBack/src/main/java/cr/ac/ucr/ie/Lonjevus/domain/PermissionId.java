@@ -8,10 +8,8 @@ public class PermissionId implements Serializable {
     private int roleId;
     private String module;
 
-    // constructor vacio obligatorio
     public PermissionId() {}
 
-    // equals y hashCode son obligatorios
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -70,7 +70,6 @@ public class CaregiverController {
                 Role rol = roleService.getById(2);
                 caregiver.setRol(rol);
             }
-           
             caregiverService.save(caregiver);
             return ResponseEntity.ok("Cuidador creado exitosamente");
         } catch (Exception e) {

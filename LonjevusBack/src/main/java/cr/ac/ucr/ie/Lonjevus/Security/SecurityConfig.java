@@ -72,7 +72,7 @@ public class SecurityConfig {
      @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        // El origen de tu frontend
+        // El origen del frontend
         configuration.setAllowedOrigins(List.of("http://localhost:5173"));
         // Métodos HTTP permitidos
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
@@ -80,7 +80,7 @@ public class SecurityConfig {
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        // Aplicar esta configuración a todas las rutas de tu API ("/**")
+        // Aplica esta configuración a todas las rutas de tu API ("/**")
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }

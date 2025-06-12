@@ -30,6 +30,7 @@ public class CaregiverServiceJPA implements ICaregiverService {
         String password = c.getPassword();
         String passwordEncript = passwordEncoder.encode(password.trim());
         c.setPassword(passwordEncript);
+        c.setIsActive(true);
         caregiverRepository.save(c);
     }
     

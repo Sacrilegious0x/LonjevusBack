@@ -27,7 +27,6 @@ public class Inventory {
     private Boolean isActive;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    //@JoinColumn(name = "productId", referencedColumnName = "id")
     @JsonManagedReference
     @JoinColumn(name = "productId", referencedColumnName = "id", insertable = false, updatable = false)
     private Product product;
