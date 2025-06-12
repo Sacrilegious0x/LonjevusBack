@@ -139,5 +139,11 @@ public class ProductController {
     public Map<String, Object> getUnitList() {
         return Collections.singletonMap("units", unitService.getAllUnits());
     }
+    
+    @DeleteMapping("/deleteBySupplier")
+    public Map<String, Object> deleteProductBySupplierId(@RequestParam int id) {
+        productService.deleteBySupplierId(id);
+        return getList();
+    }
 
 }

@@ -16,12 +16,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
         
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name="product")
 @SQLDelete(sql = "UPDATE product SET isActive = 0 WHERE id = ?")
-@Where(clause = "isActive = 1")
 public class Product {
     
     
