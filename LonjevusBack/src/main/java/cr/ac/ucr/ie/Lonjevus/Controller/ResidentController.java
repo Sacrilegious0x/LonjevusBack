@@ -26,15 +26,15 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 
 public class ResidentController {
-    
+
     @Autowired
     private IResidentService service;
-    
+
     @Autowired
     private IResidentContactService contactService;
 
     private static LocalStorageService localS = new LocalStorageService();
-    
+
     @GetMapping("/residents")
     public List<Resident> getResidents() {
         return service.getList();
@@ -82,7 +82,7 @@ public class ResidentController {
     public String updateResident(@RequestParam int id, @RequestParam String identification, @RequestParam String name,
             @RequestParam String birthdate, @RequestParam String healthStatus,
             @RequestParam int numberRoom, @RequestParam(required = false) MultipartFile photo) {
-        
+
         Resident resident = new Resident();
         resident.setId(id);
         resident.setIdentification(identification);
@@ -94,10 +94,14 @@ public class ResidentController {
         if (photo != null && !photo.isEmpty()) {
             String photoPath = localS.saveResidentPhoto(photo);
             resident.setPhoto(photoPath);
-        }else {
-            resident.setPhoto("foto.jpg");
+        } else {
+            Resident actual = service.getById(id);
+            if (actual == null) {
+                throw new RuntimeException("Residente no encontrado");
+            }
+            resident.setPhoto(actual.getPhoto());
         }
-        
+
         service.update(id, resident);
         return "Residente Actualizado";
     }
