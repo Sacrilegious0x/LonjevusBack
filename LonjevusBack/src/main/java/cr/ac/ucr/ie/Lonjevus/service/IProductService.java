@@ -13,4 +13,5 @@ public interface IProductService {
     void delete(int productId);
     Product getById(int productId);
     void deleteBySupplierId(int supplierId);
+    int countBySupplierId(int id);
 }

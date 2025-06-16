@@ -18,5 +18,5 @@ public interface ISupplierService {
     List<Supplier> getAllSuppliers();
     void delete(int supplierId);
     Supplier getById(int supplierId);
-    
+     
 }

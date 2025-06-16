@@ -45,4 +45,9 @@ public class ProductServiceJPA implements IProductService {
     public void deleteBySupplierId(int supplierId) {
         repo.deleteAllBySupplierId(supplierId);
     }
+    
+    @Override
+    public int countBySupplierId(int id) {
+        return repo.countBySupplierId(id);
+    }
 }

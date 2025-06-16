@@ -1,6 +1,7 @@
 package cr.ac.ucr.ie.Lonjevus.Controller;
 
 import cr.ac.ucr.ie.Lonjevus.domain.Supplier;
+import cr.ac.ucr.ie.Lonjevus.service.IProductService;
 import cr.ac.ucr.ie.Lonjevus.service.ISupplierService;
 import cr.ac.ucr.ie.Lonjevus.service.LocalStorageService;
 import java.util.Collections;
@@ -32,6 +33,9 @@ public class SupplierController {
     
     @Autowired
     private ISupplierService service;
+    
+    @Autowired
+    private IProductService productService;
 
     @PreAuthorize("hasAuthority('PERMISSION_PROVEEDORES_VIEW')")
     @RequestMapping("/list")
@@ -100,6 +104,14 @@ public class SupplierController {
         service.save(supplier);
         //SupplierService.updateSupplier(supplier);
         return getList();
+    }
+    
+    @PreAuthorize("hasAuthority('PERMISSION_PROVEEDORES_DELETE')")
+    @GetMapping("/getQuantityProductsBySupplier")
+    public int getProductsById(@RequestParam int id){
+        
+        return productService.countBySupplierId(id);
+       
     }
     
 }

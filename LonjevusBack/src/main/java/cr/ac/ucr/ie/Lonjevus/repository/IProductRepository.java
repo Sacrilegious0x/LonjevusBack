@@ -28,6 +28,9 @@ public interface IProductRepository extends JpaRepository<Product,Integer> {
     
 
     List<Product> findByIsActiveTrue();
+    
+    @Query("SELECT COUNT(p) FROM Product p WHERE p.supplier.id = :id AND p.isActive = true")
+    int countBySupplierId(@Param("id") int id);
 
 
 }
