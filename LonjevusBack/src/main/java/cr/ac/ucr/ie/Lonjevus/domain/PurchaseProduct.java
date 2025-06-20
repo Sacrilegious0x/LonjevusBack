@@ -23,7 +23,7 @@ public class PurchaseProduct implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("idProduct")
-    @JoinColumn(name = "idProduct", insertable = false, updatable = false) 
+   @JoinColumn(name = "idProduct")
     @JsonBackReference
     @NotFound(action = NotFoundAction.IGNORE)
     private Product product;

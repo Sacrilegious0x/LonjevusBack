@@ -60,4 +60,6 @@ private IProductRepository productRepository;
     public List<Inventory> findByExpirationDate(LocalDate expirationDate) {
         return repository.findByProduct_ExpirationDate(expirationDate);
     }
+    
+    
 }

@@ -33,4 +33,5 @@ public interface IProductRepository extends JpaRepository<Product,Integer> {
     int countBySupplierId(@Param("id") int id);
 
 
+    
 }

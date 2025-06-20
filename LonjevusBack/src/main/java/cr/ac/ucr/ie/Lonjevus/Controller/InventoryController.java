@@ -26,10 +26,9 @@ public class InventoryController {
     @Autowired
     private IInventoryService service;
     @Autowired
-    private IProductService productService; // <--- AÑADIR ESTO
-
+    private IProductService productService; 
     @Autowired
-    private IPurchaseService purchaseService; // <--- AÑADIR ESTO
+    private IPurchaseService purchaseService;
 
     @Autowired
     private LocalStorageService localStorageService;
