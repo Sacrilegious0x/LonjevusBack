@@ -134,7 +134,14 @@ public class ActivityServiceJPA implements IActivityService {
 
     @Override
     public List<Resident> getResidentsFromActivity(Integer id) {
-        return activityRepository.findResidentsByActivityId(id);
+        List<Resident> list = new LinkedList<>();
+        
+        for(Resident resident: activityRepository.findResidentsByActivityId(id)){
+            if(resident.isIsActive())
+                list.add(resident);
+        }
+        
+        return list;
         
     }
 }
