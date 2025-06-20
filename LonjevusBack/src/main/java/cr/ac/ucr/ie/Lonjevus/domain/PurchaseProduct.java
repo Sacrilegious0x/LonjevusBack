@@ -23,7 +23,7 @@ public class PurchaseProduct implements Serializable {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("idProduct")
-   @JoinColumn(name = "idProduct")
+    @JoinColumn(name = "idProduct")
     @JsonBackReference
     @NotFound(action = NotFoundAction.IGNORE)
     private Product product;
@@ -83,8 +83,8 @@ public class PurchaseProduct implements Serializable {
             this.id = new PurchaseProductId();
         }
         if (product != null && product.getId() != null) {
-        this.id.setIdProduct(product.getId());
-    }
+            this.id.setIdProduct(product.getId());
+        }
     }
 
     public Integer getQuantity() {
@@ -102,7 +102,6 @@ public class PurchaseProduct implements Serializable {
         }
         return price;
     }
-    
 
     public void setPrice(BigDecimal price) {
         this.price = price;
