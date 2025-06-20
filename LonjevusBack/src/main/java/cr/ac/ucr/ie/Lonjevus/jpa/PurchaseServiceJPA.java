@@ -9,6 +9,8 @@ import cr.ac.ucr.ie.Lonjevus.repository.IInventoryRepository;
 import cr.ac.ucr.ie.Lonjevus.repository.IProductRepository;
 import cr.ac.ucr.ie.Lonjevus.repository.IPurchaseRepository;
 import cr.ac.ucr.ie.Lonjevus.service.IPurchaseService;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,9 @@ public class PurchaseServiceJPA implements IPurchaseService {
 
     @Autowired
     private IInventoryRepository inventoryRepository;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public List<Purchase> getAll() {
@@ -50,24 +55,26 @@ public class PurchaseServiceJPA implements IPurchaseService {
                 .orElseThrow(() -> new RuntimeException("Compra no encontrada o inactiva"));
 
         if (purchase.getAdmin() != null) {
-            purchase.getAdmin().getName();
+            purchase.getAdmin().getName(); // para forzar carga
         }
 
         for (PurchaseProduct item : purchase.getItems()) {
             Integer productId = item.getIdProduct();
 
-            productRepository.findById(productId).ifPresentOrElse(
-                    product -> {
-                        item.setProduct(product);
-                        item.setPrice(product.getPrice());
-                        item.setProductName(product.getName());
-                    },
-                    () -> {
-                        item.setProduct(null);
-                        item.setPrice(null);
-                        item.setProductName("Producto eliminado");
-                    }
-            );
+            Product product = productRepository.findProductByIdRegardlessOfStatus(productId);
+            if (product != null) {
+                item.setProduct(product);
+                item.setProductName(product.getName());
+                item.setPrice(product.getPrice());
+            } else {
+                Product placeholder = new Product();
+                placeholder.setId(productId);
+                placeholder.setName("Producto eliminado");
+                placeholder.setIsActive(false);
+                item.setProduct(placeholder);
+                item.setProductName("Producto eliminado");
+                item.setPrice(null);
+            }
         }
 
         return purchase;
@@ -104,7 +111,7 @@ public class PurchaseServiceJPA implements IPurchaseService {
             for (int i = 0; i < item.getQuantity(); i++) {
                 Inventory inv = new Inventory();
                 inv.setProductId(product.getId());
-                inv.setExpirationDate(product.getExpirationDate());
+                inv.setExpirationDate(item.getExpirationDate());
                 inv.setProduct(product);
                 inv.setQuantity(1);
                 inv.setIsActive(true);
@@ -122,36 +129,57 @@ public class PurchaseServiceJPA implements IPurchaseService {
         Purchase existing = repository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Compra no encontrada"));
 
+        //Todos los productos originales todavía estén en inventario
+        for (PurchaseProduct oldItem : existing.getItems()) {
+            Integer productId = oldItem.getIdProduct();
+            boolean exists = inventoryRepository.existsByProductIdAndPurchaseId(productId, id);
+            if (!exists) {
+                throw new RuntimeException("No se puede editar la compra. El producto con ID " + productId + " ya no está en inventario.");
+            }
+        }
+
         existing.setDate(updatedPurchase.getDate());
         existing.setAmount(updatedPurchase.getAmount());
-        existing.getItems().clear();
 
+        // Eliminar inventario
         List<Inventory> oldInventory = inventoryRepository.findByPurchaseId(id);
         for (Inventory inv : oldInventory) {
             inventoryRepository.delete(inv);
         }
 
+        // Eliminar productos antiguos
+        existing.getItems().clear();
+        entityManager.flush();
+
+        // Agregar nuevos productos
         for (PurchaseProduct item : updatedPurchase.getItems()) {
-            item.setPurchase(existing);
             Integer productId = item.getIdProduct();
             if (productId == null) {
                 throw new RuntimeException("Falta idProduct en un item");
             }
 
-            item.setId(new PurchaseProductId(id, productId));
             Product product = productRepository.findById(productId)
-                    .orElseThrow(() -> new RuntimeException("Producto no encontrado con ID"));
-            item.setProduct(product);
-            existing.getItems().add(item);
+                    .orElseThrow(() -> new RuntimeException("Producto no encontrado con ID: " + productId));
+
+            PurchaseProduct nuevoItem = new PurchaseProduct();
+            nuevoItem.setPurchase(existing);
+            nuevoItem.setProduct(product);
+            nuevoItem.setQuantity(item.getQuantity());
+            nuevoItem.setExpirationDate(item.getExpirationDate());
+            nuevoItem.setProductName(product.getName());
+
+            existing.addItem(nuevoItem);
 
             for (int i = 0; i < item.getQuantity(); i++) {
                 Inventory inv = new Inventory();
                 inv.setProduct(product);
+                inv.setProductId(product.getId());
                 inv.setQuantity(1);
                 inv.setIsActive(true);
                 inv.setCategory(product.getCategory());
                 inv.setPhotoURL(product.getPhotoURL());
                 inv.setPurchase(existing);
+                inv.setExpirationDate(item.getExpirationDate());
                 inventoryRepository.save(inv);
             }
         }
@@ -173,22 +201,22 @@ public class PurchaseServiceJPA implements IPurchaseService {
             for (PurchaseProduct item : purchase.getItems()) {
                 Integer productId = item.getIdProduct();
 
-                productRepository.findById(productId).ifPresentOrElse(
-                        product -> {
-                    item.setProduct(product); // Mostrar detalles aunque esté inactivo
+                Product product = productRepository.findProductByIdRegardlessOfStatus(productId);
+                if (product != null) {
+                    item.setProduct(product);
                     item.setProductName(product.getName());
                     item.setPrice(product.getPrice());
-                },
-                () -> {
-                    item.setProduct(null);
-                    if (item.getProductName() == null || item.getProductName().isBlank()) {
-                        item.setProductName("Producto no disponible");
-                    }
-                    item.setPrice(null); 
+                } else {
+                    Product placeholder = new Product();
+                    placeholder.setId(productId);
+                    placeholder.setName("Producto eliminado");
+                    placeholder.setIsActive(false);
+                    item.setProduct(placeholder);
+                    item.setProductName("Producto eliminado");
+                    item.setPrice(null);
                 }
-            );
+            }
         }
     }
-}
 
 }
