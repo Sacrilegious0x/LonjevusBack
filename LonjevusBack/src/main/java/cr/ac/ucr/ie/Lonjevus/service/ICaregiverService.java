@@ -19,4 +19,5 @@ public interface ICaregiverService {
     void update(int caregiverId, Caregiver c);
     Caregiver getById(int caregiverId);
     Optional<Caregiver> findByEmail(String email);
+    void updatePassword(int caregiverId, String password);
 }

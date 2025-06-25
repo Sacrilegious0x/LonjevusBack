@@ -19,4 +19,5 @@ public interface IAdminService {
     void update(int adminId, Admin a);
     Admin getById(int adminId);
     Optional<Admin> findByEmail(String email);
+    void updatePassword(int adminId, String password);
 }

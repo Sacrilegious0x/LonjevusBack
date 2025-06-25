@@ -40,7 +40,7 @@ public class VisitServiceJPA implements IVisitService {
 
     @Override
     public LinkedList<Visit> getAll() {
-        List<Visit> allVisits = visitRepository.findAll();
+        List<Visit> allVisits = visitRepository.findAllByOrderByVisitDateDesc();
         for (Visit v : allVisits) {
             Resident resident = v.getResident();
             if (resident != null) {

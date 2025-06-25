@@ -71,5 +71,17 @@ public class CaregiverServiceJPA implements ICaregiverService {
     public Optional<Caregiver> findByEmail(String email) {
         return caregiverRepository.findByEmail(email);
     }
+
+    @Override
+    public void updatePassword(int caregiverId, String password) {
+       
+        Caregiver caregiver = caregiverRepository.findById(caregiverId).orElse(null);
+        if(caregiver!=null){
+            String passwordEncript = passwordEncoder.encode(password);
+            caregiver.setPassword(passwordEncript);
+            caregiverRepository.save(caregiver);
+        }
+    
+    }
     
 }

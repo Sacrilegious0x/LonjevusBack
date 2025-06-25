@@ -68,5 +68,14 @@ public class AdminServiceJPA implements IAdminService{
     public Optional<Admin> findByEmail(String email) {
         return adminRepository.findByEmail(email);
     }
-    
+
+    @Override
+    public void updatePassword(int adminId, String password) {
+        Admin admin = adminRepository.findById(adminId).orElse(null);
+        if(admin!=null){
+            String passwordEncript = passwordEncoder.encode(password);
+            admin.setPassword(passwordEncript);
+            adminRepository.save(admin);
+        }
+    }  
 }
