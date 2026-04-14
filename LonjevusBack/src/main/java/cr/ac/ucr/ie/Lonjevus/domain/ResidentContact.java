@@ -4,20 +4,41 @@
  */
 package cr.ac.ucr.ie.Lonjevus.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
 /**
  *
  * @author JOSHUACALETCESPEDESG
  */
+@Entity
+@Table(name="residentcontact")
 public class ResidentContact {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(name="name")
     private String name;
+    @Column(name="phoneNumber")
     private String phoneNumber;
+    @Column(name="relationShip")
     private String relationShip;
-    private int idResident;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="idResident")
+    @JsonIgnoreProperties({"contacts"})
     private Resident resident;
     
     public ResidentContact(){
-        resident = new Resident();
     }
 
     public int getId() {
@@ -50,14 +71,6 @@ public class ResidentContact {
 
     public void setRelationShip(String relationShip) {
         this.relationShip = relationShip;
-    }
-
-    public int getIdResident() {
-        return idResident;
-    }
-
-    public void setIdResident(int idResident) {
-        this.idResident = idResident;
     }
 
     public Resident getResident() {

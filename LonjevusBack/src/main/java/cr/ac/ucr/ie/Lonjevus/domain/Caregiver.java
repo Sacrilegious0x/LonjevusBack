@@ -4,11 +4,23 @@
  */
 package cr.ac.ucr.ie.Lonjevus.domain;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
 /**
  *
  * @author User
  */
+@Entity
+@Table(name = "caregiver")
+@SQLDelete(sql = "UPDATE caregiver SET isActive = 0 WHERE id = ?")
+@Where(clause = "isActive = 1")
 public class Caregiver extends Person {
+    
+    @Column(name = "shift")
     private String Shift;
 
     public Caregiver() {

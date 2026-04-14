@@ -1,24 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/springframework/Controller.java to edit this template
- */
 package cr.ac.ucr.ie.Lonjevus.Controller;
 
 import cr.ac.ucr.ie.Lonjevus.domain.Purchase;
-import cr.ac.ucr.ie.Lonjevus.service.PurchaseService;
+import cr.ac.ucr.ie.Lonjevus.service.IPurchaseService;
 import java.util.LinkedList;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 /**
  *
@@ -29,48 +18,58 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "http://localhost:5173")
 public class PurchaseController {
 
-    private final PurchaseService purchaseService = new PurchaseService();
+    private final IPurchaseService purchaseService;
 
-    @GetMapping("/all")
-    public LinkedList<Purchase> getAllPurchases() {
-        return purchaseService.getAllPurchases();
+    @Autowired
+    public PurchaseController(IPurchaseService purchaseService) {
+        this.purchaseService = purchaseService;
     }
-
+    @PreAuthorize("hasAuthority('PERMISSION_COMPRAS_VIEW')")
+    @GetMapping("/all")
+    public List<Purchase> getAllPurchases() {
+        return purchaseService.getAll();
+    }
+    @PreAuthorize("hasAuthority('PERMISSION_COMPRAS_VIEW')")
+    @GetMapping("/inactive")
+    public List<Purchase> getInactivePurchases() {
+        return purchaseService.getAllInactive();
+    }
+    @PreAuthorize("hasAuthority('PERMISSION_COMPRAS_CREATE')")
     @PostMapping("/add")
     public ResponseEntity<?> addPurchase(@RequestBody Purchase purchase) {
         try {
-            purchaseService.addPurchase(purchase);
+            purchaseService.save(purchase);
             return ResponseEntity.ok().body("{\"message\": \"Compra registrada correctamente\"}");
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(500).body("{\"message\": \"Error al registrar la compra\"}");
         }
     }
-
+    @PreAuthorize("hasAuthority('PERMISSION_COMPRAS_VIEW')")
     @GetMapping("/{id}")
     public ResponseEntity<?> getPurchaseById(@PathVariable String id) {
         try {
-            Purchase purchase = purchaseService.getPurchaseById(id);
+            Purchase purchase = purchaseService.findById(id);
             return ResponseEntity.ok(purchase);
         } catch (Exception e) {
             return ResponseEntity.status(404).body("Compra no encontrada");
         }
     }
-
+    @PreAuthorize("hasAuthority('PERMISSION_COMPRAS_UPDATE')")
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updatePurchase(@PathVariable String id, @RequestBody Purchase purchase) {
         try {
-            purchaseService.updatePurchase(id, purchase);
+            purchaseService.update(id, purchase);
             return ResponseEntity.ok("Compra actualizada correctamente");
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Error al actualizar");
         }
     }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePurchase(@PathVariable String id) {
-        purchaseService.deletePurchase(id);
-        return ResponseEntity.noContent().build();
+    @PreAuthorize("hasAuthority('PERMISSION_COMPRAS_DELETE')")
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deletePurchase(@PathVariable String id) {
+        purchaseService.delete(id);
+        return ResponseEntity.ok("Compra eliminada correctamente.");
     }
 
 }

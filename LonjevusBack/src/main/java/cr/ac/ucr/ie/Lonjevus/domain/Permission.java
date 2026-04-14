@@ -1,99 +1,60 @@
 
 package cr.ac.ucr.ie.Lonjevus.domain;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
+import jakarta.persistence.Table;
 
+@Entity
+@Table(name="role_module_permissions")
+@IdClass(PermissionId.class)
 public class Permission {
     
-    private int roleId;       
-    private int moduleId;     
-    private String  moduleCode;  
-    private String  moduleName;   
+    @Id
+    @Column(name="role_id")
+    private int roleId;
+    
+    @Id
+    @Column(name="module")
+    private String module; // En lugar de module_id
+    
+    private boolean canView;
+    
+    private boolean canCreate;
+    
+    private boolean canUpdate;
+    
+    private boolean canDelete;
+    
 
-    private Boolean canView;      
-    private Boolean canCreate;   
-    private Boolean canUpdate;    
-    private Boolean canDelete;    
+    public Permission() {}
 
-    public Permission(int roleId, int moduleId, String moduleCode, String moduleName, Boolean canView, Boolean canCreate, Boolean canUpdate, Boolean canDelete) {
+    public Permission(int roleId, String module, boolean canView, boolean canCreate, boolean canUpdate, boolean canDelete) {
         this.roleId = roleId;
-        this.moduleId = moduleId;
-        this.moduleCode = moduleCode;
-        this.moduleName = moduleName;
+        this.module = module;
         this.canView = canView;
         this.canCreate = canCreate;
         this.canUpdate = canUpdate;
         this.canDelete = canDelete;
     }
 
-    public Permission() {
-    }
+    public int getRoleId() { return roleId; }
+    public void setRoleId(int roleId) { this.roleId = roleId; }
 
-    public int getRoleId() {
-        return roleId;
-    }
+    public String getModule() { return module; }
+    public void setModule(String module) { this.module = module; }
 
-    public void setRoleId(int roleId) {
-        this.roleId = roleId;
-    }
+    public boolean isCanView() { return canView; }
+    public void setCanView(boolean canView) { this.canView = canView; }
 
-    public int getModuleId() {
-        return moduleId;
-    }
+    public boolean isCanCreate() { return canCreate; }
+    public void setCanCreate(boolean canCreate) { this.canCreate = canCreate; }
 
-    public void setModuleId(int moduleId) {
-        this.moduleId = moduleId;
-    }
+    public boolean isCanUpdate() { return canUpdate; }
+    public void setCanUpdate(boolean canUpdate) { this.canUpdate = canUpdate; }
 
-    public String getModuleCode() {
-        return moduleCode;
-    }
-
-    public void setModuleCode(String moduleCode) {
-        this.moduleCode = moduleCode;
-    }
-
-    public String getModuleName() {
-        return moduleName;
-    }
-
-    public void setModuleName(String moduleName) {
-        this.moduleName = moduleName;
-    }
-
-    public Boolean getCanView() {
-        return canView;
-    }
-
-    public void setCanView(Boolean canView) {
-        this.canView = canView;
-    }
-
-    public Boolean getCanCreate() {
-        return canCreate;
-    }
-
-    public void setCanCreate(Boolean canCreate) {
-        this.canCreate = canCreate;
-    }
-
-    public Boolean getCanUpdate() {
-        return canUpdate;
-    }
-
-    public void setCanUpdate(Boolean canUpdate) {
-        this.canUpdate = canUpdate;
-    }
-
-    public Boolean getCanDelete() {
-        return canDelete;
-    }
-
-    public void setCanDelete(Boolean canDelete) {
-        this.canDelete = canDelete;
-    }
-    
-    
-
-
-    
+    public boolean isCanDelete() { return canDelete; }
+    public void setCanDelete(boolean canDelete) { this.canDelete = canDelete; }
 }
