@@ -88,9 +88,3 @@ mvn spring-boot:run
 ---
 **Nota:** Asegúrese de que el puerto definido en `ConnectionDB` (3399) coincida con su instancia local de MySQL si no está utilizando la configuración estándar de Spring.
 ```
-
-Espero que esta versión sea más acorde a lo que buscas para un perfil técnico o de arquitectura.
-
-<!--
-[PROMPT_SUGGESTION]¿Cómo puedo refactorizar ConnectionDB.java para que use los valores de application.properties mediante la anotación @Value?[/PROMPT_SUGGESTION]
-[PROMPT_SUGGESTION]¿Cómo puedo implementar un ExceptionHandler global para manejar errores de integridad de datos en la base de datos?[/PROMPT_SUGGESTION]
