@@ -1,78 +1,96 @@
-# Lonjevus - Backend API
+# Lonjevus Backend API - Especificación Técnica
 
-Este es el backend del sistema **Lonjevus**, una plataforma diseñada para la gestión de centros de cuidado (enfocado en adultos mayores). La aplicación está construida con **Java** y **Spring Boot**, siguiendo una arquitectura orientada a servicios y seguridad basada en tokens JWT.
+Este repositorio contiene el núcleo lógico y de persistencia de **Lonjevus**, una plataforma de gestión para centros de cuidado. El sistema está construido bajo una arquitectura de microservicios monolíticos utilizando el ecosistema de **Spring Boot 3**.
 
-## 🚀 Tecnologías Utilizadas
+## 🛠 Stack Tecnológico
 
-*   **Java 17+**
-*   **Spring Boot 3.x**
-*   **Spring Security** (Autenticación y Autorización)
-*   **JSON Web Token (JWT)** para sesiones stateless.
-*   **Spring Data JPA / Hibernate** (Persistencia de datos).
-*   **MySQL** (Base de datos relacional).
-*   **Maven** (Gestión de dependencias).
+*   **Runtime:** Java 17
+*   **Framework Principal:** Spring Boot 3.x
+*   **Seguridad:** Spring Security 6 + JSON Web Token (JWT)
+*   **Persistencia:** Spring Data JPA + Hibernate
+*   **Base de Datos:** MySQL 8.0
+*   **Build Tool:** Maven
 
-## 🛠️ Configuración del Proyecto
+## 🏗 Arquitectura del Sistema
 
-### 1. Base de Datos
-El sistema utiliza MySQL. Asegúrate de tener una instancia corriendo con los siguientes parámetros (configurados en `ConnectionDB.java`):
+El proyecto sigue un patrón de diseño por capas (N-Tier Architecture):
+1.  **Layer de Dominio:** Entidades JPA que representan el modelo relacional.
+2.  **Layer de Repositorio:** Interfaces que extienden de `JpaRepository` para abstracción de consultas SQL.
+3.  **Layer de Servicio:** Implementación de la lógica de negocio, manejo de transaccionalidad (`@Transactional`) y orquestación de datos.
+4.  **Layer de Controlador:** REST Endpoints con validación de seguridad mediante anotaciones.
 
-*   **URL:** `jdbc:mysql://localhost:3399/longevusdb`
-*   **Usuario:** `root`
-*   **Contraseña:** (vacía por defecto)
+### Decisiones Técnicas Relevantes
 
-### 2. Almacenamiento de Archivos (Fotos)
-El sistema gestiona fotos de cuidadores e inventario. Actualmente, la ruta está configurada de forma absoluta en `WebConfig.java`:
-*   Ruta local: `C:/Users/User/Desktop/Proyecto Lenguajes/proyecto-lonjevus-back/LonjevusBack/uploads/photos/`
-*   Acceso vía API: `http://localhost:8080/photos/**`
+*   **Gestión de Inventario Atómica:** En `PurchaseServiceJPA`, el registro de una compra dispara un proceso que desglosa la cantidad de productos en registros individuales dentro del inventario, asegurando trazabilidad por fecha de vencimiento.
+*   **Persistencia Híbrida:** Aunque el proyecto usa JPA, existe una clase `ConnectionDB` para conexiones JDBC directas (Legacy Support o tareas específicas de bajo nivel).
+*   **Almacenamiento de Recursos:** Implementación de `WebMvcConfigurer` para el mapeo de recursos estáticos externos, permitiendo que archivos locales en el servidor sean servidos como URLs públicas.
 
-### 3. Seguridad y Roles
-Se implementa un control de acceso basado en permisos (RBAC). Los roles principales son:
-*   **ADMIN:** Acceso total a gestión de personal, compras e inventario.
-*   **CAREGIVER:** Acceso limitado según los permisos asignados en la base de datos.
+## 🔐 Seguridad y Control de Acceso (RBAC)
 
-## 📑 Módulos Principales
+La seguridad se implementa de forma *stateless* mediante un filtro personalizado `JwtRequestFilter` que intercepta cada petición.
 
-### Autenticación (`/api/auth`)
-*   `POST /login`: Genera un token JWT y devuelve los datos del usuario.
-*   `POST /newPassword`: Permite restablecer contraseñas para administradores y cuidadores.
-
-### Inventario y Compras (`/api/inventory`, `/purchase`)
-*   Gestión de productos, stock y fechas de vencimiento.
-*   Al registrar una compra, el sistema desglosa automáticamente los productos y los ingresa al inventario de forma individual.
-
-### Cuidadores (`/caregiver`)
-*   CRUD completo de trabajadores, incluyendo la carga de fotos de perfil y asignación de horarios (`Schedule`).
-
-### Permisos (`/permissions`)
-*   Gestión dinámica de permisos por rol, permitiendo habilitar o deshabilitar acciones de Ver, Crear, Actualizar o Eliminar por módulo.
-
-## ⚙️ Instalación
-
-1.  Clonar el repositorio.
-2.  Importar el proyecto en tu IDE favorito (IntelliJ IDEA, Eclipse, NetBeans).
-3.  Asegurarte de que el puerto `3399` para MySQL esté disponible o modificar `ConnectionDB.java`.
-4.  Ejecutar la aplicación mediante el comando:
-    ```bash
-    mvn spring-boot:run
+### Flujo de Autorización:
+1.  **Autenticación:** El `AuthenticationController` valida credenciales y genera un JWT con el `Subject` (email) y `Claims` personalizados.
+2.  **Validación:** `JwtUtils` se encarga de la firma (HS256) y expiración del token.
+3.  **Autorización Fina:** Se utiliza **RBAC (Role-Based Access Control)** dinámico. Los permisos se cargan desde la base de datos y se inyectan en el contexto de seguridad de Spring, permitiendo el uso de:
+    ```java
+    @PreAuthorize("hasAuthority('PERMISSION_INVENTARIO_VIEW')")
     ```
 
-## 🛡️ Seguridad (CORS)
-La API está configurada para aceptar peticiones desde el frontend en `http://localhost:5173` (típicamente un entorno de desarrollo con Vite/React).
+## 📊 Modelo de Datos
 
-## 📝 Notas de Desarrollo
-*   **Filtro JWT:** Cada petición protegida debe incluir el header `Authorization: Bearer <token>`.
-*   **Transaccionalidad:** Los servicios de compras e inventario utilizan `@Transactional` para asegurar la integridad de los datos al realizar múltiples inserciones.
+El sistema gestiona una base de datos relacional con las siguientes entidades críticas:
+*   **Users (Admin/Caregiver):** Herencia lógica mediante roles para diferenciar privilegios.
+*   **Inventory:** Vinculado a `Product` y `Purchase`, permitiendo el control de stock y mermas.
+*   **Permissions:** Tabla de unión que mapea acciones (View, Create, Update, Delete) sobre módulos específicos para cada Rol.
 
----
-Desarrollado para el Proyecto de Lenguajes - UCR.
+## 📡 API Endpoints Principales
+
+| Módulo | Endpoint | Método | Auth | Descripción |
+| :--- | :--- | :--- | :--- | :--- |
+| **Auth** | `/api/auth/login` | `POST` | PermitAll | Intercambio de credenciales por JWT. |
+| **Inventory** | `/api/inventory/save` | `POST` | JWT (Create) | Carga de stock con soporte para `multipart/form-data`. |
+| **Purchases** | `/purchase` | `POST` | JWT (Create) | Registro transaccional de compras e impacto en inventario. |
+| **Caregivers** | `/caregiver/listCaregiver` | `GET` | JWT (View) | Listado de personal con carga Lazy de horarios. |
+
+## ⚙️ Configuración de Entorno
+
+### Variables de Aplicación (`application.properties`)
+
+Es necesario configurar el origen de datos y las políticas de archivos:
+
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/longevusdb
+spring.datasource.username=root
+spring.datasource.password=
+
+# Configuración de carga de archivos
+spring.servlet.multipart.max-file-size=50MB
 ```
 
-### Sugerencias de mejora para tu proyecto:
+### Configuración de CORS
+El backend está configurado para aceptar peticiones exclusivamente desde el origen del frontend (Vite/React):
+*   **Allowed Origins:** `http://localhost:5173`
+*   **Allowed Methods:** `GET, POST, PUT, DELETE, OPTIONS`
 
-1.  **Externalización de configuraciones:** Actualmente, la configuración de la base de datos (`ConnectionDB.java`) y las rutas de fotos (`WebConfig.java`) tienen rutas fijas (hardcoded). Te recomendaría mover estas configuraciones al archivo `src/main/resources/application.properties` para que el proyecto sea más fácil de desplegar en diferentes computadoras.
-2.  **Manejo de Excepciones:** Podrías implementar un `@ControllerAdvice` para manejar los errores de forma global y devolver respuestas JSON más limpias en lugar de lanzar `RuntimeException` directamente en los servicios.
+## 🛠 Comandos de Desarrollo
+
+**Compilar el proyecto:**
+```bash
+mvn clean install
+```
+
+**Ejecutar en modo desarrollo:**
+```bash
+mvn spring-boot:run
+```
+
+---
+**Nota:** Asegúrese de que el puerto definido en `ConnectionDB` (3399) coincida con su instancia local de MySQL si no está utilizando la configuración estándar de Spring.
+```
+
+Espero que esta versión sea más acorde a lo que buscas para un perfil técnico o de arquitectura.
 
 <!--
-[PROMPT_SUGGESTION]¿Cómo puedo mover la configuración de la base de datos de ConnectionDB.java al archivo application.properties de Spring? [/PROMPT_SUGGESTION]
-[PROMPT_SUGGESTION]¿Cómo implementar un manejador global de excepciones para que los errores de "Producto no encontrado" devuelvan un código 404?[/PROMPT_SUGGESTION]
+[PROMPT_SUGGESTION]¿Cómo puedo refactorizar ConnectionDB.java para que use los valores de application.properties mediante la anotación @Value?[/PROMPT_SUGGESTION]
+[PROMPT_SUGGESTION]¿Cómo puedo implementar un ExceptionHandler global para manejar errores de integridad de datos en la base de datos?[/PROMPT_SUGGESTION]
